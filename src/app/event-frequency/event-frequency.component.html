@@ -1,0 +1,18 @@
+<ng-container>
+  <div *ngIf="asRecurringEventDaily(recurringEvent) as dailyEvent">
+    <ng-container *ngIf="dailyEvent.selectedDays.length === 7; then everyDay else specificDays"></ng-container>
+    <ng-template #everyDay>
+      Every day
+    </ng-template>
+    <ng-template #specificDays>
+      Every
+      <span *ngFor="let day of dailyEvent.selectedDays; index as i">
+        <span>{{ day }}</span>
+        <span *ngIf="dailyEvent.selectedDays.length > 1 && i < dailyEvent.selectedDays.length - 1">, </span>
+        <span *ngIf="dailyEvent.selectedDays.length > 1 && i == dailyEvent.selectedDays.length - 2">and </span>
+      </span>
+    </ng-template>
+  </div>
+</ng-container>
+
+
