@@ -1,49 +1,67 @@
 <mat-expansion-panel style="margin-bottom: 22px;" expanded>
   <mat-expansion-panel-header>Details</mat-expansion-panel-header>
+  <div>
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput type="text" [(ngModel)]="name"/>
+    </mat-form-field>
+  </div>
 
-  <mat-form-field>
-    <mat-label>Name</mat-label>
-    <input matInput type="text" [(ngModel)]="name" />
-  </mat-form-field>
+  <div>
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea matInput [(ngModel)]="description"></textarea>
+    </mat-form-field>
+  </div>
 
-  <mat-form-field>
-    <mat-label>Description</mat-label>
-    <textarea matInput [(ngModel)]="description"></textarea>
-  </mat-form-field>
-
-  <mat-form-field>
-    <mat-label>Cost</mat-label>
-    <input matInput type="number" min="0" step="0.01" [(ngModel)]="cost"/>
-  </mat-form-field>
+  <div>
+    <mat-form-field>
+      <mat-label>Cost</mat-label>
+      <input matInput type="number" min="0" step="0.01" [(ngModel)]="cost"/>
+    </mat-form-field>
+  </div>
 
 </mat-expansion-panel>
 
 
-
 <mat-expansion-panel style="margin-bottom: 22px;" expanded>
   <mat-expansion-panel-header>Frequency</mat-expansion-panel-header>
-  <div>
-    Every
-    <mat-form-field>
-      <mat-select [(ngModel)]="eventFrequency">
-        <mat-option [value]="EventFrequency.Monthly">Month</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
 
-  <div>
-    On a
-    <mat-form-field>
-      <mat-select [(ngModel)]="eventType">
-        <mat-option [value]="'specific-date'">specific date</mat-option>
-      </mat-select>
-    </mat-form-field>
+  <table>
+    <tr>
+      <td>Every</td>
+      <td>
+        <mat-form-field>
+          <mat-select [(ngModel)]="eventFrequency">
+            <mat-option [value]="EventFrequency.Monthly">month</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </td>
+    </tr>
 
-    <mat-form-field>
-      <mat-label>Choose a date</mat-label>
-      <input matInput type="number" [(ngModel)]="dayOfMonth" />
-    </mat-form-field>
-  </div>
+
+    <tr>
+      <td>On a</td>
+      <td>
+        <mat-form-field>
+          <mat-select [(ngModel)]="eventType">
+            <mat-option [value]="'specific-date'">specific date</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </td>
+    </tr>
+
+
+    <tr>
+      <td></td>
+      <td>
+        <mat-form-field>
+          <mat-label>Day of the month</mat-label>
+          <input matInput type="number" [(ngModel)]="dayOfMonth"/>
+        </mat-form-field>
+      </td>
+    </tr>
+  </table>
 </mat-expansion-panel>
 
 
@@ -70,23 +88,22 @@
 
       <tr>
         <td colspan="2">
-          <hr />
+          <hr/>
         </td>
       </tr>
 
       <tr>
         <td>
-          What should happen if the date falls on a non-suitable day?
+          Is the bill charged early or late?
         </td>
         <td>
           <mat-radio-group aria-label="Select an option" [(ngModel)]="invalidDayFallback">
-            <mat-radio-button [value]="InvalidDayFallback.PreviousAllowedDay">Prev. day</mat-radio-button>
-            <mat-radio-button [value]="InvalidDayFallback.NextAllowedDay">Next day</mat-radio-button>
+            <mat-radio-button [value]="InvalidDayFallback.PreviousAllowedDay">Before</mat-radio-button>
+            <mat-radio-button [value]="InvalidDayFallback.NextAllowedDay">After</mat-radio-button>
           </mat-radio-group>
         </td>
       </tr>
     </table>
-
 
 
   </mat-expansion-panel>
