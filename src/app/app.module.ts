@@ -19,6 +19,7 @@ import {MatExpansionModule} from "@angular/material/expansion";
 import {MatChipsModule} from "@angular/material/chips";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import { EventQuickListComponent } from './components/event-quick-list/event-quick-list.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
     EventFrequencyComponent,
     EventFrequencyFormComponent,
     DashboardComponent,
-    CreateEventComponent
+    CreateEventComponent,
+    EventQuickListComponent
   ],
   imports: [
     BrowserModule,

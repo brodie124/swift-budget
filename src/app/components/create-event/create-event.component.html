@@ -1,27 +1,53 @@
-<div>
-  Every
-  <mat-form-field>
-    <mat-select [(ngModel)]="eventFrequency">
-      <mat-option [value]="EventFrequency.Monthly">Month</mat-option>
-    </mat-select>
-  </mat-form-field>
-</div>
+<mat-expansion-panel style="margin-bottom: 22px;" expanded>
+  <mat-expansion-panel-header>Details</mat-expansion-panel-header>
 
-<div>
-  On a
   <mat-form-field>
-    <mat-select [(ngModel)]="eventType">
-      <mat-option [value]="'specific-date'">specific date</mat-option>
-    </mat-select>
+    <mat-label>Name</mat-label>
+    <input matInput type="text" [(ngModel)]="name" />
   </mat-form-field>
 
   <mat-form-field>
-    <mat-label>Choose a date</mat-label>
-    <input matInput type="number" [(ngModel)]="dayOfMonth" />
+    <mat-label>Description</mat-label>
+    <textarea matInput [(ngModel)]="description"></textarea>
   </mat-form-field>
-</div>
 
-<div *ngIf="true">
+  <mat-form-field>
+    <mat-label>Cost</mat-label>
+    <input matInput type="number" min="0" step="0.01" [(ngModel)]="cost"/>
+  </mat-form-field>
+
+</mat-expansion-panel>
+
+
+
+<mat-expansion-panel style="margin-bottom: 22px;" expanded>
+  <mat-expansion-panel-header>Frequency</mat-expansion-panel-header>
+  <div>
+    Every
+    <mat-form-field>
+      <mat-select [(ngModel)]="eventFrequency">
+        <mat-option [value]="EventFrequency.Monthly">Month</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div>
+    On a
+    <mat-form-field>
+      <mat-select [(ngModel)]="eventType">
+        <mat-option [value]="'specific-date'">specific date</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Choose a date</mat-label>
+      <input matInput type="number" [(ngModel)]="dayOfMonth" />
+    </mat-form-field>
+  </div>
+</mat-expansion-panel>
+
+
+<div *ngIf="true" style="margin-bottom: 22px;">
   <mat-expansion-panel>
     <mat-expansion-panel-header>Advanced Options</mat-expansion-panel-header>
     <table>
@@ -67,6 +93,6 @@
 </div>
 
 <div style="display: flex; flex-direction: row;">
-  <button mat-flat-button color="warn">Cancel</button>
+  <button mat-flat-button color="warn" style="margin-right: 11px;" (click)="cancel()">Cancel</button>
   <button mat-flat-button color="primary" (click)="create()">Create</button>
 </div>

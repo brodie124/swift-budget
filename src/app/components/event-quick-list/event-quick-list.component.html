@@ -1,0 +1,7 @@
+<ul class="event-quick-list">
+  <li *ngFor="let event of calculatedEvents">
+    {{ event.event.name }}
+    <br />
+    {{ event.nextOccurrence?.format("DD/MM/YYYY")}}
+  </li>
+</ul>
