@@ -15,7 +15,7 @@
     <ng-container
       *ngFor="let day of [CalendarDay.Monday, CalendarDay.Tuesday, CalendarDay.Wednesday, CalendarDay.Thursday, CalendarDay.Friday, CalendarDay.Saturday, CalendarDay.Sunday];">
       <div>
-        <input id="day + '-checkbox'" type="checkbox" checked/>
+        <input id="day + '-checkbox'" type="checkbox" [ngModel]="dailySelectedDays.get(day)" (ngModelChange)="dailySelectedDays.set(day, $event)"/>
         <label [for]="day + '-checkbox'">{{ day }}</label>
       </div>
     </ng-container>

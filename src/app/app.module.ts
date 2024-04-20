@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { EventFrequencyComponent } from './event-frequency/event-frequency.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { EventFrequencyFormComponent } from './compnents/event-frequency-form/event-frequency-form.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { EventFrequencyFormComponent } from './compnents/event-frequency-form/ev
   ],
   imports: [
     BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

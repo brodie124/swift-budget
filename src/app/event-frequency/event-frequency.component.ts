@@ -103,7 +103,7 @@ export enum EventFrequency {
 }
 
 export enum CalendarDay {
-  Monday= 'monday',
+  Monday = 'monday',
   Tuesday = 'tuesday',
   Wednesday = 'wednesday',
   Thursday = 'thursday',
