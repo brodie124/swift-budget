@@ -1,5 +1,8 @@
 import {Component} from '@angular/core';
 import moment from 'moment';
+import {CalendarDay} from "../types/calendar/calendar-types";
+import { EventFrequency } from '../types/event/event-frequency';
+import {InvalidDayFallback, RecurringEvent, RecurringEventDaily} from "../types/event/event";
 
 @Component({
   selector: 'app-event-frequency',
@@ -41,88 +44,8 @@ export class EventFrequencyComponent {
 }
 
 
-export interface RecurringEventDaily {
-  frequency: EventFrequency.Daily;
-  selectedDays: Array<CalendarDay>;
-}
-
-export interface RecurringEventWeekly {
-  frequency: EventFrequency.Weekly;
-  selectedDay: CalendarDay;
-}
-
-export interface RecurringEventMonthly {
-  frequency: EventFrequency.Weekly;
-  selectedMonths: Array<CalendarMonth>;
-  options: MonthlySpecificDateOptions | MonthlySpecificDayOptions | MonthlySpecificDaySpecialOptions;
-}
-
-export interface MonthlySpecificDateOptions {
-  type: 'specific-date';
-  dayOfMonth: number;
-}
-
-export interface MonthlySpecificDayOptions {
-  type: 'specific-day';
-  day: string;
-  occurrenceInMonth: number;
-}
-
-export interface MonthlySpecificDaySpecialOptions {
-  type: 'specific-day-special';
-  position: 'first' | 'last';
-}
 
 
-export interface RecurringEventAdvancedOptions {
-  advancedOptions: {
-    weekdaysAllowed: boolean;
-    weekendsAllowed: boolean;
-    workingDaysAllowed: boolean;
-    invalidDayFallback: InvalidDayFallback;
-  }
-}
-
-export enum InvalidDayFallback {
-  PreviousAllowedDay,
-  NextAllowedDay
-}
-
-export type RecurringEvent =
-  RecurringEventAdvancedOptions
-  & (RecurringEventDaily | RecurringEventWeekly | RecurringEventMonthly);
 
 
-export enum EventFrequency {
-  Daily,
-  Weekly,
-  Monthly,
-  Quarterly,
-  Biannually,
-  Annually,
-}
 
-export enum CalendarDay {
-  Monday = 'monday',
-  Tuesday = 'tuesday',
-  Wednesday = 'wednesday',
-  Thursday = 'thursday',
-  Friday = 'friday',
-  Saturday = 'saturday',
-  Sunday = 'sunday'
-}
-
-export enum CalendarMonth {
-  January,
-  February,
-  March,
-  April,
-  May,
-  June,
-  July,
-  August,
-  September,
-  October,
-  November,
-  December
-}

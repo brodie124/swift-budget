@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import {C} from "@angular/cdk/keycodes";
-import {CalendarDay} from "../../event-frequency/event-frequency.component";
+import { CalendarDay } from 'src/app/types/calendar/calendar-types';
 
 type SelectedDays = {
   [key in keyof CalendarDay]: boolean;
@@ -9,7 +8,7 @@ type SelectedDays = {
 @Component({
   selector: 'app-event-frequency-form',
   templateUrl: './event-frequency-form.component.html',
-  styleUrls: ['./event-frequency-form.component.css']
+  styleUrls: ['./event-frequency-form.component.less']
 })
 export class EventFrequencyFormComponent {
 
