@@ -1,16 +1,34 @@
 <div class="event-quick-list">
-  <p-card *ngFor="let event of calculatedEvents">
+  <p-card *ngFor="let event of calculatedEvents" class="block mb-5 event-item">
+      <ng-template pTemplate="footer">
+        <div class="mark-as-paid-reminder">
+          <span>The due date for this bill has passed.&nbsp;</span>
+          <a href="#">Click here to mark it as paid</a>
+        </div>
+      </ng-template>
+
+
+
+
 
     <div class="flex flex-row">
+      <div>
+<!--        ICON HERE-->
+      </div>
+
       <div class="flex-grow-1">
         <h3 class="m-0 p-0">{{ event.event.name }}</h3>
         {{ event.nextOccurrence?.format("DD/MM/YYYY")}}
+
+        <div class="toolbar" style="font-size: 0.5rem;">
+          <p-button label="Mark as paid" [text]="true" size="small" />
+        </div>
+
       </div>
       <div style="font-size: 2.5rem;">
         <span class="p-text-secondary" style="font-size: 2rem;">£</span>
         {{ event.event.expense }}
       </div>
-
     </div>
 
 

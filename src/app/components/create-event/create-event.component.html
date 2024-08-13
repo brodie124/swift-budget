@@ -23,23 +23,24 @@
 
 <ng-template #details>
   <div class="form-field mb-2">
-      <label for="name">Name</label>
-      <input pInputText type="text" id="name" [(ngModel)]="name" />
+    <label for="name">Name</label>
+    <input pInputText type="text" id="name" [(ngModel)]="name"/>
   </div>
 
   <div class="form-field mb-2">
-      <label for="description">Description</label>
-      <textarea pInputTextarea id="description" [(ngModel)]="description"></textarea>
-  </div>
-
-  <div class="form-field mb-2">
-      <label>Cost</label>
+    <label>Cost</label>
     <p-inputGroup>
       <p-inputGroupAddon>&pound;</p-inputGroupAddon>
       <p-inputNumber mode="decimal" [minFractionDigits]="2" [(ngModel)]="cost"/>
     </p-inputGroup>
-
   </div>
+
+  <div class="form-field mb-2">
+    <label for="description">Description</label>
+    <textarea pInputTextarea id="description" [(ngModel)]="description"></textarea>
+  </div>
+
+
 </ng-template>
 
 <ng-template #frequency>
@@ -57,9 +58,9 @@
     <tr>
       <td>On a</td>
       <td class="form-field">
-          <p-dropdown [(ngModel)]="eventType" [options]="frequencyOperationOptions"
-                      optionLabel="label" optionValue="value"
-                      placeholder="Select an operation"/>
+        <p-dropdown [(ngModel)]="eventType" [options]="frequencyOperationOptions"
+                    optionLabel="label" optionValue="value"
+                    placeholder="Select an operation"/>
       </td>
     </tr>
 
@@ -67,7 +68,7 @@
     <tr>
       <td></td>
       <td class="form-field">
-        <p-calendar dateFormat="dd/mm/yy" [(ngModel)]="specificDate" [showIcon]="true" />
+        <p-calendar dateFormat="dd/mm/yy" [(ngModel)]="specificDate" [showIcon]="true"/>
       </td>
     </tr>
   </table>
@@ -80,7 +81,7 @@
         Are weekdays valid?
       </td>
       <td class="form-field checkbox mb-0">
-        <p-checkbox [(ngModel)]="allowWeekdays" [binary]="true" inputId="allowWeekdays" />
+        <p-checkbox [(ngModel)]="allowWeekdays" [binary]="true" inputId="allowWeekdays"/>
         <label for="allowWeekdays">Allow weekdays</label>
       </td>
     </tr>
@@ -90,7 +91,7 @@
         Are weekends valid?
       </td>
       <td class="form-field checkbox mb-0">
-        <p-checkbox [(ngModel)]="allowWeekends" [binary]="true" inputId="allowWeekends"  />
+        <p-checkbox [(ngModel)]="allowWeekends" [binary]="true" inputId="allowWeekends"/>
         <label for="allowWeekends">Allow weekends</label>
       </td>
     </tr>
@@ -108,12 +109,12 @@
       <td class="flex flex-wrap gap-3">
         <div class="form-field radio mb-0">
           <p-radioButton [(ngModel)]="invalidDayFallback" [value]="InvalidDayFallback.PreviousAllowedDay"
-                         inputId="invalidDayFallbackPreviousAllowedDay" />
+                         inputId="invalidDayFallbackPreviousAllowedDay"/>
           <label for="invalidDayFallbackPreviousAllowedDay">Early</label>
         </div>
         <div class="form-field radio mb-0">
           <p-radioButton [(ngModel)]="invalidDayFallback" [value]="InvalidDayFallback.NextAllowedDay"
-                         inputId="invalidDayFallbackNextAllowedDay" />
+                         inputId="invalidDayFallbackNextAllowedDay"/>
           <label for="invalidDayFallbackNextAllowedDay">Late</label>
         </div>
       </td>
