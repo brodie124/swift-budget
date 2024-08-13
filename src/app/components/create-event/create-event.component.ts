@@ -30,6 +30,14 @@ export class CreateEventComponent {
   public allowWeekends: boolean = false;
   public allowWorkingDays: boolean = true;
 
+  public frequencyCategoryOptions = [
+    { label: 'month', value: EventFrequency.Monthly }
+  ];
+
+  public frequencyOperationOptions  = [
+    { label: 'specific date', value: 'specific-date' }
+  ];
+
   public formGroup = this._formBuilder.group({
 
   });

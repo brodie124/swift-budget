@@ -1,140 +1,121 @@
-<mat-stepper>
-  <mat-step>
+<p-stepper orientation="vertical">
 
+  <p-stepperPanel header="Details">
+    <ng-template pTemplate="content">
+      <ng-container *ngTemplateOutlet="details"/>
+    </ng-template>
 
-    <button mat-button matStepperPrevious>Back</button>
-    <button mat-button matStepperNext>Next</button>
-  </mat-step>
+  </p-stepperPanel>
+  <p-stepperPanel header="Frquency">
+    <ng-template pTemplate="content">
+      <ng-container *ngTemplateOutlet="frequency"/>
+    </ng-template>
+  </p-stepperPanel>
 
-</mat-stepper>
+  <p-stepperPanel header="Advanced Options">
+    <ng-template pTemplate="content">
+      <ng-container *ngTemplateOutlet="advancedOptions"/>
+    </ng-template>
+  </p-stepperPanel>
+
+</p-stepper>
 
 
 <ng-template #details>
+  <div class="form-field">
+      <label for="name">Name</label>
+      <input pInputText type="text" id="name" [(ngModel)]="name" />
+  </div>
 
+  <div class="form-field">
+      <label for="description">Description</label>
+      <textarea pInputTextarea id="description" [(ngModel)]="description"></textarea>
+  </div>
+
+  <div class="form-field">
+      <label>Cost</label>
+      <p-inputNumber mode="decimal" min="0" step="0.01" [(ngModel)]="cost"/>
+  </div>
 </ng-template>
 
 <ng-template #frequency>
-
-</ng-template>
-
-<ng-template #advancedOptions>
-
-</ng-template>
-
-
-
-<mat-expansion-panel style="margin-bottom: 22px;" expanded>
-  <mat-expansion-panel-header>Details</mat-expansion-panel-header>
-  <div>
-    <mat-form-field>
-      <mat-label>Name</mat-label>
-      <input matInput type="text" [(ngModel)]="name"/>
-    </mat-form-field>
-  </div>
-
-  <div>
-    <mat-form-field>
-      <mat-label>Description</mat-label>
-      <textarea matInput [(ngModel)]="description"></textarea>
-    </mat-form-field>
-  </div>
-
-  <div>
-    <mat-form-field>
-      <mat-label>Cost</mat-label>
-      <input matInput type="number" min="0" step="0.01" [(ngModel)]="cost"/>
-    </mat-form-field>
-  </div>
-
-</mat-expansion-panel>
-
-
-<mat-expansion-panel style="margin-bottom: 22px;" expanded>
-  <mat-expansion-panel-header>Frequency</mat-expansion-panel-header>
-
   <table>
     <tr>
       <td>Every</td>
-      <td>
-        <mat-form-field>
-          <mat-select [(ngModel)]="eventFrequency">
-            <mat-option [value]="EventFrequency.Monthly">month</mat-option>
-          </mat-select>
-        </mat-form-field>
+      <td class="form-field">
+        <p-dropdown [(ngModel)]="eventFrequency" [options]="frequencyCategoryOptions" optionLabel="label"
+                    placeholder="Select a frequency"/>
       </td>
     </tr>
 
 
     <tr>
       <td>On a</td>
-      <td>
-        <mat-form-field>
-          <mat-select [(ngModel)]="eventType">
-            <mat-option [value]="'specific-date'">specific date</mat-option>
-          </mat-select>
-        </mat-form-field>
+      <td class="form-field">
+          <p-dropdown [(ngModel)]="eventType" [options]="frequencyOperationOptions" optionLabel="label" />
       </td>
     </tr>
 
 
     <tr>
       <td></td>
-      <td>
-        <mat-form-field>
-          <mat-label>Day of the month</mat-label>
-          <input matInput type="number" [(ngModel)]="dayOfMonth"/>
-        </mat-form-field>
+      <td class="form-field">
+        <label>Day of the month</label>
+        <p-calendar dateFormat="dd/mm/yy" [(ngModel)]="dayOfMonth"/>
       </td>
     </tr>
   </table>
-</mat-expansion-panel>
+</ng-template>
 
+<ng-template #advancedOptions>
+  <table>
+    <tr>
+      <td>
+        Are weekdays valid?
+      </td>
+      <td class="form-field checkbox">
+        <p-checkbox [(ngModel)]="allowWeekdays" [binary]="true" inputId="allowWeekdays" />
+        <label for="allowWeekdays">Allow weekdays</label>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        Are weekends valid?
+      </td>
+      <td class="form-field checkbox">
+        <p-checkbox [(ngModel)]="allowWeekends" [binary]="true" inputId="allowWeekends"  />
+        <label for="allowWeekends">Allow weekends</label>
+      </td>
+    </tr>
 
-<div *ngIf="true" style="margin-bottom: 22px;">
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>Advanced Options</mat-expansion-panel-header>
-    <table>
-      <tr>
-        <td>
-          Are weekdays valid?
-        </td>
-        <td>
-          <mat-checkbox [(ngModel)]="allowWeekdays">Allow weekdays</mat-checkbox>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Are weekends valid?
-        </td>
-        <td>
-          <mat-checkbox [(ngModel)]="allowWeekends">Allow weekends</mat-checkbox>
-        </td>
-      </tr>
+    <tr>
+      <td colspan="2">
+        <hr/>
+      </td>
+    </tr>
 
-      <tr>
-        <td colspan="2">
-          <hr/>
-        </td>
-      </tr>
+    <tr>
+      <td>
+        Is the bill charged early or late?
+      </td>
+      <td class="flex flex-wrap gap-3">
+        <div class="form-field radio">
+          <p-radioButton [(ngModel)]="invalidDayFallback" [value]="InvalidDayFallback.PreviousAllowedDay"
+                         inputId="invalidDayFallbackPreviousAllowedDay" />
+          <label for="invalidDayFallbackPreviousAllowedDay">Before</label>
+        </div>
+        <div class="form-field radio">
+          <p-radioButton [(ngModel)]="invalidDayFallback" [value]="InvalidDayFallback.NextAllowedDay"
+                         inputId="invalidDayFallbackNextAllowedDay" />
+          <label for="invalidDayFallbackNextAllowedDay">After</label>
+        </div>
+      </td>
+    </tr>
+  </table>
+</ng-template>
 
-      <tr>
-        <td>
-          Is the bill charged early or late?
-        </td>
-        <td>
-          <mat-radio-group aria-label="Select an option" [(ngModel)]="invalidDayFallback">
-            <mat-radio-button [value]="InvalidDayFallback.PreviousAllowedDay">Before</mat-radio-button>
-            <mat-radio-button [value]="InvalidDayFallback.NextAllowedDay">After</mat-radio-button>
-          </mat-radio-group>
-        </td>
-      </tr>
-    </table>
-
-
-  </mat-expansion-panel>
-</div>
 
 <div style="display: flex; flex-direction: row;">
-  <button mat-flat-button color="warn" style="margin-right: 11px;" (click)="cancel()">Cancel</button>
-  <button mat-flat-button color="primary" (click)="create()">Create</button>
+  <p-button [severity]="'warning'" (click)="cancel()" [style]="{marginRight: '1rem'}">Cancel</p-button>
+  <p-button [severity]="'primary'" (click)="create()">Create</p-button>
 </div>

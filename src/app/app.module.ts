@@ -21,6 +21,16 @@ import {MatRadioModule} from "@angular/material/radio";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import { EventQuickListComponent } from './components/event-quick-list/event-quick-list.component';
 import {MatStepperModule} from "@angular/material/stepper";
+import {Button} from "primeng/button";
+import {StepperModule} from "primeng/stepper";
+import {FloatLabelModule} from "primeng/floatlabel";
+import {InputTextModule} from "primeng/inputtext";
+import {InputTextareaModule} from "primeng/inputtextarea";
+import {InputNumberModule} from "primeng/inputnumber";
+import {DropdownModule} from "primeng/dropdown";
+import {CalendarModule} from "primeng/calendar";
+import {CheckboxModule} from "primeng/checkbox";
+import {RadioButtonModule} from "primeng/radiobutton";
 
 @NgModule({
   declarations: [
@@ -31,23 +41,33 @@ import {MatStepperModule} from "@angular/material/stepper";
     CreateEventComponent,
     EventQuickListComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatSelectModule,
-        MatExpansionModule,
-        MatChipsModule,
-        MatRadioModule,
-        MatCheckboxModule,
-        MatStepperModule
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule,
+    MatExpansionModule,
+    MatChipsModule,
+    MatRadioModule,
+    MatCheckboxModule,
+    MatStepperModule,
+    Button,
+    StepperModule,
+    FloatLabelModule,
+    InputTextModule,
+    InputTextareaModule,
+    InputNumberModule,
+    DropdownModule,
+    CalendarModule,
+    CheckboxModule,
+    RadioButtonModule
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
