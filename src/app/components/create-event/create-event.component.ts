@@ -5,6 +5,7 @@ import {AllCalendarMonths} from "../../types/calendar/calendar-types";
 import {EventManagerService} from "../../services/event-manager.service";
 import {Router} from "@angular/router";
 import {FinancialEvent} from "../../types/financial/financial-event";
+import {FormBuilder} from "@angular/forms";
 
 @Component({
   selector: 'app-create-event',
@@ -29,10 +30,16 @@ export class CreateEventComponent {
   public allowWeekends: boolean = false;
   public allowWorkingDays: boolean = true;
 
+  public formGroup = this._formBuilder.group({
+
+  });
+
   constructor(
     private readonly _router: Router,
     private readonly _eventManager: EventManagerService,
+    private readonly _formBuilder: FormBuilder,
   ) {
+
   }
 
   public async create(): Promise<void> {

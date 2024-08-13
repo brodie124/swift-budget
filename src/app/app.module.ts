@@ -20,6 +20,7 @@ import {MatChipsModule} from "@angular/material/chips";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import { EventQuickListComponent } from './components/event-quick-list/event-quick-list.component';
+import {MatStepperModule} from "@angular/material/stepper";
 
 @NgModule({
   declarations: [
@@ -30,22 +31,23 @@ import { EventQuickListComponent } from './components/event-quick-list/event-qui
     CreateEventComponent,
     EventQuickListComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatSelectModule,
-    MatExpansionModule,
-    MatChipsModule,
-    MatRadioModule,
-    MatCheckboxModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatSelectModule,
+        MatExpansionModule,
+        MatChipsModule,
+        MatRadioModule,
+        MatCheckboxModule,
+        MatStepperModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
