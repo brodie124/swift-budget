@@ -23,7 +23,7 @@ export class CreateEventComponent {
 
   public eventFrequency: EventFrequency = EventFrequency.Monthly;
   public eventType: 'specific-date' = 'specific-date';
-  public dayOfMonth: number = 1;
+  public specificDate?: Date;
 
   public invalidDayFallback: InvalidDayFallback = InvalidDayFallback.NextAllowedDay;
   public allowWeekdays: boolean = true;
@@ -52,16 +52,18 @@ export class CreateEventComponent {
 
   public async create(): Promise<void> {
     // TODO: this setup is incredibly specific to the Monthly/specific-date configuration
-    if(this.eventFrequency !== EventFrequency.Monthly) {
+    if(this.eventFrequency !== EventFrequency.Monthly)
       throw new Error('Unhandled event frequency!');
-    }
+
+    if(!this.specificDate?.getDate())
+      throw new Error('Specific date is null!');
 
     const x: RecurringEvent = {
       frequency: this.eventFrequency,
       selectedMonths: [...AllCalendarMonths],
       options: {
         type: this.eventType,
-        dayOfMonth: this.dayOfMonth
+        dayOfMonth:  this.specificDate?.getDate() ?? 0
       },
       advancedOptions: {
         invalidDayFallback: this.invalidDayFallback,

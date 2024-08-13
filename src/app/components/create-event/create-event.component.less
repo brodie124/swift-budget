@@ -2,8 +2,6 @@
   display: flex;
   flex-direction: column;
 
-  margin-bottom: 2rem;
-
   &.checkbox {
     flex-direction: row;
 
@@ -20,3 +18,11 @@
     }
   }
 }
+
+
+each(range(3), {
+  table tr.spacer-@{index} {
+    height: (@index * 0.5rem);
+  }
+})
+
