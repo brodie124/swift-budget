@@ -34,7 +34,11 @@
 
   <div class="form-field mb-2">
       <label>Cost</label>
-      <p-inputNumber mode="decimal" min="0" step="0.01" [(ngModel)]="cost"/>
+    <p-inputGroup>
+      <p-inputGroupAddon>&pound;</p-inputGroupAddon>
+      <p-inputNumber mode="decimal" [minFractionDigits]="2" [(ngModel)]="cost"/>
+    </p-inputGroup>
+
   </div>
 </ng-template>
 
@@ -63,7 +67,7 @@
     <tr>
       <td></td>
       <td class="form-field">
-        <p-calendar dateFormat="dd/mm/yy" [(ngModel)]="specificDate"/>
+        <p-calendar dateFormat="dd/mm/yy" [(ngModel)]="specificDate" [showIcon]="true" />
       </td>
     </tr>
   </table>

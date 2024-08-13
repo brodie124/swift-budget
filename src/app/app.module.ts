@@ -20,6 +20,8 @@ import {DropdownModule} from "primeng/dropdown";
 import {CalendarModule} from "primeng/calendar";
 import {CheckboxModule} from "primeng/checkbox";
 import {RadioButtonModule} from "primeng/radiobutton";
+import {InputGroupModule} from "primeng/inputgroup";
+import {InputGroupAddonModule} from "primeng/inputgroupaddon";
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import {RadioButtonModule} from "primeng/radiobutton";
     DropdownModule,
     CalendarModule,
     CheckboxModule,
-    RadioButtonModule
+    RadioButtonModule,
+    InputGroupModule,
+    InputGroupAddonModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -9,3 +9,21 @@ body {
   max-width: 600px;
   margin: 0 auto;
 }
+
+
+
+/* Fixes for PrimeNG - border radius of p-inputNumber is not correct when within a p-inputGroup */
+.p-inputgroup > p-inputnumber input.p-inputnumber-input {
+  border-radius: 0;
+  margin: 0;
+}
+
+.p-inputgroup p-inputnumber:last-child input.p-inputnumber-input {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.p-inputgroup p-inputnumber:first-child input.p-inputnumber-input {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
