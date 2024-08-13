@@ -22,6 +22,7 @@ import {CheckboxModule} from "primeng/checkbox";
 import {RadioButtonModule} from "primeng/radiobutton";
 import {InputGroupModule} from "primeng/inputgroup";
 import {InputGroupAddonModule} from "primeng/inputgroupaddon";
+import {CardModule} from "primeng/card";
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import {InputGroupAddonModule} from "primeng/inputgroupaddon";
     CheckboxModule,
     RadioButtonModule,
     InputGroupModule,
-    InputGroupAddonModule
+    InputGroupAddonModule,
+    CardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

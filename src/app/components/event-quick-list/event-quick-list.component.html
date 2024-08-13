@@ -1,7 +1,18 @@
-<ul class="event-quick-list">
-  <li *ngFor="let event of calculatedEvents">
-    {{ event.event.name }}
-    <br />
-    {{ event.nextOccurrence?.format("DD/MM/YYYY")}}
-  </li>
-</ul>
+<div class="event-quick-list">
+  <p-card *ngFor="let event of calculatedEvents">
+
+    <div class="flex flex-row">
+      <div class="flex-grow-1">
+        <h3 class="m-0 p-0">{{ event.event.name }}</h3>
+        {{ event.nextOccurrence?.format("DD/MM/YYYY")}}
+      </div>
+      <div style="font-size: 2.5rem;">
+        <span class="p-text-secondary" style="font-size: 2rem;">£</span>
+        {{ event.event.expense }}
+      </div>
+
+    </div>
+
+
+  </p-card>
+</div>
