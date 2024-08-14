@@ -19,7 +19,7 @@ export class EventQuickListComponent {
   @Input()
   public set events(value: ReadonlyArray<FinancialEvent>) {
     this._calculatedEvents = this.calculateEvents(value);
-    this._calculatedEvents.sort((a, b) => compareMomentsAscending(a.nextOccurrence, b.nextOccurrence));
+    this._calculatedEvents.sort((a, b) => compareMomentsAscending(a.nextOccurrence?.date, b.nextOccurrence?.date));
   }
 
   @Input()
@@ -32,29 +32,47 @@ export class EventQuickListComponent {
   constructor(private readonly _eventEngine: EventEngineService) {
   }
 
+  public daysUntil(date: moment.Moment): number {
+    return date.diff(moment(), 'days', true);
+  }
+
   private calculateEvents(events: ReadonlyArray<FinancialEvent>): Array<CalculatedFinancialEvent> {
     const x: Array<CalculatedFinancialEvent> = [];
 
-    for(let event of events) {
+    for (let event of events) {
       const occurrences = this._eventEngine.calculateOccurrences(event.trigger, this.startDate, this.endDate);
       const nextOccurrence = occurrences.length > 0 ? occurrences[0] : undefined;
+      const timeUntilSeconds = nextOccurrence?.diff(moment(), 'seconds', false) ?? NaN;
+
+      const nextOccurrenceX = {
+        date: nextOccurrence!,
+        timeUntil: {
+          seconds: timeUntilSeconds,
+          days: timeUntilSeconds / 86400
+        }
+      }
 
       x.push({
         event: event,
         occurrences: occurrences,
-        nextOccurrence: nextOccurrence
+        nextOccurrence: occurrences.length > 0
+          ? nextOccurrenceX
+          : undefined
       });
     }
 
     return x;
   }
-
-
-
 }
 
 export type CalculatedFinancialEvent = {
   event: FinancialEvent,
-  nextOccurrence?: moment.Moment,
+  nextOccurrence?: {
+    date: moment.Moment;
+    timeUntil: {
+      seconds: number;
+      days: number;
+    }
+  },
   occurrences: Array<moment.Moment>
 }
