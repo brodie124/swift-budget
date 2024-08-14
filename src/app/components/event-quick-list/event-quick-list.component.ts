@@ -32,10 +32,6 @@ export class EventQuickListComponent {
   constructor(private readonly _eventEngine: EventEngineService) {
   }
 
-  public daysUntil(date: moment.Moment): number {
-    return date.diff(moment(), 'days', true);
-  }
-
   private calculateEvents(events: ReadonlyArray<FinancialEvent>): Array<CalculatedFinancialEvent> {
     const x: Array<CalculatedFinancialEvent> = [];
 
@@ -55,6 +51,7 @@ export class EventQuickListComponent {
       x.push({
         event: event,
         occurrences: occurrences,
+        isPaid: false,
         nextOccurrence: occurrences.length > 0
           ? nextOccurrenceX
           : undefined
@@ -74,5 +71,6 @@ export type CalculatedFinancialEvent = {
       days: number;
     }
   },
-  occurrences: Array<moment.Moment>
+  occurrences: Array<moment.Moment>;
+  isPaid: boolean;
 }
