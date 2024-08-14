@@ -32,6 +32,13 @@ export class EventQuickListComponent {
   constructor(private readonly _eventEngine: EventEngineService) {
   }
 
+  public shouldShowReminderForEvent(event: CalculatedFinancialEvent): boolean {
+    return !!event.nextOccurrence
+      && !event.isPaid
+      && event.nextOccurrence.timeUntil.days >= 0
+      && event.nextOccurrence.timeUntil.days <= 2
+  }
+
   private calculateEvents(events: ReadonlyArray<FinancialEvent>): Array<CalculatedFinancialEvent> {
     const x: Array<CalculatedFinancialEvent> = [];
 
