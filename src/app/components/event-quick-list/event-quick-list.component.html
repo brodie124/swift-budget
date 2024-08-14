@@ -3,7 +3,8 @@
       <ng-template pTemplate="footer">
         @if(event.nextOccurrence && event.nextOccurrence.timeUntil.days >= 0 && event.nextOccurrence.timeUntil.days <= 2) {
           <div class="mark-as-paid-reminder">
-            <span>Due in
+            <span>
+              Due in
               {{ event.nextOccurrence.timeUntil.days | number:'1.0-0' }}
               {{ event.nextOccurrence.timeUntil.days >= 2 ? 'days' : 'day' }}
             </span>
