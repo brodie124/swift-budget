@@ -1,26 +1,29 @@
-import {Component, Input} from '@angular/core';
+import {Component, inject, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {FinancialEvent} from "../../types/financial/financial-event";
 import moment from "moment";
 import {compareMomentsAscending} from "../../helpers/moment-utils";
-import {EventEngineService} from "../../services/event-engine/event-engine.service";
+import {CalculatedFinancialEvent, FinancialEventService} from "../../services/financial-event.service";
 
 @Component({
   selector: 'app-event-quick-list',
   templateUrl: './event-quick-list.component.html',
   styleUrls: ['./event-quick-list.component.less']
 })
-export class EventQuickListComponent {
-  private _calculatedEvents: Array<CalculatedFinancialEvent> = [];
-  public get calculatedEvents(): ReadonlyArray<CalculatedFinancialEvent> {
-    return this._calculatedEvents;
+export class EventQuickListComponent implements OnChanges {
+
+  private readonly _financialEventService: FinancialEventService = inject(FinancialEventService);
+
+  private _items: Array<EventQuickListItem> = [];
+  public get items(): ReadonlyArray<EventQuickListItem> {
+    return this._items;
   }
 
 
   @Input()
-  public set events(value: ReadonlyArray<FinancialEvent>) {
-    this._calculatedEvents = this.calculateEvents(value);
-    this._calculatedEvents.sort((a, b) => compareMomentsAscending(a.nextOccurrence?.date, b.nextOccurrence?.date));
-  }
+  public events: ReadonlyArray<FinancialEvent> = [];
+  //   this._calculatedEvents = this._financialEventService.getCalculatedEvents(value, this.startDate, this.endDate);
+  //   this._calculatedEvents.sort((a, b) => compareMomentsAscending(a.nextOccurrence?.date, b.nextOccurrence?.date));
+  // }
 
   @Input()
   public startDate: moment.Moment = moment.utc(); //.subtract(1, 'month');
@@ -28,60 +31,55 @@ export class EventQuickListComponent {
   @Input()
   public endDate: moment.Moment = moment.utc().add(3, 'months');
 
-
-  constructor(private readonly _eventEngine: EventEngineService) {
+  public ngOnChanges(changes: SimpleChanges): void {
+    this.updateQuickList();
   }
 
-  public shouldShowReminderForEvent(event: CalculatedFinancialEvent): boolean {
+
+  public shouldShowReminderForEvent(event: EventQuickListItem): boolean {
     return !!event.nextOccurrence
-      && !event.isPaid
+      && !event.calculatedEvent.isPaid
       && event.nextOccurrence.timeUntil.days >= 0
       && event.nextOccurrence.timeUntil.days <= 2
   }
 
-  private calculateEvents(events: ReadonlyArray<FinancialEvent>): Array<CalculatedFinancialEvent> {
-    const x: Array<CalculatedFinancialEvent> = [];
+  private updateQuickList(): void {
+    const calculatedEvents = this._financialEventService.getCalculatedEvents(this.events, this.startDate, this.endDate);
+    this._items = calculatedEvents
+      .map(this.createQuickListItem)
+      .sort((a, b) => compareMomentsAscending(a.nextOccurrence.date, b.nextOccurrence.date));
+  }
 
-    for (let event of events) {
-      const occurrences = this._eventEngine.getOccurrences({
-        trigger: event.trigger,
-        startDate: this.startDate,
-        endDate: this.endDate
-      });
-      const nextOccurrence = occurrences.length > 0 ? occurrences[0] : undefined;
-      const timeUntilSeconds = nextOccurrence?.diff(moment(), 'seconds', false) ?? NaN;
+  private createQuickListItem(calculatedEvent: CalculatedFinancialEvent): EventQuickListItem {
+    if(calculatedEvent.occurrences.length <= 0)
+      throw new Error('Cannot create quick list item without at least one occurrence!');
 
-      const nextOccurrenceX = {
-        date: nextOccurrence!,
+    const nextOccurrence = calculatedEvent.occurrences[0];
+    const timeUntilSeconds = nextOccurrence.diff(moment(), 'seconds', false);
+
+    return {
+      financialEvent: calculatedEvent.event,
+      calculatedEvent: calculatedEvent,
+      nextOccurrence: {
+        date: nextOccurrence,
         timeUntil: {
           seconds: timeUntilSeconds,
           days: timeUntilSeconds / 86400
         }
       }
-
-      x.push({
-        event: event,
-        occurrences: occurrences,
-        isPaid: false,
-        nextOccurrence: occurrences.length > 0
-          ? nextOccurrenceX
-          : undefined
-      });
     }
-
-    return x;
   }
 }
 
-export type CalculatedFinancialEvent = {
-  event: FinancialEvent,
-  nextOccurrence?: {
+export type EventQuickListItem = {
+  financialEvent: FinancialEvent;
+  calculatedEvent: CalculatedFinancialEvent;
+  nextOccurrence: {
     date: moment.Moment;
     timeUntil: {
       seconds: number;
       days: number;
     }
   },
-  occurrences: Array<moment.Moment>;
-  isPaid: boolean;
 }
+
