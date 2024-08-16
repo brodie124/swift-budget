@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
-import {EventTrigger, EventTriggerMonthly} from "../types/event/event";
-import {EventFrequency} from "../types/event/event-frequency";
 import moment from "moment";
-import {compareMomentsAscending} from "../helpers/moment-utils";
+import {EventTrigger, EventTriggerMonthly} from "../../types/event/event";
+import {EventFrequency} from "../../types/event/event-frequency";
+import {compareMomentsAscending} from "../../helpers/moment-utils";
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +11,12 @@ export class EventEngineService {
 
   public calculateOccurrences(trigger: EventTrigger, startDate: moment.Moment, endDate: moment.Moment): Array<moment.Moment> {
     let occurrences: Array<moment.Moment> = [];
-    if(trigger.frequency === EventFrequency.Monthly) {
+    if (trigger.frequency === EventFrequency.Monthly) {
       // Handle the monthly frequency
       occurrences = this.calculateMonthlyOccurrences(trigger, startDate, endDate);
     }
 
-    occurrences.sort((a, b) => compareMomentsAscending(a, b))
+    occurrences.sort(compareMomentsAscending);
     return occurrences;
   }
 
@@ -24,8 +24,8 @@ export class EventEngineService {
     const occurrences: Array<moment.Moment> = [];
 
     const deltaMonths = endDate.diff(startDate, 'months');
-    for(let i = 0; i <= deltaMonths; i++) {
-      switch(trigger.options.type) {
+    for (let i = 0; i <= deltaMonths; i++) {
+      switch (trigger.options.type) {
         case 'specific-date':
           const incrementedDate = moment(startDate).add(i, 'months');
           const year = incrementedDate.year();
@@ -37,12 +37,8 @@ export class EventEngineService {
           const date = moment.utc(dateString)
           occurrences.push(date);
       }
-
-
     }
-
 
     return occurrences;
   }
-
 }

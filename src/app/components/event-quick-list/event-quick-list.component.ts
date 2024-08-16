@@ -1,8 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {FinancialEvent} from "../../types/financial/financial-event";
-import {EventEngineService} from "../../services/event-engine.service";
 import moment from "moment";
-import {compareMomentsAscending, compareMomentsDescending} from "../../helpers/moment-utils";
+import {compareMomentsAscending} from "../../helpers/moment-utils";
+import {EventEngineService} from "../../services/event-engine/event-engine.service";
 
 @Component({
   selector: 'app-event-quick-list',
