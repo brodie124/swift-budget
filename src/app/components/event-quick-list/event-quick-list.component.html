@@ -14,14 +14,23 @@
 
 
     <div class="flex flex-row">
-      <div class="mr-4 flex align-items-center justify-content-center" style="font-size: 24px;">
+      <div class="mr-4 flex flex-column align-items-center justify-content-center" style="font-size: 24px;">
 <!--        ICON HERE-->
+
         @if(event.isPaid) {
           <i class="fa-regular fa-circle-check text-green-500"></i>
         } @else if((event.nextOccurrence?.timeUntil?.days ?? 999) < 0) {
           <i class="fa-regular fa-circle-exclamation text-red-500"></i>
         } @else {
+          <strong class="mb-3" style="font-size: 0.5em;">due</strong>
           <i class="fa-regular fa-clock"></i>
+          @if(event.nextOccurrence && event.nextOccurrence.timeUntil) {
+            <small class="text-center mt-3" style="font-size: 0.5em;">
+              {{ event.nextOccurrence.timeUntil.days | number:'0.0-0' }}
+              <br />
+              {{ event.nextOccurrence.timeUntil.days >= 2 || event.nextOccurrence.timeUntil.days === 0 ? 'days' : 'day' }}
+            </small>
+          }
         }
 
       </div>
