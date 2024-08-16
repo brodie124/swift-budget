@@ -1,17 +1,17 @@
 import {EventFrequency} from "./event-frequency";
 import {CalendarDay, CalendarMonth} from "../calendar/calendar-types";
 
-export interface RecurringEventDaily {
+export interface EventTriggerDaily {
   frequency: EventFrequency.Daily;
   selectedDays: Array<CalendarDay>;
 }
 
-export interface RecurringEventWeekly {
+export interface EventTriggerWeekly {
   frequency: EventFrequency.Weekly;
   selectedDay: CalendarDay;
 }
 
-export interface RecurringEventMonthly {
+export interface EventTriggerMonthly {
   frequency: EventFrequency.Monthly;
   selectedMonths: Array<CalendarMonth>;
   options: MonthlySpecificDateOptions | MonthlySpecificDayOptions | MonthlySpecificDaySpecialOptions;
@@ -34,7 +34,7 @@ export interface MonthlySpecificDaySpecialOptions {
 }
 
 
-export interface RecurringEventAdvancedOptions {
+export interface EventTriggerAdvancedOptions {
   advancedOptions: {
     weekdaysAllowed: boolean;
     weekendsAllowed: boolean;
@@ -48,6 +48,6 @@ export enum InvalidDayFallback {
   NextAllowedDay
 }
 
-export type RecurringEvent =
-  RecurringEventAdvancedOptions
-  & (RecurringEventDaily | RecurringEventWeekly | RecurringEventMonthly);
+export type EventTrigger =
+  EventTriggerAdvancedOptions
+  & (EventTriggerDaily | EventTriggerWeekly | EventTriggerMonthly);

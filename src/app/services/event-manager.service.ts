@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {RecurringEvent} from "../types/event/event";
 import {FinancialEvent} from "../types/financial/financial-event";
 
 @Injectable({

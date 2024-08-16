@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {EventFrequency} from "../../types/event/event-frequency";
-import {InvalidDayFallback, RecurringEvent} from "../../types/event/event";
+import {InvalidDayFallback, EventTrigger} from "../../types/event/event";
 import {AllCalendarMonths} from "../../types/calendar/calendar-types";
 import {EventManagerService} from "../../services/event-manager.service";
 import {Router} from "@angular/router";
@@ -58,7 +58,7 @@ export class CreateEventComponent {
     if(!this.specificDate?.getDate())
       throw new Error('Specific date is null!');
 
-    const x: RecurringEvent = {
+    const x: EventTrigger = {
       frequency: this.eventFrequency,
       selectedMonths: [...AllCalendarMonths],
       options: {
