@@ -1,30 +1,38 @@
 <p-card>
-  <p-stepper orientation="vertical">
+  <ng-template pTemplate="title">
+    <h2 class="m-0 p-0">Create a bill</h2>
+  </ng-template>
 
-    <p-stepperPanel header="Details">
-      <ng-template pTemplate="content">
-        <ng-container *ngTemplateOutlet="details"/>
-      </ng-template>
+  <ng-template pTemplate="content">
+    <p-stepper orientation="vertical">
 
-    </p-stepperPanel>
-    <p-stepperPanel header="Frquency">
-      <ng-template pTemplate="content">
-        <ng-container *ngTemplateOutlet="frequency"/>
-      </ng-template>
-    </p-stepperPanel>
+      <p-stepperPanel header="Details">
+        <ng-template pTemplate="content">
+          <ng-container *ngTemplateOutlet="details"/>
+        </ng-template>
 
-    <p-stepperPanel header="Advanced Options">
-      <ng-template pTemplate="content">
-        <ng-container *ngTemplateOutlet="advancedOptions"/>
-      </ng-template>
-    </p-stepperPanel>
+      </p-stepperPanel>
+      <p-stepperPanel header="Frquency">
+        <ng-template pTemplate="content">
+          <ng-container *ngTemplateOutlet="frequency"/>
+        </ng-template>
+      </p-stepperPanel>
 
-  </p-stepper>
+      <p-stepperPanel header="Advanced Options">
+        <ng-template pTemplate="content">
+          <ng-container *ngTemplateOutlet="advancedOptions"/>
+        </ng-template>
+      </p-stepperPanel>
 
-  <div class="mt-4" style="display: flex; flex-direction: row;">
-    <p-button [severity]="'warning'" (click)="cancel()" [style]="{marginRight: '1rem'}">Cancel</p-button>
-    <p-button [severity]="'primary'" (click)="create()">Create</p-button>
-  </div>
+    </p-stepper>
+
+    <div class="mt-4" style="display: flex; flex-direction: row;">
+      <p-button [severity]="'warning'" (click)="cancel()" [style]="{marginRight: '1rem'}">Cancel</p-button>
+      <p-button [severity]="'primary'" (click)="create()">Create</p-button>
+    </div>
+  </ng-template>
+
+
 </p-card>
 
 
