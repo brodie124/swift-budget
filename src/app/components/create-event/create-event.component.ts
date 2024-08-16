@@ -73,7 +73,9 @@ export class CreateEventComponent {
       }
     };
 
+    const uid = crypto.randomUUID().replace('-', '');
     const financialEvent: FinancialEvent = {
+      uid: uid,
       name: this.name,
       description: this.description,
       expense: this.cost,

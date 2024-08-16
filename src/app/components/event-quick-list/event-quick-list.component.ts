@@ -44,6 +44,8 @@ export class EventQuickListComponent implements OnChanges {
   }
 
   private updateQuickList(): void {
+    // TODO: this is inherently flawed - we currently do not display multiple occurrences of the same event.
+    //       We only show one occurrence of each event max.
     const calculatedEvents = this._financialEventService.getCalculatedEvents(this.events, this.startDate, this.endDate);
     this._items = calculatedEvents
       .map(this.createQuickListItem)

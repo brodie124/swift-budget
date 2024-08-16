@@ -37,3 +37,27 @@ export const AllCalendarMonths: ReadonlyArray<CalendarMonth> = [
   CalendarMonth.November,
   CalendarMonth.December
 ];
+
+export const AllCalendarDays: ReadonlyArray<CalendarDay> = [
+  CalendarDay.Monday,
+  CalendarDay.Tuesday,
+  CalendarDay.Wednesday,
+  CalendarDay.Thursday,
+  CalendarDay.Friday,
+  CalendarDay.Saturday,
+  CalendarDay.Sunday
+];
+
+export const CalendarWeekDays: ReadonlyArray<CalendarDay> = [
+  CalendarDay.Monday,
+  CalendarDay.Tuesday,
+  CalendarDay.Wednesday,
+  CalendarDay.Thursday,
+  CalendarDay.Friday
+];
+
+export const CalendarWeekendDays: ReadonlyArray<CalendarDay> = [
+  CalendarDay.Saturday,
+  CalendarDay.Sunday
+];
+

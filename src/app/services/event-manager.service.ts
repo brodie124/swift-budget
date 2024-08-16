@@ -22,7 +22,14 @@ export class EventManagerService {
   }
 
   public add(event: FinancialEvent): void {
-    const existingEvents = this.get();
+    let existingEvents = this.get();
+
+    // TODO: remove me!
+    existingEvents = existingEvents.map(e => {
+      e.uid ??= crypto.randomUUID().replace('-', '');
+      return e;
+    })
+
     const newEventList: FinancialEvent[] = [...existingEvents, event];
 
     const eventsJson = JSON.stringify(newEventList);
