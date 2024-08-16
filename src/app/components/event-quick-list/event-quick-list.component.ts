@@ -43,7 +43,11 @@ export class EventQuickListComponent {
     const x: Array<CalculatedFinancialEvent> = [];
 
     for (let event of events) {
-      const occurrences = this._eventEngine.calculateOccurrences(event.trigger, this.startDate, this.endDate);
+      const occurrences = this._eventEngine.getOccurrences({
+        trigger: event.trigger,
+        startDate: this.startDate,
+        endDate: this.endDate
+      });
       const nextOccurrence = occurrences.length > 0 ? occurrences[0] : undefined;
       const timeUntilSeconds = nextOccurrence?.diff(moment(), 'seconds', false) ?? NaN;
 
