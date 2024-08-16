@@ -1,6 +1,17 @@
 <div class="event-quick-list">
   <p-card *ngFor="let item of items" class="block mb-5 event-item">
     <ng-template pTemplate="footer">
+      @if (!item.calculatedEvent.isPaid && item.nextOccurrence.date.isBefore()) {
+        <div class="mark-as-paid-reminder overdue bg-red-400">
+          <span>
+            Due
+            {{ item.nextOccurrence.timeUntil.days * -1 | number:'0.0-0' }}
+            {{ item.nextOccurrence.timeUntil.days * -1 >= 2 ? 'days' : 'day' }}
+            ago
+          </span>
+        </div>
+      }
+
       @if (shouldShowReminderForEvent(item)) {
         <div class="mark-as-paid-reminder">
             <span>
