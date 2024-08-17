@@ -47,8 +47,6 @@ export class EventQuickListComponent implements OnChanges {
   }
 
   private updateQuickList(): void {
-    // TODO: this is inherently flawed - we currently do not display multiple occurrences of the same event.
-    //       We only show one occurrence of each event max.
     const calculatedEvents = this._financialEventService.getCalculatedEvents(this.events, this.startDate, this.endDate);
     this._items = calculatedEvents
       .map(this.createQuickListItem)
@@ -56,18 +54,14 @@ export class EventQuickListComponent implements OnChanges {
   }
 
   private createQuickListItem(calculatedEvent: CalculatedFinancialEvent): EventQuickListItem {
-    if(calculatedEvent.occurrences.length <= 0)
-      throw new Error('Cannot create quick list item without at least one occurrence!');
-
-    const nextOccurrence = calculatedEvent.occurrences[0];
-    const timeUntilSeconds = nextOccurrence.diff(moment(), 'seconds', false);
+    const timeUntilSeconds = calculatedEvent.date.diff(moment(), 'seconds', false);
 
     return {
       history: calculatedEvent.history,
       financialEvent: calculatedEvent.event,
       calculatedEvent: calculatedEvent,
       nextOccurrence: {
-        date: nextOccurrence,
+        date: calculatedEvent.date,
         timeUntil: {
           seconds: timeUntilSeconds,
           days: timeUntilSeconds / 86400

@@ -7,7 +7,7 @@ import {FinancialEventHistoryManager} from "./financial-event-history-manager.se
 export type CalculatedFinancialEvent = {
   event: FinancialEvent,
   history: FinancialEventHistory;
-  occurrences: Array<moment.Moment>;
+  date: moment.Moment;
   isPaid: boolean;
 }
 
@@ -38,18 +38,20 @@ export class FinancialEventService {
         continue;
       }
 
-      calculatedEvents.push({
+      const instances: Array<CalculatedFinancialEvent> = occurrences.map(date => ({
         event: event,
         history: eventHistory,
-        occurrences: occurrences,
-        isPaid: this.isPaid(eventHistory, startDate),
-      });
+        date: date,
+        isPaid: this.isPaid(eventHistory, date),
+      }));
+
+      calculatedEvents.push(...instances);
     }
 
     return calculatedEvents;
   }
 
-  private isPaid(history: FinancialEventHistory, cycleStartDate: moment.Moment): boolean {
-    return history.lastMarkedPaid?.isAfter(cycleStartDate) ?? false;
+  private isPaid(history: FinancialEventHistory, dateAsOf: moment.Moment): boolean {
+    return history.lastMarkedPaid?.isAfter(dateAsOf) ?? false;
   }
 }
