@@ -2,11 +2,14 @@
   "name": "swift-budget",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "ng": "npx ng",
+    "start": "npx ng serve",
+    "build": "npx ng build",
+    "watch": "npx ng build --watch --configuration development",
+    "test": "npx ng test",
+
+    "pipeline:test": "echo Not configured yet && exit 0",
+    "pipeline:build": "npm run build"
   },
   "private": true,
   "dependencies": {
