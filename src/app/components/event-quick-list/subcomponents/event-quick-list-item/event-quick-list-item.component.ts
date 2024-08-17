@@ -32,9 +32,7 @@ export class EventQuickListItemComponent {
     !this.item().calculatedEvent.isPaid
     && this.item().nextOccurrence.timeUntil.days < 0)
 
-  public markAsPaid(event: MouseEvent) {
-    event.preventDefault();
-
+  public markAsPaid() {
     this._financialEventHistoryManager.markPaid(
       this.item().financialEvent.uid,
       this.item().nextOccurrence.date.add(1, 'second'));
