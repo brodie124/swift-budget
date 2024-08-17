@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, computed, effect, inject, input, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {FinancialEvent, FinancialEventHistory} from "../../types/financial/financial-event";
 import moment from "moment";
 import {compareMomentsAscending} from "../../helpers/moment-utils";
@@ -15,31 +15,16 @@ export class EventQuickListComponent {
 
   private readonly _financialEventService: FinancialEventService = inject(FinancialEventService);
 
-  private _items: Array<EventQuickListItem> = [];
-  public get items(): ReadonlyArray<EventQuickListItem> {
-    return this._items;
-  }
+  public readonly events = input.required<ReadonlyArray<FinancialEvent>>();
+  public readonly startDate = input.required<moment.Moment>();
+  public readonly endDate = input.required<moment.Moment>();
 
-  private _events: ReadonlyArray<FinancialEvent> = [];
-
-  @Input()
-  public set events(value: ReadonlyArray<FinancialEvent>) {
-    this._events = value;
-    this.updateQuickList();
-  };
-
-  @Input()
-  public startDate: moment.Moment = moment.utc(); //.subtract(1, 'month');
-
-  @Input()
-  public endDate: moment.Moment = moment.utc().add(3, 'months');
-
-  private updateQuickList(): void {
-    const calculatedEvents = this._financialEventService.getCalculatedEvents(this._events, this.startDate, this.endDate);
-    this._items = calculatedEvents
+  public readonly items = computed(() => {
+    const calculatedEvents = this._financialEventService.getCalculatedEvents(this.events(), this.startDate(), this.endDate());
+    return calculatedEvents
       .map(this.createQuickListItem)
       .sort((a, b) => compareMomentsAscending(a.nextOccurrence.date, b.nextOccurrence.date));
-  }
+  });
 
   private createQuickListItem(calculatedEvent: CalculatedFinancialEvent): EventQuickListItem {
     const timeUntilSeconds = calculatedEvent.date.diff(moment(), 'seconds', false);

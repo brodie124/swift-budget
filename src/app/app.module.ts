@@ -26,6 +26,9 @@ import {CardModule} from "primeng/card";
 import {
     EventQuickListItemComponent
 } from "./components/event-quick-list/subcomponents/event-quick-list-item/event-quick-list-item.component";
+import {
+  EventQuickListToolbarComponent
+} from "./components/event-quick-list/subcomponents/event-quick-list-toolbar/event-quick-list-toolbar.component";
 
 @NgModule({
   declarations: [
@@ -36,26 +39,27 @@ import {
     CreateEventComponent,
     EventQuickListComponent
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        Button,
-        StepperModule,
-        FloatLabelModule,
-        InputTextModule,
-        InputTextareaModule,
-        InputNumberModule,
-        DropdownModule,
-        CalendarModule,
-        CheckboxModule,
-        RadioButtonModule,
-        InputGroupModule,
-        InputGroupAddonModule,
-        CardModule,
-        EventQuickListItemComponent
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    Button,
+    StepperModule,
+    FloatLabelModule,
+    InputTextModule,
+    InputTextareaModule,
+    InputNumberModule,
+    DropdownModule,
+    CalendarModule,
+    CheckboxModule,
+    RadioButtonModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+    CardModule,
+    EventQuickListItemComponent,
+    EventQuickListToolbarComponent
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })
