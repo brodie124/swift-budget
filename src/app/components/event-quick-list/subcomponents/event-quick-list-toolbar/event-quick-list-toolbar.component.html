@@ -2,7 +2,7 @@
   <div class="flex-grow-1">
     <div class="flex flex-column gap-2">
       <label>Payday</label>
-      <p-calendar [showOtherMonths]="false" [showIcon]="true" (onSelect)="setDate($event)" [dateFormat]="'dd/mm/yy'"  />
+      <p-calendar [showOtherMonths]="false" [showIcon]="true" (onSelect)="setDate($event)" [ngModel]="paydayDate()" [dateFormat]="'dd/mm/yy'"  />
     </div>
 
   </div>

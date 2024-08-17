@@ -1,10 +1,13 @@
-import {Component, computed, effect, model, output, signal, WritableSignal} from '@angular/core';
+import {Component, computed, effect, inject, model, output, signal, WritableSignal} from '@angular/core';
 import {CardModule} from "primeng/card";
 import {Button} from "primeng/button";
 import {RouterLink} from "@angular/router";
 import {CalendarModule} from "primeng/calendar";
 import {FormsModule} from "@angular/forms";
 import moment from "moment";
+import {
+  EventQuickListToolbarPreferencesService
+} from "../../../../services/event-quick-list-toolbar-preferences.service";
 
 export type EventQuickListDateRange = {
   startDate: moment.Moment;
@@ -25,8 +28,10 @@ export type EventQuickListDateRange = {
   styleUrl: './event-quick-list-toolbar.component.less'
 })
 export class EventQuickListToolbarComponent {
+  private _toolbarPreferencesService: EventQuickListToolbarPreferencesService = inject(EventQuickListToolbarPreferencesService);
 
   private _paydayMoment = signal<moment.Moment | undefined>(moment.utc());
+  protected paydayDate = computed(() => this._paydayMoment()?.toDate())
 
   public setDate(date: Date | undefined) {
     const parsedDate = date
@@ -34,6 +39,7 @@ export class EventQuickListToolbarComponent {
       : undefined;
 
     this._paydayMoment.set(parsedDate);
+    this._toolbarPreferencesService.payday = parsedDate;
   }
 
   public computedDateRange = computed<EventQuickListDateRange>(() => {
@@ -60,5 +66,9 @@ export class EventQuickListToolbarComponent {
     effect(() => {
       this.dateRangeChanged.emit(this.computedDateRange());
     });
+  }
+
+  ngOnInit(): void {
+    this._paydayMoment.set(this._toolbarPreferencesService.payday ?? undefined);
   }
 }

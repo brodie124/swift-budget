@@ -13,7 +13,7 @@ export class MonthlyTriggerHandler implements EventTriggerHandler<EventTriggerMo
   ): Array<moment.Moment> {
     const occurrences: Array<moment.Moment> = [];
 
-    const deltaMonths = endDate.diff(startDate, 'months');
+    const deltaMonths = Math.max(1, endDate.diff(startDate, 'months'));
     for (let i = 0; i <= deltaMonths; i++) {
       switch (trigger.options.type) {
         case 'specific-date':
@@ -25,7 +25,8 @@ export class MonthlyTriggerHandler implements EventTriggerHandler<EventTriggerMo
           // TODO: we need to handle when `dayOfMonth` is greater than the number of days in the month (it should be pushed back to the next month)
           const dateString = `${year}-${month}-${day}`;
           const date = moment.utc(dateString)
-          occurrences.push(date);
+          if (date.isAfter(startDate) && date.isBefore(endDate))
+            occurrences.push(date);
       }
     }
 
