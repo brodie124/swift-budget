@@ -5,6 +5,7 @@ import {compareMomentsAscending} from "../../helpers/moment-utils";
 import {CalculatedFinancialEvent, FinancialEventService} from "../../services/financial-event.service";
 import {FinancialEventHistoryManager} from "../../services/financial-event-history-manager.service";
 import {CdkTextareaAutosize} from "@angular/cdk/text-field";
+import {getMomentUtc} from "../../utils/moment-utils";
 
 @Component({
   selector: 'app-event-quick-list',
@@ -27,7 +28,7 @@ export class EventQuickListComponent {
   });
 
   private createQuickListItem(calculatedEvent: CalculatedFinancialEvent): EventQuickListItem {
-    const timeUntilSeconds = calculatedEvent.date.diff(moment(), 'seconds', false);
+    const timeUntilSeconds = calculatedEvent.date.diff(getMomentUtc(), 'seconds', false);
 
     return {
       history: calculatedEvent.history,

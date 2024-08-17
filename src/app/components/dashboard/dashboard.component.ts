@@ -5,6 +5,7 @@ import {
   EventQuickListDateRange
 } from "../event-quick-list/subcomponents/event-quick-list-toolbar/event-quick-list-toolbar.component";
 import moment from "moment";
+import {getMomentUtc} from "../../utils/moment-utils";
 
 @Component({
   selector: 'app-dashboard',
@@ -13,8 +14,8 @@ import moment from "moment";
 })
 export class DashboardComponent {
   public quickListDateRange = signal<EventQuickListDateRange>({
-    startDate: moment().utc(),
-    endDate: moment().utc().add(1, 'month')
+    startDate: getMomentUtc(),
+    endDate: getMomentUtc().add(1, 'month')
   });
 
   constructor(private readonly _eventManager: EventManagerService) {

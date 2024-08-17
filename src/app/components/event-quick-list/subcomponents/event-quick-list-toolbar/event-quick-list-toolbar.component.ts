@@ -8,6 +8,7 @@ import moment from "moment";
 import {
   EventQuickListToolbarPreferencesService
 } from "../../../../services/event-quick-list-toolbar-preferences.service";
+import {getMomentUtc} from "../../../../utils/moment-utils";
 
 export type EventQuickListDateRange = {
   startDate: moment.Moment;
@@ -30,7 +31,7 @@ export type EventQuickListDateRange = {
 export class EventQuickListToolbarComponent {
   private _toolbarPreferencesService: EventQuickListToolbarPreferencesService = inject(EventQuickListToolbarPreferencesService);
 
-  private _paydayMoment = signal<moment.Moment | undefined>(moment.utc());
+  private _paydayMoment = signal<moment.Moment | undefined>(getMomentUtc());
   protected paydayDate = computed(() => this._paydayMoment()?.toDate())
 
   public setDate(date: Date | undefined) {
@@ -44,7 +45,7 @@ export class EventQuickListToolbarComponent {
 
   public computedDateRange = computed<EventQuickListDateRange>(() => {
     if (!this._paydayMoment()) {
-      const startDate = moment.utc();
+      const startDate = getMomentUtc();
       const endDate = startDate.clone().add(1, 'month');
       return {
         startDate: startDate,

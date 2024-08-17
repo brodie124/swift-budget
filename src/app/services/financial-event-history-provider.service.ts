@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {FinancialEventHistory, FinancialEventId} from "../types/financial/financial-event";
 import moment from "moment";
+import {getMomentUtc} from "../utils/moment-utils";
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class FinancialEventHistoryProvider {
 
     return {
       eventUid: uid,
-      lastUpdated: moment(),
+      lastUpdated: getMomentUtc(),
     };
   }
 
