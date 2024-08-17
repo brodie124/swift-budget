@@ -4,8 +4,8 @@
       <div class="mark-as-paid-reminder overdue bg-red-400">
           <span>
             Due
-            {{ item().nextOccurrence.timeUntil.days * -1 | number:'0.0-0' }}
-            {{ item().nextOccurrence.timeUntil.days * -1 >= 1.5 ? 'days' : 'day' }}
+            {{ item().nextOccurrence.timeUntil.days * -1}}
+            {{ item().nextOccurrence.timeUntil.days * -1 > 1 ? 'days' : 'day' }}
             ago
           </span>
       </div>
@@ -18,8 +18,8 @@
                 Due today
               } @else {
                 Due in
-                {{ item().nextOccurrence.timeUntil.days | number:'1.0-0' }}
-                {{ item().nextOccurrence.timeUntil.days >= 1.5 ? 'days' : 'day' }}
+                {{ item().nextOccurrence.timeUntil.days }}
+                {{ item().nextOccurrence.timeUntil.days > 1 ? 'days' : 'day' }}
               }
             </span>
       </div>
@@ -42,7 +42,7 @@
           @if (item().nextOccurrence.timeUntil.days < 1) {
             today
           } @else {
-            {{ item().nextOccurrence.timeUntil.days | number:'0.0-0' }}
+            {{ item().nextOccurrence.timeUntil.days }}
             <br/>
             {{ item().nextOccurrence.timeUntil.days >= 2 || item().nextOccurrence.timeUntil.days === 0 ? 'days' : 'day' }}
           }
