@@ -1,0 +1,75 @@
+<p-card class="block mb-5 event-item">
+  <ng-template pTemplate="footer">
+    @if (isOverdue()) {
+      <div class="mark-as-paid-reminder overdue bg-red-400">
+          <span>
+            Due
+            {{ item().nextOccurrence.timeUntil.days * -1 | number:'0.0-0' }}
+            {{ item().nextOccurrence.timeUntil.days * -1 >= 2 ? 'days' : 'day' }}
+            ago
+          </span>
+      </div>
+    }
+
+    @if (isDueSoon()) {
+      <div class="mark-as-paid-reminder">
+            <span>
+              @if (item().nextOccurrence.timeUntil.days < 1) {
+                Due today
+              } @else {
+                Due in
+                {{ item().nextOccurrence.timeUntil.days | number:'1.0-0' }}
+                {{ item().nextOccurrence.timeUntil.days >= 2 ? 'days' : 'day' }}
+              }
+            </span>
+      </div>
+    }
+  </ng-template>
+
+
+  <div class="flex flex-row">
+    <div class="mr-4 flex flex-column align-items-center justify-content-center" style="font-size: 24px;">
+      <!--        ICON HERE-->
+
+      @if (item().calculatedEvent.isPaid) {
+        <i class="fa-regular fa-circle-check text-green-500"></i>
+      } @else if (item().nextOccurrence.timeUntil.days < 0) {
+        <i class="fa-regular fa-circle-exclamation text-red-500"></i>
+      } @else {
+        <strong class="mb-3" style="font-size: 0.5em;">due</strong>
+        <i class="fa-regular fa-clock"></i>
+        <small class="text-center mt-3" style="font-size: 0.5em;">
+          @if (item().nextOccurrence.timeUntil.days < 1) {
+            today
+          } @else {
+            {{ item().nextOccurrence.timeUntil.days | number:'0.0-0' }}
+            <br/>
+            {{ item().nextOccurrence.timeUntil.days >= 2 || item().nextOccurrence.timeUntil.days === 0 ? 'days' : 'day' }}
+          }
+        </small>
+      }
+
+    </div>
+
+    <div class="flex-grow-1">
+      <h3 class="m-0 p-0">{{ item().financialEvent.name }}</h3>
+      {{ item().nextOccurrence.date.format("DD/MM/YYYY") }}
+
+
+      @if (!item().calculatedEvent.isPaid) {
+        <div class="toolbar mt-3 p-link no-underline">
+          <a href="#" (click)="markAsPaid($event)" class="p-0">
+            Mark as paid
+          </a>
+        </div>
+      }
+
+    </div>
+    <div style="font-size: 2.5rem;">
+      <span class="p-text-secondary" style="font-size: 2rem;">£</span>
+      {{ item().financialEvent.expense }}
+    </div>
+  </div>
+
+
+</p-card>
