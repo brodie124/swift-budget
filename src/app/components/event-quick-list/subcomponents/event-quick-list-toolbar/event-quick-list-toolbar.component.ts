@@ -39,15 +39,15 @@ export class EventQuickListToolbarComponent {
   public computedDateRange = computed<EventQuickListDateRange>(() => {
     if (!this._paydayMoment()) {
       const startDate = moment.utc();
-      const endDate = startDate.add(1, 'month');
+      const endDate = startDate.clone().add(1, 'month');
       return {
         startDate: startDate,
         endDate
       };
     }
 
-    const startDate = this._paydayMoment()!.subtract(1, 'month');
-    const endDate = this._paydayMoment()!.subtract(1, 'day');
+    const startDate = this._paydayMoment()!.clone().subtract(1, 'month');
+    const endDate = this._paydayMoment()!.clone().subtract(1, 'day');
     return {
       startDate,
       endDate
