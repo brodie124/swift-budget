@@ -58,8 +58,8 @@
 
 
         @if (!item.calculatedEvent.isPaid) {
-          <div class="toolbar mt-3" style="font-size: 0.5rem;">
-            <a href="#" (click)="markAsPaid(item)"  label="Mark as paid" size="small" class="p-0">
+          <div class="toolbar mt-3 p-link no-underline">
+            <a href="#" (click)="markAsPaid($event, item)" class="p-0">
               Mark as paid
             </a>
           </div>

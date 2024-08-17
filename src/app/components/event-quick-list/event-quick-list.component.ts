@@ -41,8 +41,10 @@ export class EventQuickListComponent implements OnChanges {
       && event.nextOccurrence.timeUntil.days <= 2
   }
 
-  public markAsPaid(item: EventQuickListItem) {
-    this._financialEventHistoryManager.markPaid(item.financialEvent.uid);
+  public markAsPaid(event: MouseEvent, item: EventQuickListItem) {
+    event.preventDefault();
+
+    this._financialEventHistoryManager.markPaid(item.financialEvent.uid, item.nextOccurrence.date.add(1, 'second'));
     this.updateQuickList();
   }
 

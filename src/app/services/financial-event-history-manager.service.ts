@@ -13,10 +13,10 @@ export class FinancialEventHistoryManager {
     return this._historyProvider.getOrCreateHistory(eventUid);
   }
 
-  public markPaid(eventUid: FinancialEventId): void {
+  public markPaid(eventUid: FinancialEventId, paidDate?: moment.Moment): void {
     const eventHistory = this._historyProvider.getOrCreateHistory(eventUid);
-    eventHistory.lastMarkedPaid = moment();
-    eventHistory.lastUpdated = moment();
+    eventHistory.lastMarkedPaid = paidDate ?? moment.utc();
+    eventHistory.lastUpdated = moment.utc();
 
     this._historyProvider.updateHistory(eventHistory);
   }
