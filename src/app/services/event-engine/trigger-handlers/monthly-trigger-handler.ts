@@ -24,7 +24,7 @@ export class MonthlyTriggerHandler implements EventTriggerHandler<EventTriggerMo
 
           // TODO: we need to handle when `dayOfMonth` is greater than the number of days in the month (it should be pushed back to the next month)
           const dateString = `${year}-${month}-${day}`;
-          const date = moment.utc(dateString)
+          const date = moment.utc(dateString, 'YYYY-MM-DD')
           if (date.isAfter(startDate) && date.isBefore(endDate))
             occurrences.push(date);
       }
