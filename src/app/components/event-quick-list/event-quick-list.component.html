@@ -1,5 +1,11 @@
 <div class="event-quick-list mt-4">
   @for(item of items(); track $index) {
     <app-event-quick-list-item [item]="item" />
+  } @empty {
+
+    <div class="flex align-items-center justify-content-center text-white mt-5">
+      You have no upcoming bills.
+    </div>
+
   }
 </div>
