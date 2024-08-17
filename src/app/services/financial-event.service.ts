@@ -1,10 +1,12 @@
 import {inject, Injectable} from '@angular/core';
-import {FinancialEvent} from "../types/financial/financial-event";
+import {FinancialEvent, FinancialEventHistory} from "../types/financial/financial-event";
 import moment from "moment/moment";
 import {EventEngineService} from "./event-engine/event-engine.service";
+import {FinancialEventHistoryManager} from "./financial-event-history-manager.service";
 
 export type CalculatedFinancialEvent = {
   event: FinancialEvent,
+  history: FinancialEventHistory;
   occurrences: Array<moment.Moment>;
   isPaid: boolean;
 }
@@ -14,6 +16,7 @@ export type CalculatedFinancialEvent = {
 })
 export class FinancialEventService {
   private readonly _eventEngine: EventEngineService = inject(EventEngineService);
+  private readonly _financialEventHistoryManager: FinancialEventHistoryManager = inject(FinancialEventHistoryManager);
 
   public getCalculatedEvents(
     events: ReadonlyArray<FinancialEvent>,
@@ -22,6 +25,8 @@ export class FinancialEventService {
   ): Array<CalculatedFinancialEvent> {
     const calculatedEvents: Array<CalculatedFinancialEvent> = [];
     for (let event of events) {
+
+      const eventHistory = this._financialEventHistoryManager.getHistory(event.uid);
       const occurrences = this._eventEngine.getOccurrences({
         trigger: event.trigger,
         startDate: startDate,
@@ -35,11 +40,16 @@ export class FinancialEventService {
 
       calculatedEvents.push({
         event: event,
+        history: eventHistory,
         occurrences: occurrences,
-        isPaid: false,
+        isPaid: this.isPaid(eventHistory, startDate),
       });
     }
 
     return calculatedEvents;
+  }
+
+  private isPaid(history: FinancialEventHistory, cycleStartDate: moment.Moment): boolean {
+    return history.lastMarkedPaid?.isBefore(cycleStartDate) ?? false;
   }
 }

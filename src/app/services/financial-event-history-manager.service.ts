@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {FinancialEventHistoryProvider} from "./financial-event-history-provider.service";
-import {FinancialEventId} from "../types/financial/financial-event";
+import {FinancialEventHistory, FinancialEventId} from "../types/financial/financial-event";
 import moment from "moment";
 
 @Injectable({
@@ -8,6 +8,10 @@ import moment from "moment";
 })
 export class FinancialEventHistoryManager {
   private readonly _historyProvider: FinancialEventHistoryProvider = inject(FinancialEventHistoryProvider);
+
+  public getHistory(eventUid: FinancialEventId): FinancialEventHistory {
+    return this._historyProvider.getOrCreateHistory(eventUid);
+  }
 
   public markPaid(eventUid: FinancialEventId): void {
     const eventHistory = this._historyProvider.getOrCreateHistory(eventUid);

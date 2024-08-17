@@ -1,8 +1,9 @@
 import {Component, inject, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {FinancialEvent} from "../../types/financial/financial-event";
+import {FinancialEvent, FinancialEventHistory} from "../../types/financial/financial-event";
 import moment from "moment";
 import {compareMomentsAscending} from "../../helpers/moment-utils";
 import {CalculatedFinancialEvent, FinancialEventService} from "../../services/financial-event.service";
+import {FinancialEventHistoryManager} from "../../services/financial-event-history-manager.service";
 
 @Component({
   selector: 'app-event-quick-list',
@@ -12,18 +13,15 @@ import {CalculatedFinancialEvent, FinancialEventService} from "../../services/fi
 export class EventQuickListComponent implements OnChanges {
 
   private readonly _financialEventService: FinancialEventService = inject(FinancialEventService);
+  private readonly _financialEventHistoryManager: FinancialEventHistoryManager = inject(FinancialEventHistoryManager);
 
   private _items: Array<EventQuickListItem> = [];
   public get items(): ReadonlyArray<EventQuickListItem> {
     return this._items;
   }
 
-
   @Input()
   public events: ReadonlyArray<FinancialEvent> = [];
-  //   this._calculatedEvents = this._financialEventService.getCalculatedEvents(value, this.startDate, this.endDate);
-  //   this._calculatedEvents.sort((a, b) => compareMomentsAscending(a.nextOccurrence?.date, b.nextOccurrence?.date));
-  // }
 
   @Input()
   public startDate: moment.Moment = moment.utc(); //.subtract(1, 'month');
@@ -60,6 +58,7 @@ export class EventQuickListComponent implements OnChanges {
     const timeUntilSeconds = nextOccurrence.diff(moment(), 'seconds', false);
 
     return {
+      history: calculatedEvent.history,
       financialEvent: calculatedEvent.event,
       calculatedEvent: calculatedEvent,
       nextOccurrence: {
@@ -76,6 +75,7 @@ export class EventQuickListComponent implements OnChanges {
 export type EventQuickListItem = {
   financialEvent: FinancialEvent;
   calculatedEvent: CalculatedFinancialEvent;
+  history: FinancialEventHistory;
   nextOccurrence: {
     date: moment.Moment;
     timeUntil: {
