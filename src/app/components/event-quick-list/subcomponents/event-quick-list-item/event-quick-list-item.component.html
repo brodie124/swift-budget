@@ -5,7 +5,7 @@
           <span>
             Due
             {{ item().nextOccurrence.timeUntil.days * -1 | number:'0.0-0' }}
-            {{ item().nextOccurrence.timeUntil.days * -1 >= 2 ? 'days' : 'day' }}
+            {{ item().nextOccurrence.timeUntil.days * -1 >= 1.5 ? 'days' : 'day' }}
             ago
           </span>
       </div>
@@ -19,7 +19,7 @@
               } @else {
                 Due in
                 {{ item().nextOccurrence.timeUntil.days | number:'1.0-0' }}
-                {{ item().nextOccurrence.timeUntil.days >= 2 ? 'days' : 'day' }}
+                {{ item().nextOccurrence.timeUntil.days >= 1.5 ? 'days' : 'day' }}
               }
             </span>
       </div>
