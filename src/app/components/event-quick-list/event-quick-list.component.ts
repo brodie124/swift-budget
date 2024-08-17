@@ -1,10 +1,8 @@
-import {Component, computed, effect, inject, input, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, computed, inject, input} from '@angular/core';
 import {FinancialEvent, FinancialEventHistory} from "../../types/financial/financial-event";
 import moment from "moment";
 import {compareMomentsAscending} from "../../helpers/moment-utils";
 import {CalculatedFinancialEvent, FinancialEventService} from "../../services/financial-event.service";
-import {FinancialEventHistoryManager} from "../../services/financial-event-history-manager.service";
-import {CdkTextareaAutosize} from "@angular/cdk/text-field";
 import {getMomentUtc} from "../../utils/moment-utils";
 
 @Component({

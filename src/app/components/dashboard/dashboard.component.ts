@@ -1,10 +1,9 @@
-import {Component, effect, signal} from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {EventManagerService} from "../../services/event-manager.service";
 import {FinancialEvent} from "../../types/financial/financial-event";
 import {
   EventQuickListDateRange
 } from "../event-quick-list/subcomponents/event-quick-list-toolbar/event-quick-list-toolbar.component";
-import moment from "moment";
 import {getMomentUtc} from "../../utils/moment-utils";
 
 @Component({

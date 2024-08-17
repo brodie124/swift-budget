@@ -1,4 +1,4 @@
-import {Component, computed, effect, inject, model, output, signal, WritableSignal} from '@angular/core';
+import {Component, computed, effect, inject, output, signal} from '@angular/core';
 import {CardModule} from "primeng/card";
 import {Button} from "primeng/button";
 import {RouterLink} from "@angular/router";
