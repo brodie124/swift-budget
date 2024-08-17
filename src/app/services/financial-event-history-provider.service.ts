@@ -38,11 +38,21 @@ export class FinancialEventHistoryProvider {
       return [];
     }
 
-    const parsedHistories = JSON.parse(historiesJson);
+    const parsedHistories = JSON.parse(historiesJson) as Array<FinancialEventHistory> | null | undefined;
     if (!parsedHistories)
       console.error('Could not parse financial event history JSON');
 
-    this._cachedHistories = parsedHistories ?? this._cachedHistories ?? [];
+    const updatedParsedHistories = parsedHistories?.map(e => {
+      if (e.lastUpdated)
+        e.lastUpdated = moment(e.lastUpdated);
+
+      if (e.lastMarkedPaid)
+        e.lastMarkedPaid = moment(e.lastMarkedPaid);
+
+      return e;
+    });
+
+    this._cachedHistories = updatedParsedHistories ?? this._cachedHistories ?? [];
     return [...this._cachedHistories!];
   }
 

@@ -41,6 +41,11 @@ export class EventQuickListComponent implements OnChanges {
       && event.nextOccurrence.timeUntil.days <= 2
   }
 
+  public markAsPaid(item: EventQuickListItem) {
+    this._financialEventHistoryManager.markPaid(item.financialEvent.uid);
+    this.updateQuickList();
+  }
+
   private updateQuickList(): void {
     // TODO: this is inherently flawed - we currently do not display multiple occurrences of the same event.
     //       We only show one occurrence of each event max.

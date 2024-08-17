@@ -50,6 +50,6 @@ export class FinancialEventService {
   }
 
   private isPaid(history: FinancialEventHistory, cycleStartDate: moment.Moment): boolean {
-    return history.lastMarkedPaid?.isBefore(cycleStartDate) ?? false;
+    return history.lastMarkedPaid?.isAfter(cycleStartDate) ?? false;
   }
 }
