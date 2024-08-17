@@ -4,6 +4,7 @@ import {DecimalPipe, NgForOf} from "@angular/common";
 import {PrimeTemplate} from "primeng/api";
 import {EventQuickListItem} from "../../event-quick-list.component";
 import {FinancialEventHistoryManager} from "../../../../services/financial-event-history-manager.service";
+import {Button} from "primeng/button";
 
 @Component({
   selector: 'app-event-quick-list-item',
@@ -12,7 +13,8 @@ import {FinancialEventHistoryManager} from "../../../../services/financial-event
     CardModule,
     DecimalPipe,
     NgForOf,
-    PrimeTemplate
+    PrimeTemplate,
+    Button
   ],
   templateUrl: './event-quick-list-item.component.html',
   styleUrl: './event-quick-list-item.component.less'

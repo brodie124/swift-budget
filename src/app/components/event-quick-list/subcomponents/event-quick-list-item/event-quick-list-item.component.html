@@ -65,10 +65,29 @@
       }
 
     </div>
-    <div style="font-size: 2.5rem;">
-      <span class="p-text-secondary" style="font-size: 2rem;">£</span>
-      {{ item().financialEvent.expense }}
+    <div>
+      <div class="text-right" style="font-size: 2.5rem;">
+        <span class="p-text-secondary" style="font-size: 2rem;">£</span>
+        {{ item().financialEvent.expense }}
+      </div>
+
+      <div class="action-bar">
+        <p-button [text]="true">
+          <i class="fa-regular fa-calendar-pen"></i>
+          &nbsp;
+          Edit
+        </p-button>
+
+        <p-button [text]="true">
+          <i class="fa-regular fa-calendar-circle-minus"></i>
+          &nbsp;
+          Delete
+        </p-button>
+      </div>
+
+
     </div>
+
   </div>
 
 
