@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, effect, signal} from '@angular/core';
 import {EventManagerService} from "../../services/event-manager.service";
 import {FinancialEvent} from "../../types/financial/financial-event";
 import {

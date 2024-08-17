@@ -26,11 +26,15 @@ export type EventQuickListDateRange = {
 })
 export class EventQuickListToolbarComponent {
 
-  private _paydayMoment = computed(() => this.paydayDate()
-    ? moment(this.paydayDate())
-    : undefined);
+  private _paydayMoment = signal<moment.Moment | undefined>(moment.utc());
 
-  protected paydayDate = model<Date>();
+  public setDate(date: Date | undefined) {
+    const parsedDate = date
+     ? moment(date)
+      : undefined;
+
+    this._paydayMoment.set(parsedDate);
+  }
 
   public computedDateRange = computed<EventQuickListDateRange>(() => {
     if (!this._paydayMoment()) {
@@ -53,8 +57,8 @@ export class EventQuickListToolbarComponent {
   public dateRangeChanged = output<EventQuickListDateRange>();
 
   constructor() {
-    computed(() => {
+    effect(() => {
       this.dateRangeChanged.emit(this.computedDateRange());
-    })
+    });
   }
 }
