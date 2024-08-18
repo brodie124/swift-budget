@@ -29,6 +29,8 @@ import {
 import {
   EventQuickListToolbarComponent
 } from "./components/event-quick-list/subcomponents/event-quick-list-toolbar/event-quick-list-toolbar.component";
+import {NavbarComponent} from "./components/navbar/navbar.component";
+import {ToolbarModule} from "primeng/toolbar";
 
 @NgModule({
   declarations: [
@@ -58,7 +60,9 @@ import {
     InputGroupAddonModule,
     CardModule,
     EventQuickListItemComponent,
-    EventQuickListToolbarComponent
+    EventQuickListToolbarComponent,
+    NavbarComponent,
+    ToolbarModule
   ],
   providers: [],
   bootstrap: [AppComponent]

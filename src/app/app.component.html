@@ -1,1 +1,9 @@
-<router-outlet></router-outlet>
+@if(isNavbarEnabled) {
+  <div class="navbar-container">
+    <app-navbar class="block mb-5" />
+  </div>
+}
+
+<div class="content-container">
+  <router-outlet />
+</div>
