@@ -5,6 +5,7 @@ import {EventEngineService} from "./event-engine/event-engine.service";
 import {FinancialEventHistoryManager} from "./financial-event-history-manager.service";
 
 export type CalculatedFinancialEvent = {
+  instanceId: string;
   event: FinancialEvent,
   history: FinancialEventHistory;
   date: moment.Moment;
@@ -39,6 +40,7 @@ export class FinancialEventService {
       }
 
       const instances: Array<CalculatedFinancialEvent> = occurrences.map(date => ({
+        instanceId: `${event.uid}_${date.format('YYYY-MM-DD')}`,
         event: event,
         history: eventHistory,
         date: date,
