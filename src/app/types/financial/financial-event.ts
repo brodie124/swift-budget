@@ -16,3 +16,11 @@ export type FinancialEventHistory = {
   lastMarkedPaid?: moment.Moment;
   lastUpdated: moment.Moment;
 }
+
+export type FinancialEventOccurrence = {
+  occurrenceId: string;
+  event: FinancialEvent,
+  history: FinancialEventHistory;
+  date: moment.Moment;
+  isPaid: boolean;
+}

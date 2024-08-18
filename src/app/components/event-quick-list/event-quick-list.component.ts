@@ -1,8 +1,8 @@
 import {Component, computed, inject, input} from '@angular/core';
-import {FinancialEvent, FinancialEventHistory} from "../../types/financial/financial-event";
+import {FinancialEvent, FinancialEventHistory, FinancialEventOccurrence} from "../../types/financial/financial-event";
 import moment from "moment";
 import {compareMomentsAscending} from "../../helpers/moment-utils";
-import {CalculatedFinancialEvent, FinancialEventService} from "../../services/financial-event.service";
+import {FinancialEventService} from "../../services/financial-event.service";
 import {getMomentUtc} from "../../utils/moment-utils";
 
 @Component({
@@ -25,7 +25,7 @@ export class EventQuickListComponent {
       .sort((a, b) => compareMomentsAscending(a.nextOccurrence.date, b.nextOccurrence.date));
   });
 
-  private createQuickListItem(calculatedEvent: CalculatedFinancialEvent): EventQuickListItem {
+  private createQuickListItem(calculatedEvent: FinancialEventOccurrence): EventQuickListItem {
     const timeUntilSeconds = calculatedEvent.date.diff(getMomentUtc(), 'seconds', false);
 
     return {
@@ -45,7 +45,7 @@ export class EventQuickListComponent {
 
 export type EventQuickListItem = {
   financialEvent: FinancialEvent;
-  calculatedEvent: CalculatedFinancialEvent;
+  calculatedEvent: FinancialEventOccurrence;
   history: FinancialEventHistory;
   nextOccurrence: {
     date: moment.Moment;

@@ -1,16 +1,8 @@
 import {inject, Injectable} from '@angular/core';
-import {FinancialEvent, FinancialEventHistory} from "../types/financial/financial-event";
+import {FinancialEvent, FinancialEventHistory, FinancialEventOccurrence} from "../types/financial/financial-event";
 import moment from "moment/moment";
 import {EventEngineService} from "./event-engine/event-engine.service";
 import {FinancialEventHistoryManager} from "./financial-event-history-manager.service";
-
-export type CalculatedFinancialEvent = {
-  instanceId: string;
-  event: FinancialEvent,
-  history: FinancialEventHistory;
-  date: moment.Moment;
-  isPaid: boolean;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -23,8 +15,8 @@ export class FinancialEventService {
     events: ReadonlyArray<FinancialEvent>,
     startDate: moment.Moment,
     endDate: moment.Moment
-  ): Array<CalculatedFinancialEvent> {
-    const calculatedEvents: Array<CalculatedFinancialEvent> = [];
+  ): Array<FinancialEventOccurrence> {
+    const calculatedEvents: Array<FinancialEventOccurrence> = [];
     for (let event of events) {
 
       const eventHistory = this._financialEventHistoryManager.getHistory(event.uid);
@@ -39,8 +31,8 @@ export class FinancialEventService {
         continue;
       }
 
-      const instances: Array<CalculatedFinancialEvent> = occurrences.map(date => ({
-        instanceId: `${event.uid}_${date.format('YYYY-MM-DD')}`,
+      const instances: Array<FinancialEventOccurrence> = occurrences.map(date => ({
+        occurrenceId: `${event.uid}_${date.format('YYYY-MM-DD')}`,
         event: event,
         history: eventHistory,
         date: date,
