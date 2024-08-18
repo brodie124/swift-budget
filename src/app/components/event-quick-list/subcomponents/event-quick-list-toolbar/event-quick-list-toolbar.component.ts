@@ -9,6 +9,7 @@ import {
   EventQuickListToolbarPreferencesService
 } from "../../../../services/event-quick-list-toolbar-preferences.service";
 import {getMomentUtc} from "../../../../utils/moment-utils";
+import {NgStyle} from "@angular/common";
 
 export type EventQuickListDateRange = {
   startDate: moment.Moment;
@@ -23,7 +24,8 @@ export type EventQuickListDateRange = {
     Button,
     RouterLink,
     CalendarModule,
-    FormsModule
+    FormsModule,
+    NgStyle
   ],
   templateUrl: './event-quick-list-toolbar.component.html',
   styleUrl: './event-quick-list-toolbar.component.less'
@@ -36,7 +38,7 @@ export class EventQuickListToolbarComponent {
 
   public setDate(date: Date | undefined) {
     const parsedDate = date
-     ? moment(date)
+      ? moment(date)
       : undefined;
 
     this._paydayMoment.set(parsedDate);
@@ -72,4 +74,20 @@ export class EventQuickListToolbarComponent {
   ngOnInit(): void {
     this._paydayMoment.set(this._toolbarPreferencesService.payday ?? undefined);
   }
+
+  highlightCalendarDate(primeNgDate: PrimeNgDate): boolean {
+    const dateString = `${primeNgDate.year}-${primeNgDate.month + 1}-${primeNgDate.day}`;
+    const date = moment(dateString, 'YYYY-MM-DD');
+
+    const dateRange = this.computedDateRange();
+    return date.isSameOrAfter(dateRange.startDate) && date.isSameOrBefore(dateRange.endDate);
+  }
+}
+
+export type PrimeNgDate = {
+  day: number;
+  month: number;
+  year: number;
+  selectable: boolean;
+  today: boolean;
 }

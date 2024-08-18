@@ -3,7 +3,16 @@
     <div class="flex flex-column gap-2">
       <label>Payday</label>
       <p-calendar [showOtherMonths]="false" [showIcon]="true" [iconDisplay]="'input'"
-                  (onSelect)="setDate($event)" [ngModel]="paydayDate()" [dateFormat]="'dd/mm/yy'" />
+                  (onSelect)="setDate($event)" [ngModel]="paydayDate()" [dateFormat]="'dd/mm/yy'">
+
+
+        <ng-template pTemplate="date" let-date>
+          <span [class.p-highlight]="highlightCalendarDate(date)">
+              {{date.day}}
+          </span>
+        </ng-template>
+
+      </p-calendar>
     </div>
 
   </div>
