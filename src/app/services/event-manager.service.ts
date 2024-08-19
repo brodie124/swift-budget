@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {FinancialEvent} from "../types/financial/financial-event";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class EventManagerService {
   constructor() { }
 
   public get(): ReadonlyArray<FinancialEvent> {
-    const eventsJson = localStorage.getItem(this._localStorageKey);
+    const eventsJson = localStorage.getItem(environment.cacheKeys.eventList);
     if(!eventsJson)
       return [];
 
@@ -33,6 +34,6 @@ export class EventManagerService {
     const newEventList: FinancialEvent[] = [...existingEvents, event];
 
     const eventsJson = JSON.stringify(newEventList);
-    localStorage.setItem(this._localStorageKey, eventsJson);
+    localStorage.setItem(environment.cacheKeys.eventList, eventsJson);
   }
 }

@@ -1,4 +1,9 @@
 ﻿export type EnvironmentConfig = {
-  isProduction: boolean;
-  enableNavbar: boolean;
+  readonly isProduction: boolean;
+  readonly enableNavbar: boolean;
+  readonly cacheKeys: {
+    readonly eventList: string;
+    readonly eventHistory: string;
+    readonly paydayPreference: string;
+  }
 }

@@ -2,13 +2,12 @@ import { Injectable } from '@angular/core';
 import {FinancialEventHistory, FinancialEventId} from "../types/financial/financial-event";
 import moment from "moment";
 import {getMomentUtc} from "../utils/moment-utils";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class FinancialEventHistoryProvider {
-  private readonly _localStorageKey: string = 'sb-event-history';
-
   private _cachedHistories: Array<FinancialEventHistory> | null = null;
 
 
@@ -33,7 +32,7 @@ export class FinancialEventHistoryProvider {
     if (this._cachedHistories)
       return [...this._cachedHistories];
 
-    const historiesJson = localStorage.getItem(this._localStorageKey);
+    const historiesJson = localStorage.getItem(environment.cacheKeys.eventHistory);
     if (!historiesJson) {
       console.info('Could not financial event history JSON');
       return [];
@@ -60,7 +59,7 @@ export class FinancialEventHistoryProvider {
   public updateHistories(eventHistories: Array<FinancialEventHistory>) {
     this._cachedHistories = [...eventHistories];
     const historiesJson = JSON.stringify(eventHistories);
-    localStorage.setItem(this._localStorageKey, historiesJson);
+    localStorage.setItem(environment.cacheKeys.eventHistory, historiesJson);
   }
 
   public updateHistory(history: FinancialEventHistory) {
@@ -69,6 +68,6 @@ export class FinancialEventHistoryProvider {
     const newHistoriesJson = JSON.stringify(newHistories);
 
     this._cachedHistories = newHistories;
-    localStorage.setItem(this._localStorageKey, newHistoriesJson);
+    localStorage.setItem(environment.cacheKeys.eventHistory, newHistoriesJson);
   }
 }

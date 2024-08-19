@@ -1,11 +1,9 @@
 ﻿import {Injectable} from "@angular/core";
 import moment from "moment";
+import {environment} from "../../environments/environment";
 
 @Injectable({providedIn: 'root'})
 export class EventQuickListToolbarPreferencesService {
-
-  private readonly _cacheKey: string = 'sb-event-quick-list-preferences';
-
   private _date: Date | moment.Moment | null = null;
 
   public set payday(date: Date | moment.Moment | null | undefined) {
@@ -14,14 +12,14 @@ export class EventQuickListToolbarPreferencesService {
       ? JSON.stringify(this._date)
       : '';
 
-    localStorage.setItem(`${this._cacheKey}_payday`, value);
+    localStorage.setItem(environment.cacheKeys.paydayPreference, value);
   }
 
   public get payday(): moment.Moment | null {
     if (this._date)
       return moment(this._date);
 
-    const json = localStorage.getItem(`${this._cacheKey}_payday`);
+    const json = localStorage.getItem(environment.cacheKeys.paydayPreference);
     if (!json)
       return null;
 
