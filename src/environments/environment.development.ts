@@ -6,6 +6,7 @@ export const environment: EnvironmentConfig = {
     eventList: 'sb-recurring-events',
     eventHistory: 'sb-event-history',
     paydayPreference: 'sb-event-quick-list-preferences_payday',
+    encryptionPreference: 'sb-encryption-preference',
   },
   enableNavbar: true,
   enableFirstTimeSetup: true,

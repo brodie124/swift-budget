@@ -5,7 +5,8 @@ export const environment: EnvironmentConfig = {
   cacheKeys: {
     eventList: 'sbe',
     eventHistory: 'sbeh',
-    paydayPreference: 'sbeqlp_p',
+    paydayPreference: 'sbeqlpp',
+    encryptionPreference: 'sbep',
   },
   enableNavbar: false,
   enableFirstTimeSetup: false,
