@@ -8,4 +8,5 @@ import {environment} from "../environments/environment";
 })
 export class AppComponent {
   public readonly isNavbarEnabled: boolean =  environment.enableNavbar;
+  public readonly isFirstTimeSetupEnabled: boolean = environment.enableFirstTimeSetup;
 }

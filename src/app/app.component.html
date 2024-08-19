@@ -1,3 +1,7 @@
+@if(isFirstTimeSetupEnabled) {
+  <app-first-time-setup />
+}
+
 @if(isNavbarEnabled) {
   <div class="navbar-container">
     <app-navbar class="block mb-5" />

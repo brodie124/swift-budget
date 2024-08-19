@@ -1,0 +1,46 @@
+<p-dialog
+  [modal]="true"
+  [closable]="false"
+  [draggable]="false"
+  [(visible)]="isVisible" header="First time setup">
+
+  <ng-template pTemplate="footer">
+    <p-button [severity]="'success'">Save</p-button>
+  </ng-template>
+
+  <p>
+    Hi there! It looks like this is your first time using SwiftBudget on this device. Before you can get started, we
+    first need some information from you.
+  </p>
+  <p>
+
+    The data you input into this application is stored locally so that you can access it when you're offline.
+  </p>
+
+  <hr class="mt-3 mb-3"/>
+
+  <div class="flex flex-column gap-2">
+    <label for="enableEncryption">Would you like this data to be encrypted?</label>
+
+    <div class="flex flex-row gap-3 align-items-center">
+      <p-inputSwitch [(ngModel)]="enableEncryption" inputId="enableEncryption"/>
+
+      <span>
+        @if (enableEncryption) {
+          Yes
+        } @else {
+          No
+        }
+      </span>
+    </div>
+  </div>
+
+  @if (enableEncryption) {
+    <div class="flex flex-column gap-2 mt-3">
+      <label for="encryptionKey">Master password</label>
+      <p-password [(ngModel)]="encryptionKey" inputId="encryptionKey" />
+    </div>
+  }
+
+  <div class="spacer" style="height: 48px;"></div>
+</p-dialog>
