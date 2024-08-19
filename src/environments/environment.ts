@@ -7,6 +7,7 @@ export const environment: EnvironmentConfig = {
     eventHistory: 'sbeh',
     paydayPreference: 'sbeqlpp',
     encryptionPreference: 'sbep',
+    encryptionCheck: 'sbec',
   },
   enableNavbar: false,
   enableFirstTimeSetup: false,
