@@ -1,0 +1,70 @@
+<p-dialog
+  [modal]="true"
+  [closable]="false"
+  [draggable]="false"
+  [(visible)]="showModal" header="Unlock">
+
+  <ng-template pTemplate="footer">
+    <div class="mt-3">
+      <p-button [severity]="'success'" (onClick)="unlock()">Unlock</p-button>
+    </div>
+
+  </ng-template>
+
+  <p>
+    <strong>Your data is encrypted.</strong>
+    <br/>
+    Please enter your master password to continue.
+  </p>
+
+  <hr class="mt-3 mb-3"/>
+  <div class="form-control">
+    <label for="masterPassword">Master password</label>
+    <p-password inputId="masterPassword"
+                [feedback]="false"
+                [(ngModel)]="masterPassword"
+                [class.ng-dirty]="hasSubmitted && !masterPassword"
+                [class.ng-invalid]="!masterPassword" />
+
+    @if (masterPasswordErrorMessage) {
+      <span class="p-invalid text-red-400">
+        {{ masterPasswordErrorMessage }}
+      </span>
+    }
+  </div>
+
+  <div style="height: 48px;"></div>
+
+  <!--  @if(enableEncryption) {-->
+  <!--    &lt;!&ndash;    ENCRYPTION WARNING&ndash;&gt;-->
+  <!--    <div class="flex flex-row align-items-center mt-5 p-3 border-round bg-yellow-200">-->
+  <!--      <div class="text-orange-300 mr-3" style="font-size: 3rem;">-->
+  <!--        <i class="fa-regular fa-triangle-exclamation"></i>-->
+  <!--      </div>-->
+  <!--      <div class="flex-grow-1">-->
+  <!--        <strong>Warning!</strong>-->
+  <!--        <br />-->
+
+  <!--        Your master password is used to encrypt your data.-->
+  <!--        <br />-->
+  <!--        If you lose your password, you lose your data.-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  } @else {-->
+  <!--    &lt;!&ndash;    LACK OF ENCRYPTION WARNING&ndash;&gt;-->
+  <!--    <div class="flex flex-row align-items-center mt-5 p-3 border-round bg-blue-100">-->
+  <!--      <div class="text-blue-500 mr-3" style="font-size: 3rem;">-->
+  <!--        <i class="fa-regular fa-circle-info"></i>-->
+  <!--      </div>-->
+  <!--      <div class="flex-grow-1">-->
+  <!--        <strong>Notice!</strong>-->
+  <!--        <br />-->
+
+  <!--        Your data will be stored in an unencrypted format.-->
+  <!--        <br />-->
+  <!--        It is as safe as plain text.-->
+  <!--      </div>-->
+  <!--    </div>-->
+  <!--  }-->
+
+</p-dialog>

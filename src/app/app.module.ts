@@ -32,6 +32,7 @@ import {
 import {NavbarComponent} from "./components/navbar/navbar.component";
 import {ToolbarModule} from "primeng/toolbar";
 import {FirstTimeSetupComponent} from "./components/first-time-setup/first-time-setup.component";
+import {UnlockModalComponent} from "./components/unlock-modal/unlock-modal.component";
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import {FirstTimeSetupComponent} from "./components/first-time-setup/first-time-
         EventQuickListToolbarComponent,
         NavbarComponent,
         ToolbarModule,
-        FirstTimeSetupComponent
+        FirstTimeSetupComponent,
+        UnlockModalComponent
     ],
   providers: [],
   bootstrap: [AppComponent]

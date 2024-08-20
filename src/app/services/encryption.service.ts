@@ -31,6 +31,10 @@ export class EncryptionService {
     localStorage.setItem(environment.cacheKeys.encryptionCheck, encryptedCheck);
   }
 
+  public isEnabled(): boolean {
+    return !!localStorage.getItem(environment.cacheKeys.encryptionCheck);
+  }
+
   public encrypt(value: any): Promise<string> {
     return this._encryptionHandler.encryptObject(value);
   }
@@ -50,6 +54,7 @@ type EncryptedPayload = {
   cipher: string;
 };
 
+// TODO: remove the direct access to local storage, move the types, etc.
 export class EncryptionHandler {
   private _password: string | null = null;
 

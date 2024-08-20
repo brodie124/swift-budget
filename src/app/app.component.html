@@ -1,13 +1,19 @@
-@if(isFirstTimeSetupEnabled) {
-  <app-first-time-setup />
-}
+@if(showUnlockModal) {
+  <app-unlock-modal (onUnlock)="unlock()" />
+} @else {
 
-@if(isNavbarEnabled) {
-  <div class="navbar-container">
-    <app-navbar class="block mb-5" />
+  @if(isFirstTimeSetupEnabled) {
+    <app-first-time-setup />
+  }
+
+  @if(isNavbarEnabled) {
+    <div class="navbar-container">
+      <app-navbar class="block mb-5" />
+    </div>
+  }
+
+  <div class="content-container">
+    <router-outlet />
   </div>
-}
 
-<div class="content-container">
-  <router-outlet />
-</div>
+}
