@@ -1,10 +1,12 @@
 import {Injectable} from '@angular/core';
 import {sha256} from "../helpers/hash-utils";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class EncryptionService {
+  private readonly _encryptionHandler = new EncryptionHandler();
   private _masterPassword: string | null = null;
 
   public async setMasterPassword(input: string): Promise<void> {
@@ -12,13 +14,34 @@ export class EncryptionService {
       throw new Error('Master password cannot be empty!');
 
     this._masterPassword = await sha256(`swift-budget:${input}`);
+    this._encryptionHandler.password = this._masterPassword;
   }
 
-  public async checkMasterPassword(): Promise<void> {
+  public async checkMasterPassword(): Promise<boolean> {
+    const encryptedCheckValue = localStorage.getItem(environment.cacheKeys.encryptionCheck);
+    if (!encryptedCheckValue)
+      return false;
 
+    const decryptedCheckValue = await this.decrypt<string>(atob(encryptedCheckValue));
+    return decryptedCheckValue === this._masterPassword;
   }
 
+  public async writeCheck(): Promise<void> {
+    const encryptedCheck = btoa(await this.encrypt(this._masterPassword));
+    localStorage.setItem(environment.cacheKeys.encryptionCheck, encryptedCheck);
+  }
 
+  public encrypt(value: any): Promise<string> {
+    return this._encryptionHandler.encryptObject(value);
+  }
+
+  public decrypt<T>(value: any): Promise<T | null> {
+    return this._encryptionHandler.decryptObject<T>(value);
+  }
+
+  public isSupported(): boolean {
+    return this._encryptionHandler.isSupported();
+  }
 }
 
 type EncryptedPayload = {
@@ -60,8 +83,11 @@ export class EncryptionHandler {
   }
 
   public async encryptString(input: string): Promise<string> {
+    if (!this.isSupported())
+      throw new Error('Cannot encrypt - crypto.subtle not supported');
+
     if (!this._password)
-      return input;
+      throw new Error('Cannot encrypt - no password provided');
 
     const iv = crypto.getRandomValues(new Uint8Array(12));
     const salt = crypto.getRandomValues(new Uint8Array(16));
@@ -81,8 +107,15 @@ export class EncryptionHandler {
   }
 
   public async decryptString(input: string): Promise<string | null> {
-    if (!this._password)
-      return input;
+    if (!this.isSupported()) {
+      console.error('Cannot decrypt value - crypto.subtle not supported');
+      return null;
+    }
+
+    if (!this._password) {
+      console.warn('Cannot decrypt value - no password provided');
+      return null;
+    }
 
     const encryptedPayloadJson = atob(input); // Decode base64 first
     const encryptedPayload = JSON.parse(encryptedPayloadJson) as EncryptedPayload;

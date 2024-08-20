@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {DialogModule} from "primeng/dialog";
 import {InputSwitchModule} from "primeng/inputswitch";
 import {AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {InputTextModule} from "primeng/inputtext";
 import {Button} from "primeng/button";
 import {PasswordModule} from "primeng/password";
+import {environment} from "../../../environments/environment";
+import {EncryptionService} from "../../services/encryption.service";
 
 @Component({
   selector: 'app-first-time-setup',
@@ -21,7 +23,9 @@ import {PasswordModule} from "primeng/password";
   templateUrl: './first-time-setup.component.html',
   styleUrl: './first-time-setup.component.less'
 })
-export class FirstTimeSetupComponent {
+export class FirstTimeSetupComponent implements OnInit {
+  private readonly _encryptionService = inject(EncryptionService);
+
   public isVisible: boolean = true;
   public hasSubmitted: boolean = false;
 
@@ -39,14 +43,27 @@ export class FirstTimeSetupComponent {
     return this.firstTimeForm.controls['masterPassword'];
   }
 
-  constructor(formBuilder: FormBuilder) {
+  public constructor(formBuilder: FormBuilder) {
     this.firstTimeForm = formBuilder.group({
       enableEncryption: [true, Validators.required],
       masterPassword: ['', Validators.required]
     });
   }
 
-  public saveAndExit(): void {
+  public ngOnInit(): void {
+    const preference = localStorage.getItem(environment.cacheKeys.encryptionPreference);
+    const isPreferenceValid = preference === '0' || !!localStorage.getItem(environment.cacheKeys.encryptionCheck);
+
+    this.isVisible = !isPreferenceValid;
+  }
+
+  public async saveAndExit(): Promise<void> {
+    if (!this._encryptionService.isSupported()) {
+      alert('Encryption not supported. Disable it to continue.');
+      this.enableEncryptionControl.setValue(false);
+      return;
+    }
+
     this.masterPasswordControl.setValidators(this.enableEncryption ? Validators.required : null);
     this.masterPasswordControl.updateValueAndValidity();
 
@@ -54,6 +71,13 @@ export class FirstTimeSetupComponent {
     if(!this.firstTimeForm.valid)
       return;
 
+    await this.saveToLocal();
     this.isVisible = false;
+  }
+
+  private async saveToLocal(): Promise<void> {
+    localStorage.setItem(environment.cacheKeys.encryptionPreference, this.enableEncryption ? '1' : '0');
+    await this._encryptionService.setMasterPassword(this.masterPasswordControl.value.trim());
+    await this._encryptionService.writeCheck();
   }
 }
