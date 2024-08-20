@@ -24,7 +24,8 @@
                 [feedback]="false"
                 [(ngModel)]="masterPassword"
                 [class.ng-dirty]="hasSubmitted && !masterPassword"
-                [class.ng-invalid]="!masterPassword" />
+                [class.ng-invalid]="!masterPassword"
+    (keyup)="submitKeyUpCheck($event)"/>
 
     @if (masterPasswordErrorMessage) {
       <span class="p-invalid text-red-400">

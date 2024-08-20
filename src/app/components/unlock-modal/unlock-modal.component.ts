@@ -56,4 +56,9 @@ export class UnlockModalComponent {
     this.showModal = false;
     setTimeout(() => this.onUnlock.emit(), 100); // Delay just enough for animations of modal closing to finish
   }
+
+  async submitKeyUpCheck(event: KeyboardEvent): Promise<void> {
+    if (event.key.toLowerCase() === 'enter')
+      await this.unlock()
+  }
 }

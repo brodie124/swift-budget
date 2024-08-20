@@ -44,7 +44,8 @@
         <label for="masterPassword">Master password</label>
         <p-password inputId="masterPassword" formControlName="masterPassword"
                     [class.ng-dirty]="hasSubmitted || masterPasswordControl.dirty"
-                    [class.ng-invalid]="masterPasswordControl.invalid" />
+                    [class.ng-invalid]="masterPasswordControl.invalid"
+                    (keyup)="submitKeyUpCheck($event)"/>
 
         @if((hasSubmitted || masterPasswordControl.dirty) && masterPasswordControl.invalid) {
           <span class="p-invalid text-red-400">A master password is required to enable encryption.</span>

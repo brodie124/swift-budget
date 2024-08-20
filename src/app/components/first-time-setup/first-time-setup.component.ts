@@ -75,6 +75,12 @@ export class FirstTimeSetupComponent implements OnInit {
     this.isVisible = false;
   }
 
+
+  public async submitKeyUpCheck(event: KeyboardEvent): Promise<void> {
+    if (event.key.toLowerCase() === 'enter')
+      await this.saveAndExit()
+  }
+
   private async saveToLocal(): Promise<void> {
     localStorage.setItem(environment.cacheKeys.encryptionPreference, this.enableEncryption ? '1' : '0');
 
