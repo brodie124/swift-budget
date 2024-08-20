@@ -28,10 +28,44 @@ type EncryptedPayload = {
 };
 
 export class EncryptionHandler {
-  async encryptString(input: string, password: string): Promise<string> {
+  private _password: string | null = null;
+
+  public set password(input: string | null | undefined) {
+    this._password = input ?? null;
+  }
+
+  public isSupported(): boolean {
+    return !!window.crypto.subtle; // If subtle is defined then it should be enabled
+  }
+
+  public encryptObject(input: any): Promise<string> {
+    if (input === null || input === undefined)
+      throw new Error('Cannot encrypt null/undefined');
+
+    const json = JSON.stringify(input);
+    return this.encryptString(json);
+  }
+
+  public async decryptObject<T>(input: string): Promise<T | null> {
+    try {
+      const json = await this.decryptString(input);
+      if (json === null)
+        return null;
+
+      return JSON.parse(json) as T;
+    } catch (err) {
+      console.error('Failed to parse decrypted JSON object', err);
+      return null;
+    }
+  }
+
+  public async encryptString(input: string): Promise<string> {
+    if (!this._password)
+      return input;
+
     const iv = crypto.getRandomValues(new Uint8Array(12));
     const salt = crypto.getRandomValues(new Uint8Array(16));
-    const key = await this.createKey(password,  salt);
+    const key = await this.createKey(this._password,  salt);
 
     const inputBytes = this.convertStringToBytes(input);
     const encryptedBuffer = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key,  inputBytes)
@@ -46,17 +80,20 @@ export class EncryptionHandler {
     return btoa(payloadJson); // Return base64
   }
 
-  async decryptString(input: string, password: string): Promise<string> {
+  public async decryptString(input: string): Promise<string | null> {
+    if (!this._password)
+      return input;
+
     const encryptedPayloadJson = atob(input); // Decode base64 first
     const encryptedPayload = JSON.parse(encryptedPayloadJson) as EncryptedPayload;
     if (!encryptedPayload.iv || !encryptedPayload.salt || !encryptedPayload.cipher)
-      throw new Error('Cannot decrypt malformed payload');
+      return null;
 
     const iv = this.convertBase64ToBytes(encryptedPayload.iv);
     const salt = this.convertBase64ToBytes(encryptedPayload.salt);
     const cipher = this.convertBase64ToBytes(encryptedPayload.cipher);
 
-    const key = await this.createKey(password, salt);
+    const key = await this.createKey(this._password, salt);
 
     const decryptedContentBuffer = await crypto.subtle.decrypt({name: 'AES-GCM', iv}, key, cipher);
     const decryptedBytes = new Uint8Array(decryptedContentBuffer);
