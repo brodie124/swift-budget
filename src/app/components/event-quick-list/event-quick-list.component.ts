@@ -4,6 +4,8 @@ import moment from "moment";
 import {compareMomentsAscending} from "../../helpers/moment-utils";
 import {FinancialEventService} from "../../services/financial-event.service";
 import {getMomentUtc} from "../../utils/moment-utils";
+import {toObservable} from "@angular/core/rxjs-interop";
+import {from, map, switchMap} from "rxjs";
 
 @Component({
   selector: 'app-event-quick-list',
@@ -18,12 +20,13 @@ export class EventQuickListComponent {
   public readonly startDate = input.required<moment.Moment>();
   public readonly endDate = input.required<moment.Moment>();
 
-  public readonly items = computed(() => {
-    const calculatedEvents = this._financialEventService.getCalculatedEvents(this.events(), this.startDate(), this.endDate());
-    return calculatedEvents
-      .map(this.createQuickListItem)
-      .sort((a, b) => compareMomentsAscending(a.nextOccurrence.date, b.nextOccurrence.date));
-  });
+  public itemsPromise = computed(() => this._financialEventService.getCalculatedEventsAsync(this.events(), this.startDate(), this.endDate()));
+  public items$ = toObservable(this.itemsPromise).pipe(
+    switchMap(e => from(e)), map(calculatedEvents => calculatedEvents
+    .map(this.createQuickListItem)
+    .sort((a: any, b: any) => compareMomentsAscending(a.nextOccurrence.date, b.nextOccurrence.date))
+  ));
+
 
   private createQuickListItem(calculatedEvent: FinancialEventOccurrence): EventQuickListItem {
     const timeUntilSeconds = calculatedEvent.date.diff(getMomentUtc(), 'seconds', false);

@@ -33,7 +33,7 @@ export class EventQuickListItemComponent {
     && this.item().nextOccurrence.timeUntil.days < 0)
 
   public markAsPaid() {
-    this._financialEventHistoryManager.markPaid(
+    this._financialEventHistoryManager.markPaidAsync(
       this.item().financialEvent.uid,
       this.item().nextOccurrence.date.add(1, 'second'));
   }

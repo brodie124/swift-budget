@@ -1,4 +1,4 @@
-import {Component, signal} from '@angular/core';
+import {Component, effect, signal} from '@angular/core';
 import {EventManagerService} from "../../services/event-manager.service";
 import {FinancialEvent} from "../../types/financial/financial-event";
 import {
@@ -11,16 +11,23 @@ import {getMomentUtc} from "../../utils/moment-utils";
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.less']
 })
-export class DashboardComponent {
+export class DashboardComponent{
+  public events: ReadonlyArray<FinancialEvent> = [];
   public quickListDateRange = signal<EventQuickListDateRange>({
     startDate: getMomentUtc(),
     endDate: getMomentUtc().add(1, 'month')
   });
 
   constructor(private readonly _eventManager: EventManagerService) {
+    effect(async () => {
+      this.quickListDateRange();
+
+      this.events = await this._eventManager.getAsync();
+    });
   }
 
-  public getEvents(): ReadonlyArray<FinancialEvent> {
-    return this._eventManager.get();
-  }
+  // public async getEventsAsync(): Promise<ReadonlyArray<FinancialEvent>> {
+  //   return this._eventManager.getAsync();
+  // }
+
 }

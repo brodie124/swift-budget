@@ -1,5 +1,5 @@
 <div class="event-quick-list mt-4">
-  @for(item of items(); track $index) {
+  @for(item of items$ | async; track $index) {
     <app-event-quick-list-item [item]="item" />
   } @empty {
 

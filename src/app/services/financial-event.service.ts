@@ -11,15 +11,15 @@ export class FinancialEventService {
   private readonly _eventEngine: EventEngineService = inject(EventEngineService);
   private readonly _financialEventHistoryManager: FinancialEventHistoryManager = inject(FinancialEventHistoryManager);
 
-  public getCalculatedEvents(
+  public async getCalculatedEventsAsync(
     events: ReadonlyArray<FinancialEvent>,
     startDate: moment.Moment,
     endDate: moment.Moment
-  ): Array<FinancialEventOccurrence> {
+  ): Promise<Array<FinancialEventOccurrence>> {
     const calculatedEvents: Array<FinancialEventOccurrence> = [];
     for (let event of events) {
 
-      const eventHistory = this._financialEventHistoryManager.getHistory(event.uid);
+      const eventHistory = await this._financialEventHistoryManager.getHistoryAsync(event.uid);
       const occurrences = this._eventEngine.getOccurrences({
         trigger: event.trigger,
         startDate: startDate,

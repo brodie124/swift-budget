@@ -1,17 +1,16 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {FinancialEvent} from "../types/financial/financial-event";
 import {environment} from "../../environments/environment";
+import {EncryptedLocalStorageService} from "./encrypted-local-storage.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventManagerService {
-  private readonly _localStorageKey: string = 'sb-recurring-events';
+  private readonly _encryptedStorageService = inject(EncryptedLocalStorageService);
 
-  constructor() { }
-
-  public get(): ReadonlyArray<FinancialEvent> {
-    const eventsJson = localStorage.getItem(environment.cacheKeys.eventList);
+  public async getAsync(): Promise<ReadonlyArray<FinancialEvent>> {
+    const eventsJson = await this._encryptedStorageService.getItemAsync(environment.cacheKeys.eventList);
     if(!eventsJson)
       return [];
 
@@ -22,8 +21,8 @@ export class EventManagerService {
     return events;
   }
 
-  public add(event: FinancialEvent): void {
-    let existingEvents = this.get();
+  public async addAsync(event: FinancialEvent): Promise<void> {
+    let existingEvents = await this.getAsync();
 
     // TODO: remove me!
     existingEvents = existingEvents.map(e => {
@@ -34,6 +33,6 @@ export class EventManagerService {
     const newEventList: FinancialEvent[] = [...existingEvents, event];
 
     const eventsJson = JSON.stringify(newEventList);
-    localStorage.setItem(environment.cacheKeys.eventList, eventsJson);
+    await this._encryptedStorageService.setItemAsync(environment.cacheKeys.eventList, eventsJson);
   }
 }

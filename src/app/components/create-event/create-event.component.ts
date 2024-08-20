@@ -83,7 +83,7 @@ export class CreateEventComponent {
     }
 
     console.log("Constructed recurring event:", x);
-    await this._eventManager.add(financialEvent);
+    await this._eventManager.addAsync(financialEvent);
     await this._router.navigate(['']);
 
   }

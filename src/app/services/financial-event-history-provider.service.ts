@@ -1,18 +1,20 @@
-import { Injectable } from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {FinancialEventHistory, FinancialEventId} from "../types/financial/financial-event";
 import moment from "moment";
 import {getMomentUtc} from "../utils/moment-utils";
 import {environment} from "../../environments/environment";
+import {EncryptedLocalStorageService} from "./encrypted-local-storage.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class FinancialEventHistoryProvider {
+  private readonly _encryptedLocalStorage = inject(EncryptedLocalStorageService);
   private _cachedHistories: Array<FinancialEventHistory> | null = null;
 
 
-  public getOrCreateHistory(uid: FinancialEventId): FinancialEventHistory {
-    const history = this.getHistory(uid);
+  public async getOrCreateHistoryAsync(uid: FinancialEventId): Promise<FinancialEventHistory> {
+    const history = await this.getHistoryAsync(uid);
     if (history)
       return history;
 
@@ -22,17 +24,17 @@ export class FinancialEventHistoryProvider {
     };
   }
 
-  public getHistory(uid: FinancialEventId): FinancialEventHistory | null {
-    const histories = this.getHistories();
+  public async getHistoryAsync(uid: FinancialEventId): Promise<FinancialEventHistory | null> {
+    const histories = await this.getHistoriesAsync();
     return histories.find(e => e.eventUid === uid) ?? null;
   }
 
 
-  public getHistories(): Array<FinancialEventHistory> {
+  public async getHistoriesAsync(): Promise<Array<FinancialEventHistory>> {
     if (this._cachedHistories)
       return [...this._cachedHistories];
 
-    const historiesJson = localStorage.getItem(environment.cacheKeys.eventHistory);
+    const historiesJson = await this._encryptedLocalStorage.getItemAsync(environment.cacheKeys.eventHistory);
     if (!historiesJson) {
       console.info('Could not financial event history JSON');
       return [];
@@ -56,18 +58,19 @@ export class FinancialEventHistoryProvider {
     return [...this._cachedHistories!];
   }
 
-  public updateHistories(eventHistories: Array<FinancialEventHistory>) {
+  public async updateHistories(eventHistories: Array<FinancialEventHistory>): Promise<void> {
     this._cachedHistories = [...eventHistories];
     const historiesJson = JSON.stringify(eventHistories);
-    localStorage.setItem(environment.cacheKeys.eventHistory, historiesJson);
+    await this._encryptedLocalStorage.setItemAsync(environment.cacheKeys.eventHistory, historiesJson);
   }
 
-  public updateHistory(history: FinancialEventHistory) {
-    const otherHistories = this.getHistories().filter(e => e.eventUid !== history.eventUid);
+  public async updateHistoryAsync(history: FinancialEventHistory): Promise<void> {
+    const originalHistories = await this.getHistoriesAsync();
+    const otherHistories = originalHistories.filter(e => e.eventUid !== history.eventUid);
     const newHistories = [...otherHistories, history];
     const newHistoriesJson = JSON.stringify(newHistories);
 
     this._cachedHistories = newHistories;
-    localStorage.setItem(environment.cacheKeys.eventHistory, newHistoriesJson);
+    await this._encryptedLocalStorage.setItemAsync(environment.cacheKeys.eventHistory, newHistoriesJson);
   }
 }

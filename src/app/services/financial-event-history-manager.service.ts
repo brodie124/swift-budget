@@ -10,15 +10,15 @@ import {getMomentUtc} from "../utils/moment-utils";
 export class FinancialEventHistoryManager {
   private readonly _historyProvider: FinancialEventHistoryProvider = inject(FinancialEventHistoryProvider);
 
-  public getHistory(eventUid: FinancialEventId): FinancialEventHistory {
-    return this._historyProvider.getOrCreateHistory(eventUid);
+  public async getHistoryAsync(eventUid: FinancialEventId): Promise<FinancialEventHistory> {
+    return this._historyProvider.getOrCreateHistoryAsync(eventUid);
   }
 
-  public markPaid(eventUid: FinancialEventId, paidDate?: moment.Moment): void {
-    const eventHistory = this._historyProvider.getOrCreateHistory(eventUid);
+  public async markPaidAsync(eventUid: FinancialEventId, paidDate?: moment.Moment): Promise<void> {
+    const eventHistory = await this._historyProvider.getOrCreateHistoryAsync(eventUid);
     eventHistory.lastMarkedPaid = paidDate ?? getMomentUtc();
     eventHistory.lastUpdated = getMomentUtc();
 
-    this._historyProvider.updateHistory(eventHistory);
+    await this._historyProvider.updateHistoryAsync(eventHistory);
   }
 }
