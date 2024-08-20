@@ -77,6 +77,9 @@ export class FirstTimeSetupComponent implements OnInit {
 
   private async saveToLocal(): Promise<void> {
     localStorage.setItem(environment.cacheKeys.encryptionPreference, this.enableEncryption ? '1' : '0');
+
+    if (!this.enableEncryption) // Encryption required past this point
+      return;
     await this._encryptionService.setMasterPassword(this.masterPasswordControl.value.trim());
     await this._encryptionService.writeCheck();
   }
