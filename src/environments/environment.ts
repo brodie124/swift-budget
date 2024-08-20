@@ -10,5 +10,5 @@ export const environment: EnvironmentConfig = {
     encryptionCheck: 'sbec',
   },
   enableNavbar: false,
-  enableFirstTimeSetup: false,
+  enableFirstTimeSetup: true,
 };
