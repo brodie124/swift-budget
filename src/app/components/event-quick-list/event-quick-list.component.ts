@@ -35,8 +35,10 @@ export class EventQuickListComponent implements OnInit, OnDestroy {
 
 
   public ngOnInit(): void {
-    this._financialEventHistoryService.historyChanged$.subscribe(
-      () => this.triggerRecompute.set(!this.triggerRecompute())
+    this._subscriptions.add(
+      this._financialEventHistoryService.historyChanged$.subscribe(
+        () => this.triggerRecompute.set(!this.triggerRecompute())
+      )
     );
   }
 
