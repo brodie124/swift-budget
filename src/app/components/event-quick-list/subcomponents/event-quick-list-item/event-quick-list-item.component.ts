@@ -41,9 +41,8 @@ export class EventQuickListItemComponent {
       this.item().nextOccurrence.date.add(1, 'second'));
   }
 
-  public async delete(event: MouseEvent, item: EventQuickListItem) {
+  public async delete(item: EventQuickListItem) {
     const result = await this._confirmationService.confirmAsync({
-      target: event.target as EventTarget,
       message: 'Are you sure you want to delete this bill?',
       header: 'Delete bill',
       icon: 'pi pi-info-circle',
