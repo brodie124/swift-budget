@@ -33,6 +33,9 @@ import {NavbarComponent} from "./components/navbar/navbar.component";
 import {ToolbarModule} from "primeng/toolbar";
 import {FirstTimeSetupComponent} from "./components/first-time-setup/first-time-setup.component";
 import {UnlockModalComponent} from "./components/unlock-modal/unlock-modal.component";
+import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {ToastModule} from "primeng/toast";
+import {ConfirmationService, MessageService} from "primeng/api";
 
 @NgModule({
   declarations: [
@@ -41,34 +44,39 @@ import {UnlockModalComponent} from "./components/unlock-modal/unlock-modal.compo
     EventFrequencyFormComponent,
     DashboardComponent,
     CreateEventComponent,
-    EventQuickListComponent
+    EventQuickListComponent,
+    EventQuickListItemComponent,
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        Button,
-        StepperModule,
-        FloatLabelModule,
-        InputTextModule,
-        InputTextareaModule,
-        InputNumberModule,
-        DropdownModule,
-        CalendarModule,
-        CheckboxModule,
-        RadioButtonModule,
-        InputGroupModule,
-        InputGroupAddonModule,
-        CardModule,
-        EventQuickListItemComponent,
-        EventQuickListToolbarComponent,
-        NavbarComponent,
-        ToolbarModule,
-        FirstTimeSetupComponent,
-        UnlockModalComponent
-    ],
-  providers: [],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    Button,
+    StepperModule,
+    FloatLabelModule,
+    InputTextModule,
+    InputTextareaModule,
+    InputNumberModule,
+    DropdownModule,
+    CalendarModule,
+    CheckboxModule,
+    RadioButtonModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+    CardModule,
+    EventQuickListToolbarComponent,
+    NavbarComponent,
+    ToolbarModule,
+    FirstTimeSetupComponent,
+    UnlockModalComponent,
+    ConfirmDialogModule,
+    ToastModule
+  ],
+  providers: [
+    ConfirmationService,
+    MessageService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
