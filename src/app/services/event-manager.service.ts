@@ -22,14 +22,7 @@ export class EventManagerService {
   }
 
   public async addAsync(event: FinancialEvent): Promise<void> {
-    let existingEvents = await this.getAsync();
-
-    // TODO: remove me!
-    existingEvents = existingEvents.map(e => {
-      e.uid ??= crypto.randomUUID().replace('-', '');
-      return e;
-    })
-
+    const existingEvents = await this.getAsync();
     const newEventList: FinancialEvent[] = [...existingEvents, event];
 
     const eventsJson = JSON.stringify(newEventList);
