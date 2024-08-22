@@ -36,8 +36,6 @@ import {UnlockModalComponent} from "./components/unlock-modal/unlock-modal.compo
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {ToastModule} from "primeng/toast";
 import {ConfirmationService, MessageService} from "primeng/api";
-import {EventManagerService} from "./services/event-manager.service";
-import {eventManagerInitializer} from "./initializers/app-initializers";
 
 @NgModule({
   declarations: [
@@ -76,12 +74,6 @@ import {eventManagerInitializer} from "./initializers/app-initializers";
     ToastModule
   ],
   providers: [
-    {
-      provide: APP_INITIALIZER,
-      multi: true,
-      useFactory: eventManagerInitializer,
-      deps: [EventManagerService]
-    },
     ConfirmationService,
     MessageService
   ],

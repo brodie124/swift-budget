@@ -27,6 +27,7 @@ export class EventQuickListComponent implements OnInit, OnDestroy {
     this.triggerRecompute(); // Here as a trigger
     return this._financialEventService.getCalculatedEventsAsync(this.events(), this.startDate(), this.endDate())
   });
+
   public items$ = toObservable(this.itemsPromise).pipe(
     switchMap(e => from(e)), map(calculatedEvents => calculatedEvents
       .map(this.createQuickListItem)

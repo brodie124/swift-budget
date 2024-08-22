@@ -17,6 +17,8 @@ export class MonthlyTriggerHandler implements EventTriggerHandler<EventTriggerMo
     for (let i = 0; i <= deltaMonths; i++) {
       switch (trigger.options.type) {
         case 'specific-date':
+          // TODO: we assume the next occurrence will always be in the following month, but that is not always be the case
+          // A start date of 27/03 would be the 28th day bill onto 28/04
           const incrementedDate = moment(startDate).add(i, 'months');
           const year = incrementedDate.year();
           const month = incrementedDate.month() + 1; // .month() returns the index of the month

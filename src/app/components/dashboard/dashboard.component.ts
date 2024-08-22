@@ -1,4 +1,4 @@
-import {Component, effect, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, effect, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {EventManagerService} from "../../services/event-manager.service";
 import {FinancialEvent} from "../../types/financial/financial-event";
 import {
@@ -13,26 +13,19 @@ import {Subscription} from "rxjs";
   styleUrls: ['./dashboard.component.less']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  private readonly _eventManager: EventManagerService = inject(EventManagerService);
   private readonly _subscriptions: Subscription = new Subscription();
 
-  public events: ReadonlyArray<FinancialEvent> = [];
+  public events = signal<ReadonlyArray<FinancialEvent>>([]);
   public quickListDateRange = signal<EventQuickListDateRange>({
     startDate: getMomentUtc(),
     endDate: getMomentUtc().add(1, 'month')
   });
 
-  constructor(private readonly _eventManager: EventManagerService) {
-    // this._eventManager.events$.subscribe()
-
-    // effect(async () => {
-    //   this.quickListDateRange();
-    //   this.events = await this._eventManager.getAsync();
-    // });
-  }
-
-  public ngOnInit() {
+  public async ngOnInit() {
+    await this._eventManager.loadAsync();
     this._subscriptions.add(this._eventManager.events$.subscribe(events => {
-      this.events = events;
+      this.events.set(events);
     }));
   }
 
