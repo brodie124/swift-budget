@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -36,6 +36,8 @@ import {UnlockModalComponent} from "./components/unlock-modal/unlock-modal.compo
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {ToastModule} from "primeng/toast";
 import {ConfirmationService, MessageService} from "primeng/api";
+import {EventManagerService} from "./services/event-manager.service";
+import {eventManagerInitializer} from "./initializers/app-initializers";
 
 @NgModule({
   declarations: [
@@ -74,6 +76,12 @@ import {ConfirmationService, MessageService} from "primeng/api";
     ToastModule
   ],
   providers: [
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      useFactory: eventManagerInitializer,
+      deps: [EventManagerService]
+    },
     ConfirmationService,
     MessageService
   ],

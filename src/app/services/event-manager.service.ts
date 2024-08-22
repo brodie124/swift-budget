@@ -23,12 +23,12 @@ export class EventManagerService {
 
   public async loadAsync(): Promise<ReadonlyArray<FinancialEvent>> {
     const eventsJson = await this._encryptedStorageService.getItemAsync(environment.cacheKeys.eventList);
-    if(!eventsJson)
-      return [];
-
-    let events = JSON.parse(eventsJson);
-    if(!Array.isArray(events))
-      events = [];
+    let events: Array<FinancialEvent> = [];
+    if(eventsJson) {
+      events = JSON.parse(eventsJson);
+      if (!Array.isArray(events))
+        events = [];
+    }
 
     this._eventsSubject.next(events);
     return events;

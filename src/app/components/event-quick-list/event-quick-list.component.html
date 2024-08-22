@@ -1,6 +1,6 @@
 <div class="event-quick-list mt-4">
   @for(item of items$ | async; track $index) {
-    <app-event-quick-list-item [item]="item" (deleted)="onEventDeleted()" />
+    <app-event-quick-list-item [item]="item" />
   } @empty {
 
     <div class="flex align-items-center justify-content-center text-white mt-5">
