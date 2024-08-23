@@ -1,6 +1,11 @@
 <div>
   <p-card>
     <app-event-quick-list-toolbar (dateRangeChanged)="quickListDateRange.set($event)" />
+
+    @if(events().length > 0) {
+      <div class="spacer" style="height:32px"></div>
+      <app-event-quick-stats [statistics]="statistics()" />
+    }
   </p-card>
 
   <div class="text-white  align-items-end  mt-5">

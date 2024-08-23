@@ -1,4 +1,4 @@
-import {Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, computed, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {EventManagerService} from "../../services/event-manager.service";
 import {FinancialEvent, FinancialEventOccurrence} from "../../types/financial/financial-event";
 import {
@@ -8,6 +8,7 @@ import {getMomentUtc} from "../../utils/moment-utils";
 import {Subscription} from "rxjs";
 import {FinancialEventService} from "../../services/financial-event.service";
 import {FinancialEventHistoryManager} from "../../services/financial-event-history-manager.service";
+import {EventStatisticsService} from "../../services/event-statistics.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -18,10 +19,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private readonly _eventManager: EventManagerService = inject(EventManagerService);
   private readonly _financialEventService: FinancialEventService = inject(FinancialEventService);
   private readonly _financialEventHistoryManager: FinancialEventHistoryManager = inject(FinancialEventHistoryManager);
+  private readonly _eventStatisticsService: EventStatisticsService = inject(EventStatisticsService);
   private readonly _subscriptions: Subscription = new Subscription();
 
   public events = signal<ReadonlyArray<FinancialEvent>>([]);
   public occurrences = signal<ReadonlyArray<FinancialEventOccurrence>>([]);
+  public statistics = computed(() => this._eventStatisticsService.calculateStatistics(this.occurrences()));
 
   public quickListDateRange = signal<EventQuickListDateRange>({
     startDate: getMomentUtc(),

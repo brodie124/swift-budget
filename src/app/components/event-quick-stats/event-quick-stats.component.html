@@ -1,0 +1,30 @@
+<div class="flex flex-row">
+
+  <div class="stat-item">
+    <h4>
+      Total
+      <br/>
+      expenditure
+    </h4>
+    £{{ statistics().totalExpense | number:'0.2-2' }}
+  </div>
+
+  <div class="stat-item">
+    <h4>
+      Remaining
+      <br/>
+      expenditure
+    </h4>
+    £{{ statistics().remainingExpense | number:'0.2-2' }}
+  </div>
+
+  <div class="stat-item">
+    <h4>
+      Bills
+      <br/>
+      Paid
+    </h4>
+    {{ statistics().billsPaid }} / {{ statistics().totalBills }}
+  </div>
+
+</div>
