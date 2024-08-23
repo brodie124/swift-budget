@@ -1,4 +1,4 @@
-import {Component, computed, input} from '@angular/core';
+import {Component, computed, input, signal} from '@angular/core';
 import {FinancialEvent, FinancialEventHistory, FinancialEventOccurrence} from "../../types/financial/financial-event";
 import moment from "moment";
 import {compareMomentsAscending} from "../../helpers/moment-utils";
@@ -13,6 +13,9 @@ export class EventQuickListComponent {
   public readonly occurrences = input.required<ReadonlyArray<FinancialEventOccurrence>>();
   public readonly startDate = input.required<moment.Moment>();
   public readonly endDate = input.required<moment.Moment>();
+
+  public editBill = signal<FinancialEventOccurrence | undefined>(undefined);
+  public showEditBillDialog = computed(() => !!this.editBill());
 
   public items = computed(() => this.occurrences()
     .map(occurrence => this.createQuickListItem(occurrence))

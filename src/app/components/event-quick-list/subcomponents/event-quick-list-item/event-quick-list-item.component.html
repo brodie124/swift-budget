@@ -76,7 +76,7 @@
         <div class="flex-grow-1"></div>
 
         <div class="hover-only">
-          <p-button [text]="true">
+          <p-button [text]="true" (onClick)="edit(item())">
             <i class="fa-regular fa-calendar-pen"></i>
             &nbsp;
             Edit

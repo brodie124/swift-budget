@@ -1,11 +1,11 @@
-import {Component} from '@angular/core';
+import {Component, effect, input} from '@angular/core';
 import {EventFrequency} from "../../types/event/event-frequency";
-import {InvalidDayFallback, EventTrigger} from "../../types/event/event";
+import {EventTrigger, InvalidDayFallback} from "../../types/event/event";
 import {AllCalendarMonths} from "../../types/calendar/calendar-types";
 import {EventManagerService} from "../../services/event-manager.service";
 import {Router} from "@angular/router";
 import {FinancialEvent} from "../../types/financial/financial-event";
-import {FormBuilder} from "@angular/forms";
+import {getMomentUtc} from "../../utils/moment-utils";
 
 @Component({
   selector: 'app-create-event',
@@ -17,18 +17,21 @@ export class CreateEventComponent {
   public readonly EventFrequency: typeof EventFrequency = EventFrequency;
   public readonly InvalidDayFallback: typeof InvalidDayFallback = InvalidDayFallback;
 
+  public mode = input.required<'create' | 'edit'>();
+  public existingEvent = input<FinancialEvent>();
+
   public name: string = '';
   public description: string = '';
   public cost: number = 0;
 
-  public eventFrequency: EventFrequency = EventFrequency.Monthly;
+  public eventFrequency: EventFrequency = this.existingEvent()?.trigger?.frequency ?? EventFrequency.Monthly;
   public eventType: 'specific-date' = 'specific-date';
   public specificDate?: Date;
 
   public invalidDayFallback: InvalidDayFallback = InvalidDayFallback.NextAllowedDay;
   public allowWeekdays: boolean = true;
-  public allowWeekends: boolean = false;
-  public allowWorkingDays: boolean = true;
+  public allowWeekends: boolean = this.existingEvent()?.trigger?.advancedOptions.weekendsAllowed ?? false;
+  public allowWorkingDays: boolean = this.existingEvent()?.trigger?.advancedOptions?.workingDaysAllowed ?? true;
 
   public frequencyCategoryOptions = [
     { label: 'month', value: EventFrequency.Monthly }
@@ -38,16 +41,34 @@ export class CreateEventComponent {
     { label: 'specific date', value: 'specific-date' }
   ];
 
-  public formGroup = this._formBuilder.group({
-
-  });
-
   constructor(
     private readonly _router: Router,
     private readonly _eventManager: EventManagerService,
-    private readonly _formBuilder: FormBuilder,
   ) {
+    effect(() => {
+      if (this.mode() !== 'edit')
+        return;
 
+      const existingEvent = this.existingEvent();
+      if (!existingEvent)
+        return;
+
+      this.name = existingEvent.name;
+      this.cost = existingEvent.expense;
+      this.description = existingEvent.description ?? '';
+
+      this.eventFrequency = existingEvent.trigger.frequency;
+
+      this.invalidDayFallback = existingEvent.trigger.advancedOptions.invalidDayFallback;
+      this.allowWeekdays = existingEvent.trigger.advancedOptions.weekdaysAllowed;
+      this.allowWeekends = existingEvent.trigger.advancedOptions.weekendsAllowed;
+      this.allowWorkingDays = existingEvent.trigger.advancedOptions.workingDaysAllowed;
+
+      if (existingEvent?.trigger?.frequency === EventFrequency.Monthly && existingEvent.trigger.options.type === 'specific-date') {
+        this.eventType = existingEvent.trigger.options.type;
+        this.specificDate = getMomentUtc().set('date', existingEvent.trigger.options.dayOfMonth).toDate();
+      }
+    });
   }
 
   public async create(): Promise<void> {

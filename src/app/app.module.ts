@@ -38,6 +38,7 @@ import {ToastModule} from "primeng/toast";
 import {ConfirmationService, MessageService} from "primeng/api";
 import {DueInDaysPipe} from "./event-due-soon.pipe";
 import {EventQuickStatsComponent} from "./components/event-quick-stats/event-quick-stats.component";
+import {DialogModule} from "primeng/dialog";
 
 @NgModule({
   declarations: [
@@ -75,7 +76,8 @@ import {EventQuickStatsComponent} from "./components/event-quick-stats/event-qui
     ConfirmDialogModule,
     ToastModule,
     DueInDaysPipe,
-    EventQuickStatsComponent
+    EventQuickStatsComponent,
+    DialogModule
   ],
   providers: [
     ConfirmationService,

@@ -4,6 +4,7 @@ import {EventQuickListItem} from "../../event-quick-list.component";
 import {FinancialEventHistoryManager} from "../../../../services/financial-event-history-manager.service";
 import {AsyncConfirmationService} from "../../../../services/async-confirmation.service";
 import {EventManagerService} from "../../../../services/event-manager.service";
+import {FinancialEventOccurrence} from "../../../../types/financial/financial-event";
 
 @Component({
   selector: 'app-event-quick-list-item',
@@ -18,7 +19,8 @@ export class EventQuickListItemComponent {
   private readonly _financialEventHistoryManager: FinancialEventHistoryManager = inject(FinancialEventHistoryManager);
   private readonly _eventManagerService: EventManagerService = inject(EventManagerService);
 
-  public readonly deleted = output<void>();
+  public readonly deleted = output<FinancialEventOccurrence>();
+  public readonly edited = output<FinancialEventOccurrence>();
 
   public item = input.required<EventQuickListItem>();
   public isDueSoon = computed(() =>
@@ -63,6 +65,10 @@ export class EventQuickListItemComponent {
       detail: `${item.financialEvent.name} has been deleted.`
     });
 
-    this.deleted.emit();
+    this.deleted.emit(item.calculatedEvent);
+  }
+
+  edit(item: EventQuickListItem) {
+    this.edited.emit(item.calculatedEvent);
   }
 }
