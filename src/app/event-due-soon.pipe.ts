@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
   name: 'dueInDays',
@@ -16,9 +16,13 @@ export class DueInDaysPipe implements PipeTransform {
       return 'Due yesterday';
 
     const plural = this.getPlural(daysUntil);
+    const absDaysUntil = Math.abs(daysUntil);
     if (daysUntil >= 2) {
-      return `Due in ${plural}`
+      return `Due in ${absDaysUntil} ${plural}`
     }
+
+    if (daysUntil <= -2)
+      return `Due ${absDaysUntil} ${plural} ago`
 
     console.warn('Unhandled event due date.', {
       daysUntil
@@ -28,10 +32,9 @@ export class DueInDaysPipe implements PipeTransform {
   }
 
   private getPlural(daysUntil: number): 'day' | 'days' {
-    if (daysUntil === 1)
-      return 'days';
-
-    return 'day';
+    return daysUntil === 1
+      ? 'day'
+      : 'days';
   }
 
 }
