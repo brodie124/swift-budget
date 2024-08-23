@@ -1,10 +1,10 @@
-import {Component, computed, effect, inject, output, signal} from '@angular/core';
+import {Component, computed, effect, inject, OnInit, output, signal} from '@angular/core';
 import {CardModule} from "primeng/card";
 import {Button} from "primeng/button";
 import {RouterLink} from "@angular/router";
 import {CalendarModule} from "primeng/calendar";
 import {FormsModule} from "@angular/forms";
-import moment from "moment";
+import moment, {Moment} from "moment";
 import {
   EventQuickListToolbarPreferencesService
 } from "../../../../services/event-quick-list-toolbar-preferences.service";
@@ -30,10 +30,10 @@ export type EventQuickListDateRange = {
   templateUrl: './event-quick-list-toolbar.component.html',
   styleUrl: './event-quick-list-toolbar.component.less'
 })
-export class EventQuickListToolbarComponent {
+export class EventQuickListToolbarComponent implements OnInit {
   private _toolbarPreferencesService: EventQuickListToolbarPreferencesService = inject(EventQuickListToolbarPreferencesService);
 
-  private _paydayMoment = signal<moment.Moment | undefined>(getMomentUtc());
+  private _paydayMoment = signal<moment.Moment | undefined>(undefined);
   protected paydayDate = computed(() => this._paydayMoment()?.toDate())
 
   public setDate(date: Date | undefined) {
@@ -71,8 +71,9 @@ export class EventQuickListToolbarComponent {
     });
   }
 
-  ngOnInit(): void {
-    this._paydayMoment.set(this._toolbarPreferencesService.payday ?? undefined);
+  public ngOnInit(): void {
+    const endOfMonthMoment = this.endOfMonthMoment();
+    this._paydayMoment.set(this._toolbarPreferencesService.payday ?? endOfMonthMoment);
   }
 
   highlightCalendarDate(primeNgDate: PrimeNgDate): boolean {
@@ -81,6 +82,13 @@ export class EventQuickListToolbarComponent {
 
     const dateRange = this.computedDateRange();
     return date.isSameOrAfter(dateRange.startDate) && date.isSameOrBefore(dateRange.endDate);
+  }
+
+  private endOfMonthMoment(): moment.Moment{
+    const currentDate = getMomentUtc();
+    currentDate.set('date', currentDate.daysInMonth());
+
+    return currentDate;
   }
 }
 
