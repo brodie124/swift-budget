@@ -1,7 +1,7 @@
 import moment from "moment";
 
-export function getMomentUtc(): moment.Moment {
-  return moment.utc().set({
+export function getMomentUtc(input?: moment.MomentInput, strict?: boolean): moment.Moment {
+  return moment.utc(input, strict).set({
     hour: 0,
     minute: 0,
     second: 0,

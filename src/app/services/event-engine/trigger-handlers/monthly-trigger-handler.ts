@@ -19,7 +19,7 @@ export class MonthlyTriggerHandler implements EventTriggerHandler<EventTriggerMo
     for (let i = 0; i <= deltaMonths; i++) {
       switch (trigger.options.type) {
         case 'specific-date':
-          let evaluationDate = moment(startDate)
+          let evaluationDate = moment.utc(startDate)
             .add(i, 'months');
 
 

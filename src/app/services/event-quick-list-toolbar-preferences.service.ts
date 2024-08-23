@@ -1,6 +1,7 @@
 ﻿import {Injectable} from "@angular/core";
 import moment from "moment";
 import {environment} from "../../environments/environment";
+import {getMomentUtc} from "../utils/moment-utils";
 
 @Injectable({providedIn: 'root'})
 export class EventQuickListToolbarPreferencesService {
@@ -17,7 +18,7 @@ export class EventQuickListToolbarPreferencesService {
 
   public get payday(): moment.Moment | null {
     if (this._date)
-      return moment(this._date);
+      return getMomentUtc(this._date);
 
     const json = localStorage.getItem(environment.cacheKeys.paydayPreference);
     if (!json)
@@ -27,7 +28,7 @@ export class EventQuickListToolbarPreferencesService {
     if (!date)
       return null;
 
-    this._date = moment(date);
+    this._date = getMomentUtc(date);
     return this._date;
   }
 }

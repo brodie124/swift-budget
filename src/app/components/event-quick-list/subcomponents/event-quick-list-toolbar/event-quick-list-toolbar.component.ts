@@ -38,7 +38,7 @@ export class EventQuickListToolbarComponent {
 
   public setDate(date: Date | undefined) {
     const parsedDate = date
-      ? moment(date)
+      ? getMomentUtc(date)
       : undefined;
 
     this._paydayMoment.set(parsedDate);
@@ -77,7 +77,7 @@ export class EventQuickListToolbarComponent {
 
   highlightCalendarDate(primeNgDate: PrimeNgDate): boolean {
     const dateString = `${primeNgDate.year}-${primeNgDate.month + 1}-${primeNgDate.day}`;
-    const date = moment(dateString, 'YYYY-MM-DD');
+    const date = moment.utc(dateString, 'YYYY-MM-DD');
 
     const dateRange = this.computedDateRange();
     return date.isSameOrAfter(dateRange.startDate) && date.isSameOrBefore(dateRange.endDate);

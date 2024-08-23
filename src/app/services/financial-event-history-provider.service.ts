@@ -46,10 +46,10 @@ export class FinancialEventHistoryProvider {
 
     const updatedParsedHistories = parsedHistories?.map(e => {
       if (e.lastUpdated)
-        e.lastUpdated = moment(e.lastUpdated);
+        e.lastUpdated = getMomentUtc(e.lastUpdated);
 
       if (e.lastMarkedPaid)
-        e.lastMarkedPaid = moment(e.lastMarkedPaid);
+        e.lastMarkedPaid = getMomentUtc(e.lastMarkedPaid);
 
       return e;
     });
