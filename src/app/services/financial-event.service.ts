@@ -46,6 +46,6 @@ export class FinancialEventService {
   }
 
   private isPaid(history: FinancialEventHistory, dateAsOf: moment.Moment): boolean {
-    return history.lastMarkedPaid?.isAfter(dateAsOf) ?? false;
+    return history.lastMarkedPaid?.isSameOrAfter(dateAsOf) ?? false;
   }
 }
