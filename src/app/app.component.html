@@ -4,10 +4,7 @@
 @if(showUnlockModal) {
   <app-unlock-modal (onUnlock)="unlock()" />
 } @else {
-
-  @if(isFirstTimeSetupEnabled) {
-    <app-first-time-setup />
-  }
+  <app-first-time-setup />
 
   @if(isNavbarEnabled) {
     <div class="navbar-container">
@@ -18,5 +15,4 @@
   <div class="content-container">
     <router-outlet />
   </div>
-
 }

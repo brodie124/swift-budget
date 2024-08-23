@@ -11,8 +11,6 @@ export class AppComponent {
   private readonly _encryptionService = inject(EncryptionService);
 
   public readonly isNavbarEnabled: boolean =  environment.enableNavbar;
-  public readonly isFirstTimeSetupEnabled: boolean = environment.enableFirstTimeSetup;
-
 
   public showUnlockModal = this._encryptionService.isEnabled();
 

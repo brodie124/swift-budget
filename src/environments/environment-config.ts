@@ -10,5 +10,4 @@
     readonly encryptionCheck: string;
   },
   readonly enableNavbar: boolean;
-  readonly enableFirstTimeSetup: boolean;
 }

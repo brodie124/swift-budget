@@ -10,5 +10,4 @@ export const environment: EnvironmentConfig = {
     encryptionCheck: 'sb-encryption-check',
   },
   enableNavbar: true,
-  enableFirstTimeSetup: true,
 };
