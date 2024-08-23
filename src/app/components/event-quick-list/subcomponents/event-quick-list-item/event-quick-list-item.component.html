@@ -1,12 +1,9 @@
 <p-card class="block mb-5 event-item">
   <ng-template pTemplate="footer">
-    @if (isOverdue()) {
+    @if (item().isOverdue) {
       <div class="mark-as-paid-reminder overdue bg-red-400">
           <span>
-            Due
-            {{ item().nextOccurrence.timeUntil.days * -1}}
-            {{ item().nextOccurrence.timeUntil.days * -1 > 1 ? 'days' : 'day' }}
-            ago
+            {{ item().nextOccurrence.timeUntil.days | dueInDays }}
           </span>
       </div>
     }
@@ -14,13 +11,7 @@
     @if (isDueSoon()) {
       <div class="mark-as-paid-reminder">
             <span>
-              @if (item().nextOccurrence.timeUntil.days < 1) {
-                Due today
-              } @else {
-                Due in
-                {{ item().nextOccurrence.timeUntil.days }}
-                {{ item().nextOccurrence.timeUntil.days > 1 ? 'days' : 'day' }}
-              }
+              {{ item().nextOccurrence.timeUntil.days | dueInDays }}
             </span>
       </div>
     }

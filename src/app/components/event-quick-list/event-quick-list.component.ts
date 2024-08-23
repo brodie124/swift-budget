@@ -49,17 +49,23 @@ export class EventQuickListComponent implements OnInit, OnDestroy {
 
 
   private createQuickListItem(calculatedEvent: FinancialEventOccurrence): EventQuickListItem {
-    const timeUntilSeconds = calculatedEvent.date.diff(getMomentUtc(), 'seconds', false);
+    const comparisonDate = getMomentUtc();
+    const timeUntilSeconds = calculatedEvent.date.diff(comparisonDate, 'seconds', false);
+    const timeUntilDays = calculatedEvent.date.diff(comparisonDate, 'days', false);
+    // const absed = Math.abs(timeUntilSeconds);
 
     return {
       history: calculatedEvent.history,
       financialEvent: calculatedEvent.event,
       calculatedEvent: calculatedEvent,
+      isOverdue: !calculatedEvent.isPaid && timeUntilSeconds < 0,
       nextOccurrence: {
         date: calculatedEvent.date,
         timeUntil: {
           seconds: timeUntilSeconds,
-          days: timeUntilSeconds / 86400
+          days: timeUntilDays
+          // seconds: timeUntilSeconds,
+          // days:  Math.floor(timeUntilSeconds / 86400)
         }
       }
     }
@@ -70,6 +76,7 @@ export type EventQuickListItem = {
   financialEvent: FinancialEvent;
   calculatedEvent: FinancialEventOccurrence;
   history: FinancialEventHistory;
+  isOverdue: boolean;
   nextOccurrence: {
     date: moment.Moment;
     timeUntil: {

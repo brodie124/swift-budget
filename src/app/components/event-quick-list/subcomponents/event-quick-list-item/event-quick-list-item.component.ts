@@ -23,12 +23,8 @@ export class EventQuickListItemComponent {
   public item = input.required<EventQuickListItem>();
   public isDueSoon = computed(() =>
     !this.item().calculatedEvent.isPaid
-    && this.item().nextOccurrence.timeUntil.days >= 0
+    && !this.item().isOverdue
     && this.item().nextOccurrence.timeUntil.days <= 2);
-
-  public isOverdue = computed(() =>
-    !this.item().calculatedEvent.isPaid
-    && this.item().nextOccurrence.timeUntil.days < 0)
 
   public async markAsPaidAsync(): Promise<void> {
     await this._financialEventHistoryManager.markPaidAsync(

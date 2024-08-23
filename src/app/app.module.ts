@@ -36,6 +36,7 @@ import {UnlockModalComponent} from "./components/unlock-modal/unlock-modal.compo
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {ToastModule} from "primeng/toast";
 import {ConfirmationService, MessageService} from "primeng/api";
+import {DueInDaysPipe} from "./event-due-soon.pipe";
 
 @NgModule({
   declarations: [
@@ -71,7 +72,8 @@ import {ConfirmationService, MessageService} from "primeng/api";
     FirstTimeSetupComponent,
     UnlockModalComponent,
     ConfirmDialogModule,
-    ToastModule
+    ToastModule,
+    DueInDaysPipe
   ],
   providers: [
     ConfirmationService,
