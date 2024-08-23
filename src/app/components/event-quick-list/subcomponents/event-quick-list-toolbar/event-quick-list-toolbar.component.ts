@@ -77,7 +77,7 @@ export class EventQuickListToolbarComponent {
 
   highlightCalendarDate(primeNgDate: PrimeNgDate): boolean {
     const dateString = `${primeNgDate.year}-${primeNgDate.month + 1}-${primeNgDate.day}`;
-    const date = moment.utc(dateString, 'YYYY-MM-DD');
+    const date = getMomentUtc(dateString, 'YYYY-MM-DD');
 
     const dateRange = this.computedDateRange();
     return date.isSameOrAfter(dateRange.startDate) && date.isSameOrBefore(dateRange.endDate);

@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {EventTriggerAdvancedOptions, EventTriggerMonthly, InvalidDayFallback} from "../../../types/event/event";
 import moment from "moment/moment";
 import {EventTriggerHandler} from "./event-trigger-handle";
+import {getMomentUtc} from "../../../utils/moment-utils";
 
 export type EventTriggerMonthlyAdvanced = EventTriggerMonthly & EventTriggerAdvancedOptions;
 
@@ -19,7 +20,7 @@ export class MonthlyTriggerHandler implements EventTriggerHandler<EventTriggerMo
     for (let i = 0; i <= deltaMonths; i++) {
       switch (trigger.options.type) {
         case 'specific-date':
-          let evaluationDate = moment.utc(startDate)
+          let evaluationDate = getMomentUtc(startDate)
             .add(i, 'months');
 
 
