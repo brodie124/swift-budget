@@ -6,13 +6,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class DueInDaysPipe implements PipeTransform {
   transform(daysUntil: number): string {
-    const text = this.getText(daysUntil);
-    console.log(`Days until = ${daysUntil}; Text = ${text}`);
-
-    return text;
-  }
-
-  private getText(daysUntil: number): string {
     if (daysUntil >= 0 && daysUntil < 1)
       return 'Due today';
 
