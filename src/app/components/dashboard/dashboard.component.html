@@ -1,24 +1,46 @@
 <div>
   <p-card>
-    <app-event-quick-list-toolbar (dateRangeChanged)="quickListDateRange.set($event)" />
+    <app-event-quick-list-toolbar (dateRangeChanged)="quickListDateRange.set($event)"/>
 
-    @if(events().length > 0) {
+    @if (events().length > 0) {
       <div class="spacer" style="height:32px"></div>
-      <app-event-quick-stats [statistics]="statistics()" />
+      <app-event-quick-stats [statistics]="statistics()"/>
     }
   </p-card>
 
-  <div class="text-white  align-items-end  mt-5">
-    <h1 class="m-0">Upcoming bills</h1>
+  <div>
+    <div class="text-white  align-items-end  mt-5">
+      <h1 class="m-0">Upcoming bills</h1>
 
-    <small class="">
-      <strong>{{ quickListDateRange().startDate.format('Do of MMM') }}</strong>
-      to
-      <strong>{{ quickListDateRange().endDate.format('Do of MMM') }}</strong>
-    </small>
+      <small class="">
+        <strong>{{ quickListDateRange().startDate.format('Do of MMM') }}</strong>
+        to
+        <strong>{{ quickListDateRange().endDate.format('Do of MMM') }}</strong>
+      </small>
+    </div>
+
+    <app-event-quick-list [occurrences]="upcomingOccurrences()"
+                          [startDate]="quickListDateRange().startDate"
+                          [endDate]="quickListDateRange().endDate"/>
   </div>
 
-  <app-event-quick-list [occurrences]="occurrences()"
-                        [startDate]="quickListDateRange().startDate"
-                        [endDate]="quickListDateRange().endDate" />
+
+  @if (paidOccurrences().length > 0) {
+    <div class="mt-5">
+      <div class="text-white align-items-end  mt-5">
+        <h1 class="m-0">Paid bills</h1>
+
+        <small class="">
+          <strong>{{ quickListDateRange().startDate.format('Do of MMM') }}</strong>
+          to
+          <strong>{{ quickListDateRange().endDate.format('Do of MMM') }}</strong>
+        </small>
+      </div>
+
+      <app-event-quick-list [occurrences]="paidOccurrences()"
+                            [startDate]="quickListDateRange().startDate"
+                            [endDate]="quickListDateRange().endDate"/>
+    </div>
+  }
+
 </div>

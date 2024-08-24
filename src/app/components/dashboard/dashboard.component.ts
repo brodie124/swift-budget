@@ -26,6 +26,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public occurrences = signal<ReadonlyArray<FinancialEventOccurrence>>([]);
   public statistics = computed(() => this._eventStatisticsService.calculateStatistics(this.occurrences()));
 
+  public upcomingOccurrences = computed(() => this.occurrences().filter(e => !e.isPaid));
+  public paidOccurrences = computed(() => this.occurrences().filter(e => e.isPaid));
+
   public quickListDateRange = signal<EventQuickListDateRange>({
     startDate: getMomentUtc(),
     endDate: getMomentUtc().add(1, 'month')
