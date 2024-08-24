@@ -1,28 +1,5 @@
 @if(editBill(); as existingBill) {
-<p-dialog
-  header="Edit a bill"
-  [visible]="showEditBillDialog()"
-  [modal]="true"
-  [style]="{ width: '25rem' }">
-
-<!--  @if(editBill(); as existingBill) {-->
-<!--    <app-create-event [existingEvent]="editBill()?.event" [mode]="'edit'" />-->
-<!--  }-->
-
-  <ng-template pTemplate="footer">
-    <p-button
-      label="Cancel"
-      [text]="true"
-      severity="secondary"
-      (onClick)="editBill.set(undefined)" />
-    <p-button
-      label="Save"
-      [outlined]="true"
-      severity="secondary"
-      (onClick)="editBill.set(undefined)"
-    />
-  </ng-template>
-</p-dialog>
+  <app-edit-event [event]="existingBill.event" (closed)="editBill.set(undefined)" />
 }
 
 

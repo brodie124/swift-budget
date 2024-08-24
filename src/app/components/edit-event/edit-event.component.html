@@ -1,0 +1,22 @@
+<p-dialog
+  header="Edit a bill"
+  [visible]="visible()"
+  [modal]="true"
+  [style]="{ width: '25rem' }">
+
+  <app-event-create-edit-multi-form mode="edit" [existingEvent]="event()" />
+
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Cancel"
+      [text]="true"
+      severity="secondary"
+      (onClick)="cancel()" />
+    <p-button
+      label="Save"
+      [outlined]="true"
+      severity="secondary"
+      (onClick)="save()"
+    />
+  </ng-template>
+</p-dialog>

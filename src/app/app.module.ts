@@ -42,6 +42,7 @@ import {DialogModule} from "primeng/dialog";
 import {
     EventCreateEditMultiFormComponent
 } from "./components/event-create-edit-multi-form/event-create-edit-multi-form.component";
+import {EditEventComponent} from "./components/edit-event/edit-event.component";
 
 @NgModule({
   declarations: [
@@ -53,36 +54,37 @@ import {
     EventQuickListComponent,
     EventQuickListItemComponent,
   ],
-    imports: [
-        BrowserModule,
-        AppRoutingModule,
-        BrowserAnimationsModule,
-        FormsModule,
-        Button,
-        StepperModule,
-        FloatLabelModule,
-        InputTextModule,
-        InputTextareaModule,
-        InputNumberModule,
-        DropdownModule,
-        CalendarModule,
-        CheckboxModule,
-        RadioButtonModule,
-        InputGroupModule,
-        InputGroupAddonModule,
-        CardModule,
-        EventQuickListToolbarComponent,
-        NavbarComponent,
-        ToolbarModule,
-        FirstTimeSetupComponent,
-        UnlockModalComponent,
-        ConfirmDialogModule,
-        ToastModule,
-        DueInDaysPipe,
-        EventQuickStatsComponent,
-        DialogModule,
-        EventCreateEditMultiFormComponent
-    ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    Button,
+    StepperModule,
+    FloatLabelModule,
+    InputTextModule,
+    InputTextareaModule,
+    InputNumberModule,
+    DropdownModule,
+    CalendarModule,
+    CheckboxModule,
+    RadioButtonModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+    CardModule,
+    EventQuickListToolbarComponent,
+    NavbarComponent,
+    ToolbarModule,
+    FirstTimeSetupComponent,
+    UnlockModalComponent,
+    ConfirmDialogModule,
+    ToastModule,
+    DueInDaysPipe,
+    EventQuickStatsComponent,
+    DialogModule,
+    EventCreateEditMultiFormComponent,
+    EditEventComponent
+  ],
   providers: [
     ConfirmationService,
     MessageService
