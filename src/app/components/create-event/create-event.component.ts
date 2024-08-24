@@ -10,6 +10,7 @@ import {
   EventCreateEditMultiFormComponent
 } from "../event-create-edit-multi-form/event-create-edit-multi-form.component";
 import {waitAsync} from "../../utils/async-utils";
+import {MessageService} from "primeng/api";
 
 @Component({
   selector: 'app-create-event',
@@ -18,6 +19,7 @@ import {waitAsync} from "../../utils/async-utils";
 })
 export class CreateEventComponent implements OnInit {
   private readonly _eventManager = inject(EventManagerService);
+  private readonly _messageService = inject(MessageService);
 
   @ViewChild(EventCreateEditMultiFormComponent, {static: true})
   private readonly _eventCreateEditMultiForm: EventCreateEditMultiFormComponent = undefined!;
@@ -43,7 +45,29 @@ export class CreateEventComponent implements OnInit {
       return;
     }
 
-    await this._eventManager.addAsync(financialEvent);
+    let hasCreated = false;
+    try {
+      await this._eventManager.addAsync(financialEvent);
+      hasCreated = true;
+    } catch (err) {
+      console.error("Failed to update event", err);
+    }
+
+    if (hasCreated) {
+      this._messageService.add({
+        severity: 'success',
+        summary: "Bill created.",
+        detail: `${financialEvent.name} has been created.`
+      });
+
+    } else {
+      this._messageService.add({
+        severity: 'danger',
+        summary: "Could not create bill.",
+        detail: `An error occurred while creating the bill.`
+      });
+    }
+
     this.created.emit();
     await this.closeAsync();
   }

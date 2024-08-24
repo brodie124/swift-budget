@@ -5,7 +5,7 @@ import {
 } from "../event-create-edit-multi-form/event-create-edit-multi-form.component";
 import {FinancialEvent} from "../../types/financial/financial-event";
 import {DialogModule} from "primeng/dialog";
-import {PrimeTemplate} from "primeng/api";
+import {MessageService, PrimeTemplate} from "primeng/api";
 import {EventManagerService} from "../../services/event-manager.service";
 import {waitAsync} from "../../utils/async-utils";
 
@@ -22,9 +22,10 @@ import {waitAsync} from "../../utils/async-utils";
   styleUrl: './edit-event.component.less'
 })
 export class EditEventComponent implements OnInit {
-  @ViewChild(EventCreateEditMultiFormComponent, { static: true })
+  @ViewChild(EventCreateEditMultiFormComponent, {static: true})
   private readonly _eventCreateEditMultiForm: EventCreateEditMultiFormComponent = undefined!;
   private readonly _eventManager = inject(EventManagerService);
+  private readonly _messageService = inject(MessageService);
 
   public event = input.required<FinancialEvent>();
   public visible = signal<boolean>(false);
@@ -53,7 +54,29 @@ export class EditEventComponent implements OnInit {
       return;
     }
 
-    await this._eventManager.updateAsync(financialEvent);
+    let hasUpdated = false;
+    try {
+      await this._eventManager.updateAsync(financialEvent);
+      hasUpdated = true;
+    } catch (err) {
+      console.error("Failed to update event", err);
+    }
+
+    if (hasUpdated) {
+      this._messageService.add({
+        severity: 'success',
+        summary: "Bill updated.",
+        detail: `${financialEvent.name} has been updated.`
+      });
+
+    } else {
+      this._messageService.add({
+        severity: 'danger',
+        summary: "Could not update bill.",
+        detail: `An error occurred while updating the bill.`
+      });
+    }
+
 
     this.saved.emit();
     await this.closeAsync();
