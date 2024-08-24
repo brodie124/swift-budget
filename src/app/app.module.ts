@@ -39,6 +39,9 @@ import {ConfirmationService, MessageService} from "primeng/api";
 import {DueInDaysPipe} from "./event-due-soon.pipe";
 import {EventQuickStatsComponent} from "./components/event-quick-stats/event-quick-stats.component";
 import {DialogModule} from "primeng/dialog";
+import {
+    EventCreateEditMultiFormComponent
+} from "./components/event-create-edit-multi-form/event-create-edit-multi-form.component";
 
 @NgModule({
   declarations: [
@@ -50,35 +53,36 @@ import {DialogModule} from "primeng/dialog";
     EventQuickListComponent,
     EventQuickListItemComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    Button,
-    StepperModule,
-    FloatLabelModule,
-    InputTextModule,
-    InputTextareaModule,
-    InputNumberModule,
-    DropdownModule,
-    CalendarModule,
-    CheckboxModule,
-    RadioButtonModule,
-    InputGroupModule,
-    InputGroupAddonModule,
-    CardModule,
-    EventQuickListToolbarComponent,
-    NavbarComponent,
-    ToolbarModule,
-    FirstTimeSetupComponent,
-    UnlockModalComponent,
-    ConfirmDialogModule,
-    ToastModule,
-    DueInDaysPipe,
-    EventQuickStatsComponent,
-    DialogModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        Button,
+        StepperModule,
+        FloatLabelModule,
+        InputTextModule,
+        InputTextareaModule,
+        InputNumberModule,
+        DropdownModule,
+        CalendarModule,
+        CheckboxModule,
+        RadioButtonModule,
+        InputGroupModule,
+        InputGroupAddonModule,
+        CardModule,
+        EventQuickListToolbarComponent,
+        NavbarComponent,
+        ToolbarModule,
+        FirstTimeSetupComponent,
+        UnlockModalComponent,
+        ConfirmDialogModule,
+        ToastModule,
+        DueInDaysPipe,
+        EventQuickStatsComponent,
+        DialogModule,
+        EventCreateEditMultiFormComponent
+    ],
   providers: [
     ConfirmationService,
     MessageService
