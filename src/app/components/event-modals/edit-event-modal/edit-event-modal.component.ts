@@ -3,14 +3,14 @@ import {Button} from "primeng/button";
 import {
   EventCreateEditMultiFormComponent
 } from "../event-create-edit-multi-form/event-create-edit-multi-form.component";
-import {FinancialEvent} from "../../types/financial/financial-event";
+import {FinancialEvent} from "../../../types/financial/financial-event";
 import {DialogModule} from "primeng/dialog";
 import {MessageService, PrimeTemplate} from "primeng/api";
-import {EventManagerService} from "../../services/event-manager.service";
-import {waitAsync} from "../../utils/async-utils";
+import {EventManagerService} from "../../../services/event-manager.service";
+import {waitAsync} from "../../../utils/async-utils";
 
 @Component({
-  selector: 'app-edit-event',
+  selector: 'app-edit-event-modal',
   standalone: true,
   imports: [
     Button,
@@ -18,10 +18,10 @@ import {waitAsync} from "../../utils/async-utils";
     DialogModule,
     PrimeTemplate
   ],
-  templateUrl: './edit-event.component.html',
-  styleUrl: './edit-event.component.less'
+  templateUrl: './edit-event-modal.component.html',
+  styleUrl: './edit-event-modal.component.less'
 })
-export class EditEventComponent implements OnInit {
+export class EditEventModalComponent implements OnInit {
   @ViewChild(EventCreateEditMultiFormComponent, {static: true})
   private readonly _eventCreateEditMultiForm: EventCreateEditMultiFormComponent = undefined!;
   private readonly _eventManager = inject(EventManagerService);

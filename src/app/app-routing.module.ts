@@ -1,7 +1,7 @@
 import {RouterModule, Routes} from "@angular/router";
 import {NgModule} from "@angular/core";
 import {DashboardComponent} from "./components/dashboard/dashboard.component";
-import {CreateEventComponent} from "./components/create-event/create-event.component";
+import {CreateEventModalComponent} from "./components/event-modals/create-event-modal/create-event-modal.component";
 
 const routes: Routes = [
   {
@@ -12,7 +12,7 @@ const routes: Routes = [
   {
     path: 'create',
     pathMatch: 'full',
-    component: CreateEventComponent
+    component: CreateEventModalComponent
   }
 ];
 

@@ -8,7 +8,7 @@ import { EventFrequencyFormComponent } from './components/event-frequency-form/e
 import {FormsModule} from "@angular/forms";
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import {AppRoutingModule} from "./app-routing.module";
-import { CreateEventComponent } from './components/create-event/create-event.component';
+import { CreateEventModalComponent } from './components/event-modals/create-event-modal/create-event-modal.component';
 import { EventQuickListComponent } from './components/event-quick-list/event-quick-list.component';
 import {Button} from "primeng/button";
 import {StepperModule} from "primeng/stepper";
@@ -41,8 +41,8 @@ import {EventQuickStatsComponent} from "./components/event-quick-stats/event-qui
 import {DialogModule} from "primeng/dialog";
 import {
     EventCreateEditMultiFormComponent
-} from "./components/event-create-edit-multi-form/event-create-edit-multi-form.component";
-import {EditEventComponent} from "./components/edit-event/edit-event.component";
+} from "./components/event-modals/event-create-edit-multi-form/event-create-edit-multi-form.component";
+import {EditEventModalComponent} from "./components/event-modals/edit-event-modal/edit-event-modal.component";
 
 @NgModule({
   declarations: [
@@ -50,7 +50,7 @@ import {EditEventComponent} from "./components/edit-event/edit-event.component";
     EventFrequencyComponent,
     EventFrequencyFormComponent,
     DashboardComponent,
-    CreateEventComponent,
+    CreateEventModalComponent,
     EventQuickListComponent,
     EventQuickListItemComponent,
     EventQuickListToolbarComponent,
@@ -83,7 +83,7 @@ import {EditEventComponent} from "./components/edit-event/edit-event.component";
     EventQuickStatsComponent,
     DialogModule,
     EventCreateEditMultiFormComponent,
-    EditEventComponent,
+    EditEventModalComponent,
 
   ],
   providers: [

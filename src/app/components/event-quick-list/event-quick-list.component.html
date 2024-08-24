@@ -1,6 +1,6 @@
 
 @if(editBill(); as existingBill) {
-  <app-edit-event [event]="existingBill.event" (closed)="editBill.set(undefined)" />
+  <app-edit-event-modal [event]="existingBill.event" (closed)="editBill.set(undefined)" />
 }
 
 

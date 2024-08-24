@@ -1,10 +1,10 @@
 import {Component, effect, input} from '@angular/core';
-import {FinancialEvent} from "../../types/financial/financial-event";
+import {FinancialEvent} from "../../../types/financial/financial-event";
 import {Router} from "@angular/router";
-import {EventManagerService} from "../../services/event-manager.service";
-import {getMomentUtc} from "../../utils/moment-utils";
-import {EventTrigger, InvalidDayFallback} from "../../types/event/event";
-import {AllCalendarMonths} from "../../types/calendar/calendar-types";
+import {EventManagerService} from "../../../services/event-manager.service";
+import {getMomentUtc} from "../../../utils/moment-utils";
+import {EventTrigger, InvalidDayFallback} from "../../../types/event/event";
+import {AllCalendarMonths} from "../../../types/calendar/calendar-types";
 import {EventFrequency} from 'src/app/types/event/event-frequency';
 import {Button} from "primeng/button";
 import {CalendarModule} from "primeng/calendar";
