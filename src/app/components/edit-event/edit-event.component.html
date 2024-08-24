@@ -2,7 +2,8 @@
   header="Edit a bill"
   [visible]="visible()"
   [modal]="true"
-  [style]="{ width: '25rem' }">
+  [closable]="false"
+  [style]="{ width: '35rem' }">
 
   <app-event-create-edit-multi-form mode="edit" [existingEvent]="event()" />
 

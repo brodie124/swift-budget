@@ -103,7 +103,7 @@ export class EventCreateEditMultiFormComponent {
     });
   }
 
-  public async createFinancialEvent(existingUid?: string): Promise<FinancialEvent | null> {
+  public async createFinancialEventAsync(): Promise<FinancialEvent | null> {
     // TODO: this setup is incredibly specific to the Monthly/specific-date configuration
     if(this.eventFrequency !== EventFrequency.Monthly) {
       console.error(new Error('Unhandled event frequency!'));
@@ -130,6 +130,7 @@ export class EventCreateEditMultiFormComponent {
       }
     };
 
+    const existingUid = this.mode() === 'edit' ? this.existingEvent()?.uid : undefined;
     const uid = existingUid ?? crypto.randomUUID().replace('-', '');
     return {
       uid: uid,

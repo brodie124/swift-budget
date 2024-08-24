@@ -28,7 +28,7 @@ export class CreateEventComponent implements OnInit {
   }
 
   public async create() {
-    const financialEvent = await this._eventCreateEditMultiForm.createFinancialEvent();
+    const financialEvent = await this._eventCreateEditMultiForm.createFinancialEventAsync();
     if (!financialEvent) {
       console.info("Couldn't create financial event");
       return;

@@ -13,10 +13,6 @@ export class EventManagerService {
   private _eventsSubject: Subject<ReadonlyArray<FinancialEvent>> = new ReplaySubject<ReadonlyArray<FinancialEvent>>(1);
   public events$: Observable<ReadonlyArray<FinancialEvent>> = this._eventsSubject.asObservable();
 
-  constructor() {
-    this.events$.subscribe(async (events)  => await this.saveAsync(events));
-  }
-
   public async getAsync(): Promise<ReadonlyArray<FinancialEvent>> {
     return await firstValueFrom(this.events$)
   }
@@ -39,7 +35,14 @@ export class EventManagerService {
     const newEventList: FinancialEvent[] = [...existingEvents, event];
 
     await this.saveAsync(newEventList);
-    this._eventsSubject.next(newEventList);
+  }
+
+  public async updateAsync(updatedEvent: FinancialEvent): Promise<void> {
+    const existingEvents = await this.getAsync();
+    const filteredEvents = existingEvents.filter(e => e.uid !== updatedEvent.uid);
+
+    const newEvents = [...filteredEvents, updatedEvent];
+    await this.saveAsync(newEvents);
   }
 
   /**
@@ -51,13 +54,13 @@ export class EventManagerService {
     const filteredEvents = existingEvents.filter(event => event.uid !== eventUid);
 
     await this.saveAsync(filteredEvents);
-    this._eventsSubject.next(filteredEvents);
-
     return filteredEvents.length < existingEvents.length;
   }
 
   private async saveAsync(events: ReadonlyArray<FinancialEvent>): Promise<void> {
     const eventsJson = JSON.stringify(events);
     await this._encryptedStorageService.setItemAsync(environment.cacheKeys.eventList, eventsJson);
+
+    this._eventsSubject.next(events);
   }
 }
