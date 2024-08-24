@@ -4,6 +4,7 @@ import {
   EventQuickListToolbarPreferencesService
 } from "../../../../services/event-quick-list-toolbar-preferences.service";
 import {getMomentUtc} from "../../../../utils/moment-utils";
+import { useTouchUi } from 'src/app/utils/screen-utils';
 
 export type EventQuickListDateRange = {
   startDate: moment.Moment;
@@ -20,6 +21,10 @@ export class EventQuickListToolbarComponent implements OnInit {
 
   private _paydayMoment = signal<moment.Moment | undefined>(undefined);
   protected paydayDate = computed(() => this._paydayMoment()?.toDate())
+
+  public get useTouchUi(): boolean {
+    return useTouchUi();
+  }
 
   public setDate(date: Date | undefined) {
     const parsedDate = date

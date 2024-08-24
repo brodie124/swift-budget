@@ -20,6 +20,7 @@ import {PrimeTemplate} from "primeng/api";
 import {RadioButtonModule} from "primeng/radiobutton";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {StepperModule} from "primeng/stepper";
+import {useTouchUi} from "../../../utils/screen-utils";
 
 @Component({
   selector: 'app-event-create-edit-multi-form',
@@ -48,6 +49,10 @@ export class EventCreateEditMultiFormComponent {
 
   public readonly EventFrequency: typeof EventFrequency = EventFrequency;
   public readonly InvalidDayFallback: typeof InvalidDayFallback = InvalidDayFallback;
+
+  public get useTouchUi(): boolean {
+    return useTouchUi();
+  }
 
   public mode = input.required<'create' | 'edit'>();
   public existingEvent = input<FinancialEvent>();
