@@ -1,4 +1,4 @@
-import {Component, computed, inject, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, computed, effect, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {EventManagerService} from "../../services/event-manager.service";
 import {FinancialEvent, FinancialEventOccurrence} from "../../types/financial/financial-event";
 import {
@@ -9,6 +9,7 @@ import {Subscription} from "rxjs";
 import {FinancialEventService} from "../../services/financial-event.service";
 import {FinancialEventHistoryManager} from "../../services/financial-event-history-manager.service";
 import {EventStatisticsService} from "../../services/event-statistics.service";
+import {toObservable} from "@angular/core/rxjs-interop";
 
 @Component({
   selector: 'app-dashboard',
@@ -34,7 +35,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     endDate: getMomentUtc().add(1, 'month')
   });
 
-
+  constructor() {
+    effect(async () => {
+      this.quickListDateRange();
+      await this.calculateOccurrences(this.events());
+    });
+  }
 
   public async ngOnInit() {
     await this._eventManager.loadAsync();
