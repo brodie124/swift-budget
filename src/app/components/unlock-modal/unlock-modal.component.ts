@@ -6,7 +6,6 @@ import {PasswordModule} from "primeng/password";
 import {MessageService, PrimeTemplate} from "primeng/api";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {EncryptionService} from "../../services/encryption.service";
-import {MessageModule} from "primeng/message";
 import {ToastModule} from "primeng/toast";
 
 @Component({
@@ -30,7 +29,6 @@ import {ToastModule} from "primeng/toast";
 })
 export class UnlockModalComponent {
   private readonly _encryptionService = inject(EncryptionService);
-  private readonly messageService = inject(MessageService);
 
   public hasSubmitted: boolean = false;
   public masterPassword: string = '';

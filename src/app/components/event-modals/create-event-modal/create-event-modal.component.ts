@@ -1,11 +1,5 @@
-import {Component, effect, inject, input, OnInit, output, signal, ViewChild} from '@angular/core';
-import {EventFrequency} from "../../../types/event/event-frequency";
-import {EventTrigger, InvalidDayFallback} from "../../../types/event/event";
-import {AllCalendarMonths} from "../../../types/calendar/calendar-types";
+import {Component, inject, OnInit, output, signal, ViewChild} from '@angular/core';
 import {EventManagerService} from "../../../services/event-manager.service";
-import {Router} from "@angular/router";
-import {FinancialEvent} from "../../../types/financial/financial-event";
-import {getMomentUtc} from "../../../utils/moment-utils";
 import {
   EventCreateEditMultiFormComponent
 } from "../event-create-edit-multi-form/event-create-edit-multi-form.component";

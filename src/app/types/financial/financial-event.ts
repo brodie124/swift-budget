@@ -1,5 +1,5 @@
 import {EventTrigger} from "../event/event";
-import moment, {Moment} from "moment";
+import moment from "moment";
 
 export type FinancialEventId = string;
 

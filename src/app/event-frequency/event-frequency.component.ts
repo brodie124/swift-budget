@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import moment from 'moment';
 import {CalendarDay} from "../types/calendar/calendar-types";
 import { EventFrequency } from '../types/event/event-frequency';
 import {InvalidDayFallback, EventTrigger, EventTriggerDaily} from "../types/event/event";

@@ -1,6 +1,5 @@
 import {inject, Injectable} from '@angular/core';
 import {FinancialEventHistory, FinancialEventId} from "../types/financial/financial-event";
-import moment from "moment";
 import {getMomentUtc} from "../utils/moment-utils";
 import {environment} from "../../environments/environment";
 import {EncryptedLocalStorageService} from "./encrypted-local-storage.service";

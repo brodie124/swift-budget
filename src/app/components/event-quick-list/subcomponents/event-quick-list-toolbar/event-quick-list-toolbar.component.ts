@@ -1,15 +1,9 @@
 import {Component, computed, effect, inject, OnInit, output, signal} from '@angular/core';
-import {CardModule} from "primeng/card";
-import {Button} from "primeng/button";
-import {RouterLink} from "@angular/router";
-import {CalendarModule} from "primeng/calendar";
-import {FormsModule} from "@angular/forms";
-import moment, {Moment} from "moment";
+import moment from "moment";
 import {
   EventQuickListToolbarPreferencesService
 } from "../../../../services/event-quick-list-toolbar-preferences.service";
 import {getMomentUtc} from "../../../../utils/moment-utils";
-import {NgStyle} from "@angular/common";
 
 export type EventQuickListDateRange = {
   startDate: moment.Moment;
