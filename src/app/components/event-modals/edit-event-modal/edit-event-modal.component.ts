@@ -43,7 +43,7 @@ export class EditEventModalComponent implements OnInit {
   }
 
   public async cancel() {
-    this.saved.emit()
+    this.cancelled.emit()
     await this.closeAsync()
   }
 
@@ -84,7 +84,7 @@ export class EditEventModalComponent implements OnInit {
 
   public async closeAsync() {
     this.visible.set(false);
-    await waitAsync(100);
+    await waitAsync(250);
     this.closed.emit();
   }
 }
