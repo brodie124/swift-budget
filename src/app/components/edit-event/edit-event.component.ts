@@ -7,6 +7,7 @@ import {FinancialEvent} from "../../types/financial/financial-event";
 import {DialogModule} from "primeng/dialog";
 import {PrimeTemplate} from "primeng/api";
 import {EventManagerService} from "../../services/event-manager.service";
+import {waitAsync} from "../../utils/async-utils";
 
 @Component({
   selector: 'app-edit-event',
@@ -36,7 +37,7 @@ export class EditEventComponent implements OnInit {
     if (!this._eventCreateEditMultiForm)
       throw new Error('Create/Edit Multi-Form not found!');
 
-    await this.awaitAsync(100);
+    await waitAsync(100);
     this.visible.set(true);
   }
 
@@ -60,11 +61,7 @@ export class EditEventComponent implements OnInit {
 
   public async closeAsync() {
     this.visible.set(false);
-    await this.awaitAsync(100);
+    await waitAsync(100);
     this.closed.emit();
-  }
-
-  private awaitAsync(timeMs: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, timeMs));
   }
 }

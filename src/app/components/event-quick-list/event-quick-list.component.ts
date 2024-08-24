@@ -14,12 +14,13 @@ export class EventQuickListComponent {
   public readonly startDate = input.required<moment.Moment>();
   public readonly endDate = input.required<moment.Moment>();
 
+  public showCreateBill = signal<boolean>(false);
   public editBill = signal<FinancialEventOccurrence | undefined>(undefined);
-  public showEditBillDialog = computed(() => !!this.editBill());
 
   public items = computed(() => this.occurrences()
     .map(occurrence => this.createQuickListItem(occurrence))
     .sort((a, b) => compareMomentsAscending(a.nextOccurrence.date, b.nextOccurrence.date)));
+
 
   private createQuickListItem(calculatedEvent: FinancialEventOccurrence): EventQuickListItem {
     const comparisonDate = getMomentUtc();

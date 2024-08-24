@@ -1,7 +1,23 @@
-<div>
+<p-dialog
+  header="Create a bill"
+  [visible]="visible()"
+  [modal]="true"
+  [closable]="false"
+  [style]="{ width: '35rem' }">
+
   <app-event-create-edit-multi-form mode="create" />
-</div>
-<div class="mt-4" style="display: flex; flex-direction: row;">
-  <p-button [severity]="'warning'" (click)="cancel()" [style]="{marginRight: '1rem'}">Cancel</p-button>
-  <p-button [severity]="'primary'" (click)="create()">Create</p-button>
-</div>
+
+  <ng-template pTemplate="footer">
+    <p-button
+      label="Cancel"
+      [text]="true"
+      severity="secondary"
+      (onClick)="cancel()" />
+    <p-button
+      label="Create"
+      [outlined]="true"
+      severity="secondary"
+      (onClick)="create()"
+    />
+  </ng-template>
+</p-dialog>

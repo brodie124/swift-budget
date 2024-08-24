@@ -1,3 +1,4 @@
+
 @if(editBill(); as existingBill) {
   <app-edit-event [event]="existingBill.event" (closed)="editBill.set(undefined)" />
 }

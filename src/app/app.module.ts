@@ -53,6 +53,7 @@ import {EditEventComponent} from "./components/edit-event/edit-event.component";
     CreateEventComponent,
     EventQuickListComponent,
     EventQuickListItemComponent,
+    EventQuickListToolbarComponent,
   ],
   imports: [
     BrowserModule,
@@ -72,7 +73,6 @@ import {EditEventComponent} from "./components/edit-event/edit-event.component";
     InputGroupModule,
     InputGroupAddonModule,
     CardModule,
-    EventQuickListToolbarComponent,
     NavbarComponent,
     ToolbarModule,
     FirstTimeSetupComponent,
@@ -83,7 +83,8 @@ import {EditEventComponent} from "./components/edit-event/edit-event.component";
     EventQuickStatsComponent,
     DialogModule,
     EventCreateEditMultiFormComponent,
-    EditEventComponent
+    EditEventComponent,
+
   ],
   providers: [
     ConfirmationService,

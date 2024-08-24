@@ -18,15 +18,6 @@ export type EventQuickListDateRange = {
 
 @Component({
   selector: 'app-event-quick-list-toolbar',
-  standalone: true,
-  imports: [
-    CardModule,
-    Button,
-    RouterLink,
-    CalendarModule,
-    FormsModule,
-    NgStyle
-  ],
   templateUrl: './event-quick-list-toolbar.component.html',
   styleUrl: './event-quick-list-toolbar.component.less'
 })
@@ -45,6 +36,7 @@ export class EventQuickListToolbarComponent implements OnInit {
     this._toolbarPreferencesService.payday = parsedDate;
   }
 
+  public showCreateBill = signal<boolean>(false);
   public computedDateRange = computed<EventQuickListDateRange>(() => {
     if (!this._paydayMoment()) {
       const startDate = getMomentUtc();
@@ -89,6 +81,11 @@ export class EventQuickListToolbarComponent implements OnInit {
     currentDate.set('date', currentDate.daysInMonth());
 
     return currentDate;
+  }
+
+  createBill() {
+    console.log("Showing create a bill");
+    this.showCreateBill.set(true);
   }
 }
 

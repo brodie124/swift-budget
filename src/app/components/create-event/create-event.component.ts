@@ -1,4 +1,4 @@
-import {Component, effect, inject, input, OnInit, ViewChild} from '@angular/core';
+import {Component, effect, inject, input, OnInit, output, signal, ViewChild} from '@angular/core';
 import {EventFrequency} from "../../types/event/event-frequency";
 import {EventTrigger, InvalidDayFallback} from "../../types/event/event";
 import {AllCalendarMonths} from "../../types/calendar/calendar-types";
@@ -9,6 +9,7 @@ import {getMomentUtc} from "../../utils/moment-utils";
 import {
   EventCreateEditMultiFormComponent
 } from "../event-create-edit-multi-form/event-create-edit-multi-form.component";
+import {waitAsync} from "../../utils/async-utils";
 
 @Component({
   selector: 'app-create-event',
@@ -17,14 +18,22 @@ import {
 })
 export class CreateEventComponent implements OnInit {
   private readonly _eventManager = inject(EventManagerService);
-  private readonly _router = inject(Router);
 
-  @ViewChild(EventCreateEditMultiFormComponent, { static: true })
+  @ViewChild(EventCreateEditMultiFormComponent, {static: true})
   private readonly _eventCreateEditMultiForm: EventCreateEditMultiFormComponent = undefined!;
 
-  public ngOnInit(): void {
+  public visible = signal<boolean>(false);
+
+  public created = output<void>();
+  public cancelled = output<void>();
+  public closed = output<void>();
+
+  public async ngOnInit() {
     if (!this._eventCreateEditMultiForm)
       throw new Error('Create/Edit Multi-Form not found!');
+
+    await waitAsync(100);
+    this.visible.set(true);
   }
 
   public async create() {
@@ -35,11 +44,19 @@ export class CreateEventComponent implements OnInit {
     }
 
     await this._eventManager.addAsync(financialEvent);
-    await this._router.navigate(['']);
+    this.created.emit();
+    await this.closeAsync();
   }
 
   public async cancel() {
-    // TODO: add confirmation
-    await this._router.navigate(['']);
+    this.cancelled.emit();
+    await this.closeAsync();
+  }
+
+  private async closeAsync() {
+    this.visible.set(false);
+    await waitAsync(100);
+    this.closed.emit();
+
   }
 }
