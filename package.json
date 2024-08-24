@@ -7,7 +7,6 @@
     "build": "npx ng build",
     "watch": "npx ng build --watch --configuration development",
     "test": "npx ng test",
-
     "pipeline:test": "echo Not configured yet && exit 0",
     "pipeline:build": "npm run build"
   },
@@ -22,6 +21,7 @@
     "@angular/platform-browser": "^18.1.4",
     "@angular/platform-browser-dynamic": "^18.1.4",
     "@angular/router": "^18.1.4",
+    "firebase": "^10.13.0",
     "moment": "^2.30.1",
     "primeflex": "^3.3.1",
     "primeng": "^17.18.8",

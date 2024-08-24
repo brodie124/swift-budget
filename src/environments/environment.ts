@@ -8,6 +8,7 @@ export const environment: EnvironmentConfig = {
     paydayPreference: 'sbeqlpp',
     encryptionPreference: 'sbep',
     encryptionCheck: 'sbec',
+    firebaseAccessToken: 'sbfat',
   },
   enableNavbar: false,
 };

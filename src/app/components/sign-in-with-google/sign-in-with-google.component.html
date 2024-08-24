@@ -1,0 +1,11 @@
+@if(isSignedIn()) {
+  <button type="button" class="google-sign-in-button" [disabled]="disabled()" (click)="signOutAsync()">
+    Sign out
+  </button>
+} @else {
+  <button type="button" class="google-sign-in-button" [disabled]="disabled()" (click)="signInAsync()">
+    Sign in with Google
+  </button>
+}
+
+

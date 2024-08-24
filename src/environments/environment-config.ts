@@ -8,6 +8,9 @@
 
     readonly encryptionPreference: string;
     readonly encryptionCheck: string;
+
+
+    readonly firebaseAccessToken: string,
   },
   readonly enableNavbar: boolean;
 }

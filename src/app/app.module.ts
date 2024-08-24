@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {APP_INITIALIZER, NgModule} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -43,6 +43,8 @@ import {
     EventCreateEditMultiFormComponent
 } from "./components/event-modals/event-create-edit-multi-form/event-create-edit-multi-form.component";
 import {EditEventModalComponent} from "./components/event-modals/edit-event-modal/edit-event-modal.component";
+import {AuthService} from "./services/auth.service";
+import {initializeFirebase} from "./initializers/firebase-initializer";
 
 @NgModule({
   declarations: [
@@ -88,7 +90,13 @@ import {EditEventModalComponent} from "./components/event-modals/edit-event-moda
   ],
   providers: [
     ConfirmationService,
-    MessageService
+    MessageService,
+    {
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [AuthService],
+      useFactory: initializeFirebase
+    }
   ],
   bootstrap: [AppComponent]
 })
