@@ -5,9 +5,9 @@
 
 
 <div class="event-quick-list mt-4">
-  @for(item of items(); track $index) {
+  @for(item of items(); track item.calculatedEvent.occurrenceId) {
 
-    <app-event-quick-list-item [item]="item" (edited)="editBill.set($event)" />
+    <app-event-quick-list-item @slideInOut [item]="item" (edited)="editBill.set($event)" />
 
   } @empty {
 
