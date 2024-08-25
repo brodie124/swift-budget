@@ -26,3 +26,26 @@ body {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
 }
+
+
+
+/* Fixes for PrimeNG - toast message looks bad on dark background */
+.p-toast .p-toast-message{
+
+  &.p-toast-message-error {
+    background: rgba(255, 231, 230, 1); // Override opacity
+  }
+
+  &.p-toast-message-warn {
+    background: rgba(255, 242, 226, 1); // Override opacity
+  }
+
+  &.p-toast-message-success {
+    background: rgba(228, 248, 240, 0.7); // Override opacity
+  }
+
+  &.p-toast-message-info {
+    background: rgba(219, 234, 254, 1); // Override opacity
+  }
+
+}
