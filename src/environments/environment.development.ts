@@ -2,6 +2,10 @@ import {EnvironmentConfig} from "./environment-config";
 
 export const environment: EnvironmentConfig = {
   isProduction: false,
+  api: {
+    apiUrl: 'http://localhost:3000',
+    oauthInitEndpoint: '/oauth/init'
+  },
   cacheKeys: {
     eventList: 'sb-recurring-events',
     eventHistory: 'sb-event-history',
@@ -11,5 +15,4 @@ export const environment: EnvironmentConfig = {
     firebaseAccessToken: 'sb-firebase-access-token',
   },
   enableNavbar: true,
-  oauthInitUrl: 'http://localhost:3000/oauth/init'
 };

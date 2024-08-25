@@ -20,10 +20,10 @@ export class SignInWithGoogleComponent {
   public disabled = input<boolean>(false);
   // public mode = input<'sign-in-only' | 'sign-in-out'>('sign-in-out');
 
-  public isSignedIn = toSignal(of(false), {initialValue: false});
+  public isSignedIn = toSignal(this._authService.isSignedIn$, {initialValue: false});
 
   public async signInAsync() {
-    await this._authService.signInAsync();
+    await this._authService.startSignInAsync();
   }
 
   public async signOutAsync() {
