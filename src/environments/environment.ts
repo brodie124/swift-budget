@@ -11,4 +11,5 @@ export const environment: EnvironmentConfig = {
     firebaseAccessToken: 'sbfat',
   },
   enableNavbar: false,
+  oauthInitUrl: 'https://api.swiftbudget.brodiepestell.net/oauth/init'
 };

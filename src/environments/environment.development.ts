@@ -11,4 +11,5 @@ export const environment: EnvironmentConfig = {
     firebaseAccessToken: 'sb-firebase-access-token',
   },
   enableNavbar: true,
+  oauthInitUrl: 'http://localhost:3000/oauth/init'
 };

@@ -45,6 +45,7 @@ import {
 import {EditEventModalComponent} from "./components/event-modals/edit-event-modal/edit-event-modal.component";
 import {AuthService} from "./services/auth.service";
 import {initializeFirebase} from "./initializers/firebase-initializer";
+import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -89,6 +90,7 @@ import {initializeFirebase} from "./initializers/firebase-initializer";
 
   ],
   providers: [
+    provideHttpClient(withInterceptorsFromDi()),
     ConfirmationService,
     MessageService,
     {

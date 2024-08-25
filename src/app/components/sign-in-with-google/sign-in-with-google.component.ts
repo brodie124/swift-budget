@@ -1,6 +1,7 @@
 import {Component, inject, input, signal} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import {toSignal} from "@angular/core/rxjs-interop";
+import {of} from "rxjs";
 
 @Component({
   selector: 'app-sign-in-with-google',
@@ -19,10 +20,10 @@ export class SignInWithGoogleComponent {
   public disabled = input<boolean>(false);
   // public mode = input<'sign-in-only' | 'sign-in-out'>('sign-in-out');
 
-  public isSignedIn = toSignal(this._authService.isSignedIn$, {initialValue: false});
+  public isSignedIn = toSignal(of(false), {initialValue: false});
 
   public async signInAsync() {
-    await this._authService.authenticateAsync();
+    await this._authService.signInAsync();
   }
 
   public async signOutAsync() {
