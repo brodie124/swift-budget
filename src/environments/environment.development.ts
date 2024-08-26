@@ -13,6 +13,7 @@ export const environment: EnvironmentConfig = {
     encryptionPreference: 'sb-encryption-preference',
     encryptionCheck: 'sb-encryption-check',
     apiAccessToken: 'sb-api-access-token',
+    appdataLastSyncTime: 'sb-appdata-last-sync-time',
   },
   enableNavbar: true,
 };

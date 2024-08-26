@@ -13,6 +13,8 @@
     readonly encryptionCheck: string;
 
     readonly apiAccessToken: string,
+
+    readonly appdataLastSyncTime: string;
   },
   readonly enableNavbar: boolean;
 }

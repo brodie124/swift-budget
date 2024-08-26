@@ -1,10 +1,14 @@
 import {inject, Injectable} from '@angular/core';
 import {AuthService} from "./auth.service";
-import {firstValueFrom} from "rxjs";
+import {filter, firstValueFrom} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {ApiMediatorService} from "./api-mediator.service";
 import {AppdataPackageCreatorService} from "./appdata-package-creator.service";
 import {MessageService} from "primeng/api";
+import {LocalStorageService} from "./local-storage.service";
+import {environment} from "../../environments/environment";
+import moment from "moment";
+import {getMomentWithTime} from "../utils/moment-utils";
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +19,35 @@ export class AppDataSynchronizerService {
   private readonly _apiMediator = inject(ApiMediatorService);
   private readonly _appdataPackageCreator = inject(AppdataPackageCreatorService);
   private readonly _messageService = inject(MessageService);
+
+  private readonly _localStorageService = inject(LocalStorageService);
+
+  private _lastSyncMoment: moment.Moment = getMomentWithTime(0);
+  private _lastModifiedMoment: moment.Moment = getMomentWithTime(0);
+
+  constructor() {
+    const storedLastModified = this._localStorageService.getItem(environment.cacheKeys.appdataLastSyncTime);
+    if(storedLastModified)
+      this._lastModifiedMoment = moment(storedLastModified);
+
+    const monitoredLocalStorageKeys = [
+      environment.cacheKeys.eventList,
+      environment.cacheKeys.eventHistory,
+    ]
+    this._localStorageService.set$.pipe(filter(e => monitoredLocalStorageKeys.indexOf(e.key) !== -1)).subscribe(() => {
+      const now = getMomentWithTime();
+      const original = this._lastModifiedMoment.clone();
+
+
+
+      this._lastModifiedMoment = now.clone();
+      this._localStorageService.setItem(environment.cacheKeys.appdataLastSyncTime, this._lastModifiedMoment.toISOString());
+
+      const x = now.diff(original, 'seconds', false);
+      console.log(`Synchronisation alert! Change detected! ${x} seconds since last change`);
+
+    })
+  }
 
   public async loadAsync() {
     const jwt = await firstValueFrom(this._authService.jwt$);
