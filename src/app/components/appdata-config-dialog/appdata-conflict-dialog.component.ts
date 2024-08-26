@@ -36,6 +36,13 @@ export class AppdataConflictDialogComponent implements OnInit, OnDestroy {
       : null
   });
 
+  public malformedDataConflict = computed(() => {
+    const conflict = this.conflict()
+    return conflict.type === 'malformed-data'
+      ? conflict
+      : null
+  });
+
 
   public async ngOnInit() {
     this._subscriptions.add(this._appdataConflictBridge.notifyConflict$.subscribe(this.handleConflictNotification.bind(this)));

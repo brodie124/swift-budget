@@ -38,6 +38,24 @@
     </div>
   }
 
+  @if(malformedDataConflict(); as conflict) {
+    <div class="flex flex-row align-items-center mb-3 p-3 border-round bg-red-200" style="max-width: 500px;">
+      <div class="text-red-800 mr-3" style="font-size: 3rem;">
+        <i class="fa-regular fa-triangle-exclamation"></i>
+      </div>
+      <div class="flex-grow-1">
+        <strong>Warning!</strong>
+        <br />
+
+        Your cloud save has become <span class="font-bold">malformed/corrupted</span>.
+        <br /><br />
+
+        Your cloud data will be overwritten with your local data.
+        Would you like to keep your local copy or switch to the cloud version?
+      </div>
+    </div>
+  }
+
 
   <div class="flex flex-row w-100 last-modified-mismatch">
     <div>
@@ -81,7 +99,7 @@
         </div>
       }
 
-      <p-button (onClick)="takeCloud()">Take cloud</p-button>
+      <p-button (onClick)="takeCloud()" [disabled]="malformedDataConflict()">Take cloud</p-button>
     </div>
   </div>
 

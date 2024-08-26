@@ -76,7 +76,7 @@ export class AppDataSynchronizerService {
     return this._lastModifiedMoment.isAfter(this._lastSyncMoment);
   }
 
-  public async loadAsync(): Promise<Error | 'origin-mismatch' | 'last-modified-mismatch' | 'success'> {
+  public async loadAsync(): Promise<Error | 'origin-mismatch' | 'last-modified-mismatch' | 'malformed-data' | 'success'> {
     if (this._appdataConflictBridge.conflictInProgress)
       return new Error('Cannot upload appdata while conflict is in progress');
 
@@ -93,8 +93,17 @@ export class AppDataSynchronizerService {
 
 
     const appdata = await this._apiMediator.fetchAppdata<any>(jwt);
-    if (!isAppdataPackage(appdata))
-      return new Error('Returned appdata is malformed'); // TODO: handle this scenario better
+    if (!isAppdataPackage(appdata)) {
+      console.log("Malformed appdata");
+      const response = await this._appdataConflictBridge.requestConflictResolution({
+        type: 'malformed-data',
+      });
+
+      console.log("Response from conflict resolution:", response);
+      this._hasFetched = true;
+      if (response !== 'take-cloud')
+        return 'malformed-data';
+    }
 
     if (appdata.originUuid !== this._originUuid) {
       console.log("Origin mismatch");

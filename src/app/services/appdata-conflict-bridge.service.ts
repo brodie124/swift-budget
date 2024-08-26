@@ -46,7 +46,9 @@ export type Conflict = {
   cloudMoment: moment.Moment;
 } | {
   type: 'origin-mismatch'
+} | {
+  type: 'malformed-data'
 }
 
-export type ConflictType = 'origin-mismatch' | 'last-modified-mismatch';
+export type ConflictType = 'origin-mismatch' | 'last-modified-mismatch' | 'malformed-data';
 export type ConflictResolution = 'take-cloud' | 'keep-local' | 'disable-sync';
