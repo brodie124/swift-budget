@@ -42,22 +42,20 @@ export class AppDataSynchronizerService {
   public readonly lastModifiedMoment = this._lastModifiedMoment;
 
 
-
-
   constructor() {
     this._allowSyncSubject.next(false);
 
     // TODO: move these out of the constructor
     const storedLastModified = this._localStorageService.getItem(environment.cacheKeys.appdataLastModifiedTime);
-    if(storedLastModified)
+    if (storedLastModified)
       this._lastModifiedMoment = moment(storedLastModified);
 
     const storedLastSync = this._localStorageService.getItem(environment.cacheKeys.appdataLastSyncTime);
-    if(storedLastSync)
+    if (storedLastSync)
       this._lastSyncMoment = moment(storedLastSync);
 
     const storedOriginUuid = this._localStorageService.getItem(environment.cacheKeys.appdataOriginUuid);
-    if(storedOriginUuid)
+    if (storedOriginUuid)
       this._originUuid = storedOriginUuid;
 
     const monitoredLocalStorageKeys = [
@@ -79,7 +77,7 @@ export class AppDataSynchronizerService {
   }
 
   public async loadAsync(): Promise<Error | 'origin-mismatch' | 'last-modified-mismatch' | 'success'> {
-    if(this._appdataConflictBridge.conflictInProgress)
+    if (this._appdataConflictBridge.conflictInProgress)
       throw new Error('Cannot upload appdata while conflict is in progress');
 
     const jwt = await firstValueFrom(this._authService.jwt$);
@@ -87,15 +85,23 @@ export class AppDataSynchronizerService {
       throw new Error('Cannot fetch appdata without auth token!');
 
     const appdata = await this._apiMediator.fetchAppdata<any>(jwt);
-    if(!isAppdataPackage(appdata))
+    if (!isAppdataPackage(appdata))
       throw new Error('Returned appdata is malformed'); // TODO: handle this scenario better
 
-    if(appdata.originUuid !== this._originUuid) {
-      return 'origin-mismatch';
-      }
+    if (appdata.originUuid !== this._originUuid) {
+      console.log("Origin mismatch");
+      const response = await this._appdataConflictBridge.requestConflictResolution({
+        type: 'origin-mismatch',
+      });
+
+      console.log("Response from conflict resolution:", response);
+      if (response !== 'take-cloud')
+        return 'origin-mismatch';
+    }
 
     const packageUploadMoment = getMomentWithTime(appdata.uploadTimestamp);
-    if(packageUploadMoment.isSameOrBefore(this._lastModifiedMoment)) {
+    if (packageUploadMoment.isBefore(this._lastModifiedMoment)) {
+      console.log("Last modified mismatch");
       const response = await this._appdataConflictBridge.requestConflictResolution({
         type: 'last-modified-mismatch',
         localMoment: this._lastModifiedMoment,
@@ -103,7 +109,7 @@ export class AppDataSynchronizerService {
       });
 
       console.log("Response from conflict resolution:", response);
-      if(response !== 'take-cloud')
+      if (response !== 'take-cloud')
         return 'last-modified-mismatch';
     }
 
@@ -114,7 +120,7 @@ export class AppDataSynchronizerService {
   }
 
   public async saveAsync() {
-    if(this._appdataConflictBridge.conflictInProgress)
+    if (this._appdataConflictBridge.conflictInProgress)
       throw new Error('Cannot upload appdata while conflict is in progress');
 
     const jwt = await firstValueFrom(this._authService.jwt$);
@@ -154,28 +160,28 @@ export class AppDataSynchronizerService {
 
   private async syncCheckAsync() {
     const isSyncAllowed = await firstValueFrom(this.allowSync$);
-    if(!isSyncAllowed) {
+    if (!isSyncAllowed) {
       console.info("Skipping sync - globally disabled");
       return;
     }
 
-    if(!this._hasFetched) {
+    if (!this._hasFetched) {
       console.info("Skipping sync - no fetch has been performed yet");
       return;
     }
 
-    if(this._appdataConflictBridge.conflictInProgress) {
+    if (this._appdataConflictBridge.conflictInProgress) {
       console.info("Skipping sync - conflict in progress");
       return;
     }
 
     const isSignedIn = await firstValueFrom(this._authService.isSignedIn$);
-    if(!isSignedIn) {
+    if (!isSignedIn) {
       console.info("Skipping sync - not signed in");
       return;
     }
 
-    if(!this.needsSync()) {
+    if (!this.needsSync()) {
       console.info("Skipping sync - last modified time is before last sync");
       return;
     }

@@ -29,6 +29,13 @@ export class AppdataConflictDialogComponent implements OnInit, OnDestroy {
       : null
   });
 
+  public originMismatchConflict = computed(() => {
+    const conflict = this.conflict()
+    return conflict.type === 'origin-mismatch'
+      ? conflict
+      : null
+  });
+
 
   public async ngOnInit() {
     this._subscriptions.add(this._appdataConflictBridge.notifyConflict$.subscribe(this.handleConflictNotification.bind(this)));

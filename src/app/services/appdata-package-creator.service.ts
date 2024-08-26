@@ -39,6 +39,7 @@ export class AppdataPackageCreatorService {
     const uploadedMoment = getMomentWithTime(appdata.uploadTimestamp);
     await this._eventManager.setEventsAsync(appdata.eventList);
     await this._eventHistory.updateHistories([...appdata.eventHistory]);
+    this._localStorageService.setItem(environment.cacheKeys.appdataOriginUuid, appdata.originUuid);
     this._localStorageService.setItem(environment.cacheKeys.encryptionPreference, appdata.encryptionPreference ? '1' : '0');
     this._localStorageService.setItem(environment.cacheKeys.appdataLastModifiedTime, uploadedMoment.toISOString());
   }

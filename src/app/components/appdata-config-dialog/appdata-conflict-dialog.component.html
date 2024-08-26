@@ -15,52 +15,75 @@
         <br />
 
         Your local data is newer than the cloud save.
-        Would you like to keep your local copy or switch to the cloud version?
-      </div>
-    </div>
-
-
-    <div class="flex flex-row w-100 last-modified-mismatch">
-      <div>
-        <div class="local-icon">
-          <i class="fa-regular fa-computer"></i>
-        </div>
-
-        <span class="block mt-2 mb-2">Local</span>
-
-        <div>
-          <span class="font-bold">
-            {{ conflict.localMoment.format('MMMM Do YYYY') }}
-          </span>
-          <br />
-          <span class="font-bold">
-            {{ conflict.localMoment.format('HH:mm:ss') }}
-          </span>
-          UTC
-        </div>
-
-        <p-button (onClick)="keepLocal()">Keep local</p-button>
-      </div>
-      <div>
-        <div class="cloud-icon">
-        <i class="fa-regular fa-cloud"></i>
-        </div>
-        <span class="block mt-2 mb-2">Cloud</span>
-
-        <div>
-          <span class="font-bold">
-            {{ conflict.cloudMoment.format('MMMM Do YYYY') }}
-          </span>
-          <br />
-          <span class="font-bold">
-            {{ conflict.cloudMoment.format('HH:mm:ss') }}
-          </span>
-          UTC
-        </div>
-        <p-button (onClick)="takeCloud()">Take cloud</p-button>
+        Would you like to keep your local copy or switch to the older cloud version?
       </div>
     </div>
   }
+
+
+  @if(originMismatchConflict(); as conflict) {
+    <div class="flex flex-row align-items-center mb-3 p-3 border-round bg-yellow-200" style="max-width: 500px;">
+      <div class="text-orange-300 mr-3" style="font-size: 3rem;">
+        <i class="fa-regular fa-triangle-exclamation"></i>
+      </div>
+      <div class="flex-grow-1">
+        <strong>Warning!</strong>
+        <br />
+
+        Your cloud save appears to be from a different computer.
+        <br /><br />
+
+        Would you like to keep your local copy or switch to the cloud version?
+      </div>
+    </div>
+  }
+
+
+  <div class="flex flex-row w-100 last-modified-mismatch">
+    <div>
+      <div class="local-icon">
+        <i class="fa-regular fa-computer"></i>
+      </div>
+
+      <span class="block mt-2 mb-2">Local</span>
+
+      @if(lastModifiedMismatchConflict(); as lastModifiedConflict) {
+        <div>
+            <span class="font-bold">
+              {{ lastModifiedConflict.localMoment.format('MMMM Do YYYY') }}
+            </span>
+          <br />
+          <span class="font-bold">
+              {{ lastModifiedConflict.localMoment.format('HH:mm:ss') }}
+            </span>
+          UTC
+        </div>
+      }
+
+      <p-button (onClick)="keepLocal()">Keep local</p-button>
+    </div>
+    <div>
+      <div class="cloud-icon">
+        <i class="fa-regular fa-cloud"></i>
+      </div>
+      <span class="block mt-2 mb-2">Cloud</span>
+
+      @if(lastModifiedMismatchConflict(); as lastModifiedConflict) {
+        <div>
+            <span class="font-bold">
+              {{ lastModifiedConflict.cloudMoment.format('MMMM Do YYYY') }}
+            </span>
+          <br />
+          <span class="font-bold">
+              {{ lastModifiedConflict.cloudMoment.format('HH:mm:ss') }}
+            </span>
+          UTC
+        </div>
+      }
+
+      <p-button (onClick)="takeCloud()">Take cloud</p-button>
+    </div>
+  </div>
 
 
 </p-dialog>
