@@ -18,5 +18,5 @@ export const environment: EnvironmentConfig = {
     appdataLastModifiedTime: 'sbalmt',
     enableCloudSync: 'sbecs',
   },
-  enableNavbar: false,
+  enableNavbar: true,
 };
