@@ -1,11 +1,13 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {sha256} from "../helpers/hash-utils";
 import {environment} from "../../environments/environment";
+import {LocalStorageService} from "./local-storage.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class EncryptionService {
+  private readonly _localStorageService = inject(LocalStorageService);
   private readonly _encryptionHandler = new EncryptionHandler();
   private _masterPassword: string | null = null;
 
@@ -18,7 +20,7 @@ export class EncryptionService {
   }
 
   public async checkMasterPassword(): Promise<boolean> {
-    const encryptedCheckValue = localStorage.getItem(environment.cacheKeys.encryptionCheck);
+    const encryptedCheckValue = this._localStorageService.getItem(environment.cacheKeys.encryptionCheck);
     if (!encryptedCheckValue)
       return false;
 
@@ -28,7 +30,7 @@ export class EncryptionService {
 
   public async writeCheck(): Promise<void> {
     const encryptedCheck = btoa(await this.encrypt(this._masterPassword));
-    localStorage.setItem(environment.cacheKeys.encryptionCheck, encryptedCheck);
+    this._localStorageService.setItem(environment.cacheKeys.encryptionCheck, encryptedCheck);
   }
 
   public isEnabled(): boolean {
@@ -36,7 +38,7 @@ export class EncryptionService {
   }
 
   public isRequested(): boolean {
-    return !!localStorage.getItem(environment.cacheKeys.encryptionCheck);
+    return !!this._localStorageService.getItem(environment.cacheKeys.encryptionCheck);
   }
 
   public encrypt(value: any): Promise<string> {

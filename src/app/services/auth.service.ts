@@ -3,6 +3,7 @@ import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {ApiMediatorService} from "./api-mediator.service";
 import {Subject, Observable, ReplaySubject, startWith, map} from "rxjs";
+import {LocalStorageService} from "./local-storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import {Subject, Observable, ReplaySubject, startWith, map} from "rxjs";
 export class AuthService {
   private readonly _httpClient = inject(HttpClient);
   private readonly _apiMediator = inject(ApiMediatorService);
+  private readonly _localStorageService = inject(LocalStorageService);
 
   private _jwtSubject = new ReplaySubject<string | null>(1);
 
@@ -19,7 +21,7 @@ export class AuthService {
 
   public initialize() {
     // TODO: call the api to check the JWT (but rate limit it)
-    const localStorageJwt = localStorage.getItem(environment.cacheKeys.apiAccessToken) ?? null;
+    const localStorageJwt = this._localStorageService.getItem(environment.cacheKeys.apiAccessToken) ?? null;
     this._jwtSubject.next(localStorageJwt);
   }
 
@@ -37,7 +39,7 @@ export class AuthService {
       return 'failure';
     }
 
-    localStorage.setItem(environment.cacheKeys.apiAccessToken, jwt);
+    this._localStorageService.setItem(environment.cacheKeys.apiAccessToken, jwt);
     this._jwtSubject.next(jwt);
     return 'success';
   }
@@ -45,7 +47,7 @@ export class AuthService {
 
   public async signOutAsync() {
     // TODO: call the api to revoke the token
-    localStorage.removeItem(environment.cacheKeys.apiAccessToken);
+    this._localStorageService.removeItem(environment.cacheKeys.apiAccessToken);
     this._jwtSubject.next(null);
   }
 }

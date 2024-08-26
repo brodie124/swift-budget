@@ -1,10 +1,13 @@
-﻿import {Injectable} from "@angular/core";
+﻿import {inject, Injectable} from "@angular/core";
 import moment from "moment";
 import {environment} from "../../environments/environment";
 import {getMomentUtc} from "../utils/moment-utils";
+import {LocalStorageService} from "./local-storage.service";
 
 @Injectable({providedIn: 'root'})
 export class EventQuickListToolbarPreferencesService {
+  private readonly _localStorageService = inject(LocalStorageService);
+
   private _date: Date | moment.Moment | null = null;
 
   public set payday(date: Date | moment.Moment | null | undefined) {
@@ -13,14 +16,14 @@ export class EventQuickListToolbarPreferencesService {
       ? JSON.stringify(this._date)
       : '';
 
-    localStorage.setItem(environment.cacheKeys.paydayPreference, value);
+    this._localStorageService.setItem(environment.cacheKeys.paydayPreference, value);
   }
 
   public get payday(): moment.Moment | null {
     if (this._date)
       return getMomentUtc(this._date);
 
-    const json = localStorage.getItem(environment.cacheKeys.paydayPreference);
+    const json = this._localStorageService.getItem(environment.cacheKeys.paydayPreference);
     if (!json)
       return null;
 

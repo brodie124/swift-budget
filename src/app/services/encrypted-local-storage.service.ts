@@ -1,14 +1,16 @@
 ﻿import {Injectable, inject} from "@angular/core";
 import {EncryptionService} from "./encryption.service";
+import {LocalStorageService} from "./local-storage.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class EncryptedLocalStorageService {
   private readonly _encryptionService = inject(EncryptionService);
+  private readonly _localStorageService = inject(LocalStorageService);
 
   public async getItemAsync(key: string): Promise<string | null> {
-    const json = localStorage.getItem(key);
+    const json = this._localStorageService.getItem(key);
     if (!json)
       return null;
 
@@ -36,7 +38,7 @@ export class EncryptedLocalStorageService {
       v: storedValue
     }
     const payloadJson = JSON.stringify(payload);
-    localStorage.setItem(key, payloadJson);
+    this._localStorageService.setItem(key, payloadJson);
   }
 }
 

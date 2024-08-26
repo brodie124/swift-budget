@@ -7,6 +7,7 @@ import {Button} from "primeng/button";
 import {PasswordModule} from "primeng/password";
 import {environment} from "../../../environments/environment";
 import {EncryptionService} from "../../services/encryption.service";
+import {LocalStorageService} from "../../services/local-storage.service";
 
 @Component({
   selector: 'app-first-time-setup',
@@ -25,6 +26,7 @@ import {EncryptionService} from "../../services/encryption.service";
 })
 export class FirstTimeSetupComponent implements OnInit {
   private readonly _encryptionService = inject(EncryptionService);
+  private readonly _localStorageService = inject(LocalStorageService);
 
   public isVisible: boolean = true;
   public hasSubmitted: boolean = false;
@@ -51,8 +53,8 @@ export class FirstTimeSetupComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    const preference = localStorage.getItem(environment.cacheKeys.encryptionPreference);
-    const isPreferenceValid = preference === '0' || !!localStorage.getItem(environment.cacheKeys.encryptionCheck);
+    const preference = this._localStorageService.getItem(environment.cacheKeys.encryptionPreference);
+    const isPreferenceValid = preference === '0' || !!this._localStorageService.getItem(environment.cacheKeys.encryptionCheck);
 
     this.isVisible = !isPreferenceValid;
   }
@@ -82,7 +84,7 @@ export class FirstTimeSetupComponent implements OnInit {
   }
 
   private async saveToLocal(): Promise<void> {
-    localStorage.setItem(environment.cacheKeys.encryptionPreference, this.enableEncryption ? '1' : '0');
+    this._localStorageService.setItem(environment.cacheKeys.encryptionPreference, this.enableEncryption ? '1' : '0');
 
     if (!this.enableEncryption) // Encryption required past this point
       return;
