@@ -15,6 +15,10 @@
     readonly apiAccessToken: string,
 
     readonly appdataLastSyncTime: string;
+    readonly appdataLastModifiedTime: string;
+    readonly appdataOriginUuid: string;
+
+
   },
   readonly enableNavbar: boolean;
 }

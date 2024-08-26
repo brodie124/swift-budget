@@ -13,7 +13,9 @@ export const environment: EnvironmentConfig = {
     encryptionPreference: 'sbep',
     encryptionCheck: 'sbec',
     apiAccessToken: 'sbaat',
+    appdataOriginUuid: 'sbaou',
     appdataLastSyncTime: 'sbalst',
+    appdataLastModifiedTime: 'sbalmt',
   },
   enableNavbar: false,
 };

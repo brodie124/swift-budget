@@ -13,8 +13,7 @@ export class AppdataPackageCreatorService {
   private readonly _eventHistory = inject(FinancialEventHistoryProvider);
   private readonly _encryption = inject(EncryptionService);
 
-  public async make(): Promise<AppdataPackage> {
-    const originUuid = crypto.randomUUID().toString(); // TODO: grab from local storage if available
+  public async make(originUuid: string): Promise<AppdataPackage> {
     const uploadTimestamp = Date.now();
 
     const events = await this._eventManager.getAsync();
