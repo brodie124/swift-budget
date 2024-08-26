@@ -12,7 +12,7 @@
     readonly encryptionPreference: string;
     readonly encryptionCheck: string;
 
-    readonly firebaseAccessToken: string,
+    readonly apiAccessToken: string,
   },
   readonly enableNavbar: boolean;
 }

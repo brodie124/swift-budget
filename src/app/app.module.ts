@@ -44,7 +44,7 @@ import {
 } from "./components/event-modals/event-create-edit-multi-form/event-create-edit-multi-form.component";
 import {EditEventModalComponent} from "./components/event-modals/edit-event-modal/edit-event-modal.component";
 import {AuthService} from "./services/auth.service";
-import {initializeFirebase} from "./initializers/firebase-initializer";
+import {initializeAuth} from "./initializers/auth-initializer";
 import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
 
 @NgModule({
@@ -97,7 +97,7 @@ import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
       provide: APP_INITIALIZER,
       multi: true,
       deps: [AuthService],
-      useFactory: initializeFirebase
+      useFactory: initializeAuth
     }
   ],
   bootstrap: [AppComponent]

@@ -8,7 +8,6 @@ import {Subject, Observable, ReplaySubject, startWith, map} from "rxjs";
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly _jwtCacheKey = 'sbasat';
   private readonly _httpClient = inject(HttpClient);
   private readonly _apiMediator = inject(ApiMediatorService);
 
@@ -20,7 +19,7 @@ export class AuthService {
 
   public initialize() {
     // TODO: call the api to check the JWT (but rate limit it)
-    const localStorageJwt = localStorage.getItem(this._jwtCacheKey) ?? null;
+    const localStorageJwt = localStorage.getItem(environment.cacheKeys.apiAccessToken) ?? null;
     this._jwtSubject.next(localStorageJwt);
   }
 
@@ -38,7 +37,7 @@ export class AuthService {
       return 'failure';
     }
 
-    localStorage.setItem(this._jwtCacheKey, jwt);
+    localStorage.setItem(environment.cacheKeys.apiAccessToken, jwt);
     this._jwtSubject.next(jwt);
     return 'success';
   }
@@ -46,7 +45,7 @@ export class AuthService {
 
   public async signOutAsync() {
     // TODO: call the api to revoke the token
-    localStorage.removeItem(this._jwtCacheKey);
+    localStorage.removeItem(environment.cacheKeys.apiAccessToken);
     this._jwtSubject.next(null);
   }
 }

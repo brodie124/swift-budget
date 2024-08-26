@@ -12,7 +12,7 @@ export const environment: EnvironmentConfig = {
     paydayPreference: 'sb-event-quick-list-preferences_payday',
     encryptionPreference: 'sb-encryption-preference',
     encryptionCheck: 'sb-encryption-check',
-    firebaseAccessToken: 'sb-firebase-access-token',
+    apiAccessToken: 'sb-api-access-token',
   },
   enableNavbar: true,
 };
