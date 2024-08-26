@@ -32,7 +32,11 @@ export class EncryptionService {
   }
 
   public isEnabled(): boolean {
-    return this.isSupported() && !!localStorage.getItem(environment.cacheKeys.encryptionCheck);
+    return this.isSupported() && this.isRequested();
+  }
+
+  public isRequested(): boolean {
+    return !!localStorage.getItem(environment.cacheKeys.encryptionCheck);
   }
 
   public encrypt(value: any): Promise<string> {

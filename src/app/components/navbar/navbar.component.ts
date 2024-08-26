@@ -16,8 +16,13 @@ import {AppDataSynchronizerService} from "../../services/app-data-synchronizer.s
 export class NavbarComponent {
 private readonly _syncro = inject(AppDataSynchronizerService);
 
-  async test() {
-    console.log("test");
+  async testFetchAppdata() {
+    console.log("testFetchAppdata");
     await this._syncro.loadAsync();
+  }
+
+  async testUploadAppdata() {
+    console.log("testUploadAppdata");
+    await this._syncro.saveAsync();
   }
 }

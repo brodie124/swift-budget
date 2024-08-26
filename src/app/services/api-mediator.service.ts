@@ -45,6 +45,28 @@ export class ApiMediatorService {
     }
   }
 
+  public async saveAppdata(jwt: string, appdata: any): Promise<'success' | Error> {
+    const url = this.makeUrl('/appdata/set/');
+    const headers = this.makeAuthHeaders(jwt);
+
+    try {
+      const request = this._httpClient.post(url, appdata, {
+        headers: headers,
+        observe: 'response',
+        responseType: 'text'
+      });
+      const response = await firstValueFrom(request);
+      return response.status === 200
+        ? 'success'
+        : new Error(`Invalid response code received (${response.status})`);
+
+    } catch (err) {
+      console.error("Failed to fetch appdata", err);
+      return new Error('Unknown error while uploading appdata');
+    }
+  }
+
+
   private makeAuthHeaders(jwt: string) {
     return {
       'Authorization': `Bearer ${jwt}`,
