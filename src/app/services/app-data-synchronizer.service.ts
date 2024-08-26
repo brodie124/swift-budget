@@ -102,6 +102,7 @@ export class AppDataSynchronizerService {
       });
 
       console.log("Response from conflict resolution:", response);
+      this._hasFetched = true;
       if (response !== 'take-cloud')
         return 'origin-mismatch';
     }
@@ -116,6 +117,7 @@ export class AppDataSynchronizerService {
       });
 
       console.log("Response from conflict resolution:", response);
+      this._hasFetched = true;
       if (response !== 'take-cloud')
         return 'last-modified-mismatch';
     }
