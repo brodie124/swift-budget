@@ -125,6 +125,6 @@ export class AppDataSynchronizerService {
 
     console.info("Due for sync - syncing");
     this._lastSyncMoment = getMomentWithTime();
-    // await this.saveAsync() // Do the sync
+    await this.saveAsync() // Do the sync
   }
 }
