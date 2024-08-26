@@ -16,7 +16,7 @@ import {AppdataConflictBridgeService} from "./appdata-conflict-bridge.service";
   providedIn: 'root'
 })
 export class AppDataSynchronizerService {
-  private readonly _syncCheckInterval = 1000 * 30; // 30 sec sync checks
+  private readonly _syncCheckInterval = 1000 * 15; // 15 sec sync checks
 
   private readonly _authService = inject(AuthService);
   private readonly _httpClient = inject(HttpClient);
@@ -31,6 +31,8 @@ export class AppDataSynchronizerService {
   private _lastSyncMoment: moment.Moment = getMomentWithTime(0);
   private _lastModifiedMoment: moment.Moment = getMomentWithTime(0);
 
+  private _hasFetched: boolean = false;
+
   private _triggerSyncCheckSubject = new Subject<void>();
   public triggerSyncCheck$ = this._triggerSyncCheckSubject.asObservable();
 
@@ -38,6 +40,7 @@ export class AppDataSynchronizerService {
   public allowSync$ = this._allowSyncSubject.asObservable();
 
   public readonly lastModifiedMoment = this._lastModifiedMoment;
+
 
 
 
@@ -106,6 +109,7 @@ export class AppDataSynchronizerService {
 
     console.log("Appdata fetch response:", appdata);
     await this._appdataPackageCreator.unpackAsync(appdata);
+    this._hasFetched = true;
     return 'success';
   }
 
@@ -152,6 +156,11 @@ export class AppDataSynchronizerService {
     const isSyncAllowed = await firstValueFrom(this.allowSync$);
     if(!isSyncAllowed) {
       console.info("Skipping sync - globally disabled");
+      return;
+    }
+
+    if(!this._hasFetched) {
+      console.info("Skipping sync - no fetch has been performed yet");
       return;
     }
 
