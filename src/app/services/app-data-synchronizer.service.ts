@@ -77,6 +77,14 @@ export class AppDataSynchronizerService {
   }
 
   public async loadAsync(): Promise<Error | 'origin-mismatch' | 'last-modified-mismatch' | 'success'> {
+    if (this._appdataConflictBridge.conflictInProgress)
+      return new Error('Cannot upload appdata while conflict is in progress');
+
+    const jwt = await firstValueFrom(this._authService.jwt$);
+    if (!jwt)
+      return new Error('Cannot fetch appdata without auth token!');
+
+
     this._messageService.add({
       severity: 'info',
       summary: 'Synchronising...',
@@ -84,16 +92,9 @@ export class AppDataSynchronizerService {
     });
 
 
-    if (this._appdataConflictBridge.conflictInProgress)
-      throw new Error('Cannot upload appdata while conflict is in progress');
-
-    const jwt = await firstValueFrom(this._authService.jwt$);
-    if (!jwt)
-      throw new Error('Cannot fetch appdata without auth token!');
-
     const appdata = await this._apiMediator.fetchAppdata<any>(jwt);
     if (!isAppdataPackage(appdata))
-      throw new Error('Returned appdata is malformed'); // TODO: handle this scenario better
+      return new Error('Returned appdata is malformed'); // TODO: handle this scenario better
 
     if (appdata.originUuid !== this._originUuid) {
       console.log("Origin mismatch");

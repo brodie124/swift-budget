@@ -1,6 +1,8 @@
 import {FinancialEvent, FinancialEventHistory} from "../financial/financial-event";
 
 export type AppdataPackage = {
+  isEncrypted: boolean;
+  check?: string; // used to validate encryption
   originUuid: string; // used to track if we're overwriting a totally different appdata or not
   uploadTimestamp: number;
 
@@ -12,6 +14,7 @@ export type AppdataPackage = {
 
 export function isAppdataPackage(obj: any): obj is AppdataPackage {
   return obj
+    && typeof obj.check === 'string'
     && typeof obj.originUuid === 'string'
     && typeof obj.uploadTimestamp === 'number'
     && typeof obj.encryptionPreference === 'boolean'

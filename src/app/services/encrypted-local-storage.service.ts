@@ -1,12 +1,14 @@
 ﻿import {Injectable, inject} from "@angular/core";
 import {EncryptionService} from "./encryption.service";
 import {LocalStorageService} from "./local-storage.service";
+import {PasswordService} from "./password.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class EncryptedLocalStorageService {
   private readonly _encryptionService = inject(EncryptionService);
+  private readonly _passwordService = inject(PasswordService);
   private readonly _localStorageService = inject(LocalStorageService);
 
   public async getItemAsync(key: string): Promise<string | null> {
@@ -19,6 +21,7 @@ export class EncryptedLocalStorageService {
       if (!payload.e)
         return payload.v; // Not encrypted
 
+      await this._passwordService.waitForUnlock();
       return await this._encryptionService.decrypt<string>(payload.v);
 
     } catch (err) {

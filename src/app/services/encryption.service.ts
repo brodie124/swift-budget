@@ -2,22 +2,16 @@ import {inject, Injectable} from '@angular/core';
 import {sha256} from "../helpers/hash-utils";
 import {environment} from "../../environments/environment";
 import {LocalStorageService} from "./local-storage.service";
+import {Subject} from "rxjs";
+import {PasswordService} from "./password.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class EncryptionService {
   private readonly _localStorageService = inject(LocalStorageService);
+  private readonly _passwordService = inject(PasswordService);
   private readonly _encryptionHandler = new EncryptionHandler();
-  private _masterPassword: string | null = null;
-
-  public async setMasterPassword(input: string): Promise<void> {
-    if (!input.trim())
-      throw new Error('Master password cannot be empty!');
-
-    this._masterPassword = await sha256(`swift-budget:${input}`);
-    this._encryptionHandler.password = this._masterPassword;
-  }
 
   public async checkMasterPassword(): Promise<boolean> {
     const encryptedCheckValue = this._localStorageService.getItem(environment.cacheKeys.encryptionCheck);
@@ -25,12 +19,22 @@ export class EncryptionService {
       return false;
 
     const decryptedCheckValue = await this.decrypt<string>(atob(encryptedCheckValue));
-    return decryptedCheckValue === this._masterPassword;
+    return decryptedCheckValue === this._passwordService.masterPassword;
   }
 
   public async writeCheck(): Promise<void> {
-    const encryptedCheck = btoa(await this.encrypt(this._masterPassword));
+    const encryptedCheck = await this.getCheckAsync();
+    if(!encryptedCheck)
+      return;
+
     this._localStorageService.setItem(environment.cacheKeys.encryptionCheck, encryptedCheck);
+  }
+
+  public async getCheckAsync(): Promise<string | null> {
+    if(!this._passwordService.masterPassword)
+      return null;
+
+    return btoa(await this.encrypt(this._passwordService.masterPassword));
   }
 
   public isEnabled(): boolean {
@@ -60,13 +64,12 @@ type EncryptedPayload = {
   cipher: string;
 };
 
-// TODO: remove the direct access to local storage, move the types, etc.
-export class EncryptionHandler {
-  private _password: string | null = null;
 
-  public set password(input: string | null | undefined) {
-    this._password = input ?? null;
-  }
+@Injectable({
+  providedIn: 'root'
+})
+export class EncryptionHandler {
+  private readonly _passwordService = inject(PasswordService);
 
   public isSupported(): boolean {
     return !!window.crypto.subtle; // If subtle is defined then it should be enabled
@@ -97,12 +100,12 @@ export class EncryptionHandler {
     if (!this.isSupported())
       throw new Error('Cannot encrypt - crypto.subtle not supported');
 
-    if (!this._password)
+    if (!this._passwordService.masterPassword)
       throw new Error('Cannot encrypt - no password provided');
 
     const iv = crypto.getRandomValues(new Uint8Array(12));
     const salt = crypto.getRandomValues(new Uint8Array(16));
-    const key = await this.createKey(this._password,  salt);
+    const key = await this.createKey(this._passwordService.masterPassword,  salt);
 
     const inputBytes = this.convertStringToBytes(input);
     const encryptedBuffer = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key,  inputBytes)
@@ -123,7 +126,7 @@ export class EncryptionHandler {
       return null;
     }
 
-    if (!this._password) {
+    if (!this._passwordService.masterPassword) {
       console.warn('Cannot decrypt value - no password provided');
       return null;
     }
@@ -137,7 +140,7 @@ export class EncryptionHandler {
     const salt = this.convertBase64ToBytes(encryptedPayload.salt);
     const cipher = this.convertBase64ToBytes(encryptedPayload.cipher);
 
-    const key = await this.createKey(this._password, salt);
+    const key = await this.createKey(this._passwordService.masterPassword, salt);
 
     const decryptedContentBuffer = await crypto.subtle.decrypt({name: 'AES-GCM', iv}, key, cipher);
     const decryptedBytes = new Uint8Array(decryptedContentBuffer);

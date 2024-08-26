@@ -1,13 +1,12 @@
 <p-toast />
 <p-confirmDialog  [baseZIndex]="1000"/>
 <app-appdata-conflict-dialog />
+<app-unlock-modal (onUnlock)="unlock()" />
 
 
 @if(syncData) {
   <app-sync-appdata-dialog (finished)="syncFinish()" />
-} @else if(showUnlockModal) {
-  <app-unlock-modal (onUnlock)="unlock()" />
-} @else {
+}  @else {
   <app-first-time-setup />
 
 

@@ -8,6 +8,7 @@ import {PasswordModule} from "primeng/password";
 import {environment} from "../../../environments/environment";
 import {EncryptionService} from "../../services/encryption.service";
 import {LocalStorageService} from "../../services/local-storage.service";
+import {PasswordService} from "../../services/password.service";
 
 @Component({
   selector: 'app-first-time-setup',
@@ -26,6 +27,7 @@ import {LocalStorageService} from "../../services/local-storage.service";
 })
 export class FirstTimeSetupComponent implements OnInit {
   private readonly _encryptionService = inject(EncryptionService);
+  private readonly _passwordService = inject(PasswordService);
   private readonly _localStorageService = inject(LocalStorageService);
 
   public isVisible: boolean = true;
@@ -88,7 +90,8 @@ export class FirstTimeSetupComponent implements OnInit {
 
     if (!this.enableEncryption) // Encryption required past this point
       return;
-    await this._encryptionService.setMasterPassword(this.masterPasswordControl.value.trim());
+
+    await this._passwordService.setMasterPassword(this.masterPasswordControl.value.trim());
     await this._encryptionService.writeCheck();
   }
 }

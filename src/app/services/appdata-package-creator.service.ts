@@ -23,8 +23,11 @@ export class AppdataPackageCreatorService {
     const events = await this._eventManager.getAsync();
     const history = await this._eventHistory.getHistoriesAsync();
     const encryptionPreference = this._encryption.isRequested();
+    const check = await this._encryption.getCheckAsync();
 
     return {
+      isEncrypted: !!check,
+      check: check ?? undefined,
       originUuid,
       uploadTimestamp,
 
