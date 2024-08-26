@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, EventEmitter, inject, OnInit, output, Output} from '@angular/core';
 import {CardModule} from "primeng/card";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {AppDataSynchronizerService} from "../../services/app-data-synchronizer.service";
@@ -25,11 +25,11 @@ export class SyncAppdataDialogComponent implements OnInit{
   private readonly _synchronisationService = inject(AppDataSynchronizerService);
   private readonly _router = inject(Router);
 
+  public readonly finished = output<void>();
+
   public async ngOnInit() {
-
-
-
-
+    const result = await this._synchronisationService.loadAsync();
+    this.finished.emit();
   }
 
 }

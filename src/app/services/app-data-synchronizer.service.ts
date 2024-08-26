@@ -43,7 +43,7 @@ export class AppDataSynchronizerService {
 
 
   constructor() {
-    this._allowSyncSubject.next(false);
+    this._allowSyncSubject.next(this._localStorageService.getItem(environment.cacheKeys.enableCloudSync) === '1');
 
     // TODO: move these out of the constructor
     const storedLastModified = this._localStorageService.getItem(environment.cacheKeys.appdataLastModifiedTime);
@@ -77,6 +77,13 @@ export class AppDataSynchronizerService {
   }
 
   public async loadAsync(): Promise<Error | 'origin-mismatch' | 'last-modified-mismatch' | 'success'> {
+    this._messageService.add({
+      severity: 'info',
+      summary: 'Synchronising...',
+      detail: 'Cloud synchronisation is in progress'
+    });
+
+
     if (this._appdataConflictBridge.conflictInProgress)
       throw new Error('Cannot upload appdata while conflict is in progress');
 
@@ -116,10 +123,23 @@ export class AppDataSynchronizerService {
     console.log("Appdata fetch response:", appdata);
     await this._appdataPackageCreator.unpackAsync(appdata);
     this._hasFetched = true;
+
+    this._messageService.add({
+      severity: 'success',
+      summary: 'Synchronisation complete.',
+      detail: 'Your cloud save has been downloaded to your device.'
+    })
+
     return 'success';
   }
 
   public async saveAsync() {
+    this._messageService.add({
+      severity: 'info',
+      summary: 'Synchronising...',
+      detail: 'Cloud synchronisation is in progress'
+    });
+
     if (this._appdataConflictBridge.conflictInProgress)
       throw new Error('Cannot upload appdata while conflict is in progress');
 
@@ -155,6 +175,7 @@ export class AppDataSynchronizerService {
   }
 
   public setAllowSync(value: boolean) {
+    this._localStorageService.setItem(environment.cacheKeys.enableCloudSync, value ? '1' : '0');
     this._allowSyncSubject.next(value);
   }
 

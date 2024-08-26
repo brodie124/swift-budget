@@ -18,7 +18,7 @@
     readonly appdataLastModifiedTime: string;
     readonly appdataOriginUuid: string;
 
-
+    readonly enableCloudSync: string;
   },
   readonly enableNavbar: boolean;
 }

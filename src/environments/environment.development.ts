@@ -17,6 +17,8 @@ export const environment: EnvironmentConfig = {
     appdataOriginUuid: 'sb-appdata-origin-uuid',
     appdataLastSyncTime: 'sb-appdata-last-sync-time',
     appdataLastModifiedTime: 'sb-appdata-last-modified-time',
+
+    enableCloudSync: 'sb-enable-cloud-sync',
   },
   enableNavbar: true,
 };
