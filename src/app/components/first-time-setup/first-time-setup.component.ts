@@ -9,6 +9,7 @@ import {environment} from "../../../environments/environment";
 import {EncryptionService} from "../../services/encryption.service";
 import {LocalStorageService} from "../../services/local-storage.service";
 import {PasswordService} from "../../services/password.service";
+import {EventManagerService} from "../../services/event-manager.service";
 
 @Component({
   selector: 'app-first-time-setup',
@@ -29,6 +30,7 @@ export class FirstTimeSetupComponent implements OnInit {
   private readonly _encryptionService = inject(EncryptionService);
   private readonly _passwordService = inject(PasswordService);
   private readonly _localStorageService = inject(LocalStorageService);
+  private readonly _eventManager = inject(EventManagerService);
 
   public isVisible: boolean = true;
   public hasSubmitted: boolean = false;
@@ -76,6 +78,8 @@ export class FirstTimeSetupComponent implements OnInit {
       return;
 
     await this.saveToLocal();
+
+
     this.isVisible = false;
   }
 
@@ -88,10 +92,11 @@ export class FirstTimeSetupComponent implements OnInit {
   private async saveToLocal(): Promise<void> {
     this._localStorageService.setItem(environment.cacheKeys.encryptionPreference, this.enableEncryption ? '1' : '0');
 
-    if (!this.enableEncryption) // Encryption required past this point
-      return;
+    if(this.enableEncryption) { // Encryption required - set it up as necessary
+      await this._passwordService.setMasterPassword(this.masterPasswordControl.value.trim());
+      await this._encryptionService.writeCheck();
+    }
 
-    await this._passwordService.setMasterPassword(this.masterPasswordControl.value.trim());
-    await this._encryptionService.writeCheck();
+    await this._eventManager.setEventsAsync([]);
   }
 }
