@@ -152,6 +152,9 @@ export class AppDataSynchronizerService {
       }
     }
 
+    // Update the origin UUID
+    this._originUuid = appdata.originUuid;
+    this._localStorageService.setItem(environment.cacheKeys.appdataOriginUuid, this._originUuid);
 
     console.log("Appdata fetch response:", appdata);
     await this.unpackAsync(appdata);
