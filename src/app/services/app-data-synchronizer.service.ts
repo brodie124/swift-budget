@@ -14,7 +14,7 @@ import {getMomentWithTime} from "../utils/moment-utils";
   providedIn: 'root'
 })
 export class AppDataSynchronizerService {
-  private readonly _syncCheckInterval = 1000;// 1000 * 30; // 30 sec sync checks
+  private readonly _syncCheckInterval = 1000 * 30; // 30 sec sync checks
 
   private readonly _authService = inject(AuthService);
   private readonly _httpClient = inject(HttpClient);
