@@ -10,6 +10,7 @@ import {environment} from "../../environments/environment";
 import moment from "moment";
 import {getMomentWithTime} from "../utils/moment-utils";
 import {isAppdataPackage} from "../types/appdata/appdata-package";
+import {AppdataConflictBridgeService} from "./appdata-conflict-bridge.service";
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,7 @@ export class AppDataSynchronizerService {
   private readonly _authService = inject(AuthService);
   private readonly _httpClient = inject(HttpClient);
   private readonly _apiMediator = inject(ApiMediatorService);
+  private readonly _appdataConflictBridge = inject(AppdataConflictBridgeService);
   private readonly _appdataPackageCreator = inject(AppdataPackageCreatorService);
   private readonly _messageService = inject(MessageService);
 
@@ -36,6 +38,8 @@ export class AppDataSynchronizerService {
   public allowSync$ = this._allowSyncSubject.asObservable();
 
   public readonly lastModifiedMoment = this._lastModifiedMoment;
+
+
 
   constructor() {
     this._allowSyncSubject.next(false);
@@ -72,6 +76,9 @@ export class AppDataSynchronizerService {
   }
 
   public async loadAsync(): Promise<Error | 'origin-mismatch' | 'last-modified-mismatch' | 'success'> {
+    if(this._appdataConflictBridge.conflictInProgress)
+      throw new Error('Cannot upload appdata while conflict is in progress');
+
     const jwt = await firstValueFrom(this._authService.jwt$);
     if (!jwt)
       throw new Error('Cannot fetch appdata without auth token!');
@@ -80,12 +87,22 @@ export class AppDataSynchronizerService {
     if(!isAppdataPackage(appdata))
       throw new Error('Returned appdata is malformed'); // TODO: handle this scenario better
 
-    if(appdata.originUuid !== this._originUuid)
+    if(appdata.originUuid !== this._originUuid) {
       return 'origin-mismatch';
+      }
 
     const packageUploadMoment = getMomentWithTime(appdata.uploadTimestamp);
-    if(packageUploadMoment.isSameOrBefore(this._lastModifiedMoment))
-      return 'last-modified-mismatch';
+    if(packageUploadMoment.isSameOrBefore(this._lastModifiedMoment)) {
+      const response = await this._appdataConflictBridge.requestConflictResolution({
+        type: 'last-modified-mismatch',
+        localMoment: this._lastModifiedMoment,
+        cloudMoment: packageUploadMoment
+      });
+
+      console.log("Response from conflict resolution:", response);
+      if(response !== 'take-cloud')
+        return 'last-modified-mismatch';
+    }
 
     console.log("Appdata fetch response:", appdata);
     await this._appdataPackageCreator.unpackAsync(appdata);
@@ -93,6 +110,9 @@ export class AppDataSynchronizerService {
   }
 
   public async saveAsync() {
+    if(this._appdataConflictBridge.conflictInProgress)
+      throw new Error('Cannot upload appdata while conflict is in progress');
+
     const jwt = await firstValueFrom(this._authService.jwt$);
     if (!jwt)
       throw new Error('Cannot save appdata without auth token!');
@@ -135,14 +155,19 @@ export class AppDataSynchronizerService {
       return;
     }
 
+    if(this._appdataConflictBridge.conflictInProgress) {
+      console.info("Skipping sync - conflict in progress");
+      return;
+    }
+
     const isSignedIn = await firstValueFrom(this._authService.isSignedIn$);
     if(!isSignedIn) {
-      console.info("Cancelling sync check - not signed in");
+      console.info("Skipping sync - not signed in");
       return;
     }
 
     if(!this.needsSync()) {
-      console.info("Last modified before last sync - no need to sync");
+      console.info("Skipping sync - last modified time is before last sync");
       return;
     }
 

@@ -5,6 +5,7 @@
   <app-unlock-modal (onUnlock)="unlock()" />
 } @else {
   <app-first-time-setup />
+  <app-appdata-conflict-dialog />
 
   @if(isNavbarEnabled()) {
     <div class="navbar-container">

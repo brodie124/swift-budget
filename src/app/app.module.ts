@@ -46,6 +46,7 @@ import {EditEventModalComponent} from "./components/event-modals/edit-event-moda
 import {AuthService} from "./services/auth.service";
 import {initializeAuth} from "./initializers/auth-initializer";
 import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
+import {AppdataConflictDialogComponent} from "./components/appdata-config-dialog/appdata-conflict-dialog.component";
 
 @NgModule({
   declarations: [
@@ -87,6 +88,7 @@ import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
     DialogModule,
     EventCreateEditMultiFormComponent,
     EditEventModalComponent,
+    AppdataConflictDialogComponent,
 
   ],
   providers: [

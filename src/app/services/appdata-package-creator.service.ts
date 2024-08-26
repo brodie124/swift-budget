@@ -5,6 +5,7 @@ import {FinancialEventHistoryProvider} from "./financial-event-history-provider.
 import {EncryptionService} from "./encryption.service";
 import {environment} from "../../environments/environment";
 import {LocalStorageService} from "./local-storage.service";
+import {getMomentWithTime} from "../utils/moment-utils";
 
 @Injectable({
   providedIn: 'root'
@@ -35,9 +36,11 @@ export class AppdataPackageCreatorService {
   }
 
   public async unpackAsync(appdata: AppdataPackage, override?: boolean) {
+    const uploadedMoment = getMomentWithTime(appdata.uploadTimestamp);
     await this._eventManager.setEventsAsync(appdata.eventList);
     await this._eventHistory.updateHistories([...appdata.eventHistory]);
     this._localStorageService.setItem(environment.cacheKeys.encryptionPreference, appdata.encryptionPreference ? '1' : '0');
+    this._localStorageService.setItem(environment.cacheKeys.appdataLastModifiedTime, uploadedMoment.toISOString());
   }
 
 }
