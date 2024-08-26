@@ -21,8 +21,8 @@ export class FinancialEventHistoryManager {
 
   public async markPaidAsync(eventUid: FinancialEventId, paidDate?: moment.Moment): Promise<void> {
     const eventHistory = await this._historyProvider.getOrCreateHistoryAsync(eventUid);
-    eventHistory.lastMarkedPaid = paidDate ?? getMomentUtc();
-    eventHistory.lastUpdated = getMomentUtc();
+    eventHistory.lastMarkedPaid = paidDate?.toISOString() ?? getMomentUtc().toISOString();
+    eventHistory.lastUpdated = getMomentUtc().toISOString()
 
     await this._historyProvider.updateHistoryAsync(eventHistory);
     this._historyChangedSubject.next();

@@ -3,6 +3,7 @@ import {FinancialEvent, FinancialEventHistory, FinancialEventOccurrence} from ".
 import moment from "moment/moment";
 import {EventEngineService} from "./event-engine/event-engine.service";
 import {FinancialEventHistoryManager} from "./financial-event-history-manager.service";
+import {getMomentUtc, getMomentWithTime} from "../utils/moment-utils";
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class FinancialEventService {
         endDate: endDate
       });
 
-      if(occurrences.length <= 0) {
+      if (occurrences.length <= 0) {
         console.info("Event found with no occurrences.");
         continue;
       }
@@ -46,6 +47,7 @@ export class FinancialEventService {
   }
 
   private isPaid(history: FinancialEventHistory, dateAsOf: moment.Moment): boolean {
-    return history.lastMarkedPaid?.isSameOrAfter(dateAsOf) ?? false;
+    const lastMarkedPaidMoment = history.lastMarkedPaid ? getMomentWithTime(history.lastMarkedPaid) : undefined;
+    return lastMarkedPaidMoment?.isSameOrAfter(dateAsOf) ?? false;
   }
 }

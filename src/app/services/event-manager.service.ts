@@ -17,8 +17,8 @@ export class EventManagerService {
     return await firstValueFrom(this.events$)
   }
 
-  public setEvents(events: ReadonlyArray<FinancialEvent>) {
-    this._eventsSubject.next(events);
+  public async setEventsAsync(events: ReadonlyArray<FinancialEvent>) {
+    await this.saveAsync(events);
     return events;
   }
 
@@ -31,7 +31,8 @@ export class EventManagerService {
         events = [];
     }
 
-    return this.setEvents(events);
+    this._eventsSubject.next(events);
+    return events;
   }
 
   public async addAsync(event: FinancialEvent): Promise<void> {

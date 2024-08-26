@@ -13,8 +13,8 @@ export type FinancialEvent = {
 
 export type FinancialEventHistory = {
   eventUid: FinancialEventId;
-  lastMarkedPaid?: moment.Moment;
-  lastUpdated: moment.Moment;
+  lastMarkedPaid?: string;
+  lastUpdated: string;
 }
 
 export type FinancialEventOccurrence = {

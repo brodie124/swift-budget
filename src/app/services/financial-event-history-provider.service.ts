@@ -19,7 +19,7 @@ export class FinancialEventHistoryProvider {
 
     return {
       eventUid: uid,
-      lastUpdated: getMomentUtc(),
+      lastUpdated: getMomentUtc().toISOString(),
     };
   }
 
@@ -44,10 +44,10 @@ export class FinancialEventHistoryProvider {
 
     const updatedParsedHistories = parsedHistories?.map(e => {
       if (e.lastUpdated)
-        e.lastUpdated = getMomentUtc(e.lastUpdated);
+        e.lastUpdated = getMomentUtc(e.lastUpdated).toISOString();
 
       if (e.lastMarkedPaid)
-        e.lastMarkedPaid = getMomentUtc(e.lastMarkedPaid);
+        e.lastMarkedPaid = getMomentUtc(e.lastMarkedPaid).toISOString();
 
       return e;
     });

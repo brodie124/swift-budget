@@ -35,7 +35,7 @@ export class AppdataPackageCreatorService {
   }
 
   public async unpackAsync(appdata: AppdataPackage, override?: boolean) {
-    this._eventManager.setEvents(appdata.eventList);
+    await this._eventManager.setEventsAsync(appdata.eventList);
     await this._eventHistory.updateHistories([...appdata.eventHistory]);
     this._localStorageService.setItem(environment.cacheKeys.encryptionPreference, appdata.encryptionPreference ? '1' : '0');
   }
