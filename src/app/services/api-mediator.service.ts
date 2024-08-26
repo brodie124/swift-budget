@@ -29,6 +29,28 @@ export class ApiMediatorService {
     }
   }
 
+  public async fetchAppdata<T>(jwt: string): Promise<T | Error> {
+    const url = this.makeUrl('/appdata/get/');
+    const headers = this.makeAuthHeaders(jwt);
+
+    try {
+      const request = this._httpClient.get<T | null | undefined>(url, {headers});
+      const response = await firstValueFrom(request);
+
+      return response || new Error('No appdata payload returned');
+
+    } catch (err) {
+      console.error("Failed to fetch appdata", err);
+      return new Error('Unknown error while fetching appdata');
+    }
+  }
+
+  private makeAuthHeaders(jwt: string) {
+    return {
+      'Authorization': `Bearer ${jwt}`,
+    }
+  }
+
   private makeUrl(endpoint: string): string {
     const sanitisedEndpoint = endpoint.startsWith('/')
       ? endpoint.substring(1)

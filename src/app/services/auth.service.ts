@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {ApiMediatorService} from "./api-mediator.service";
-import {Subject, Observable, ReplaySubject, startWith} from "rxjs";
+import {Subject, Observable, ReplaySubject, startWith, map} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -12,13 +12,16 @@ export class AuthService {
   private readonly _httpClient = inject(HttpClient);
   private readonly _apiMediator = inject(ApiMediatorService);
 
-  private _isSignedInSubject = new ReplaySubject<boolean>(1);
-  public isSignedIn$: Observable<boolean> = this._isSignedInSubject.asObservable().pipe(startWith(false));
+  private _jwtSubject = new ReplaySubject<string | null>(1);
+
+  public jwt$: Observable<string | null> = this._jwtSubject.asObservable();
+  public isSignedIn$: Observable<boolean> = this.jwt$.pipe(map(jwt => !!jwt));
+
 
   public initialize() {
     // TODO: call the api to check the JWT (but rate limit it)
-    const localStorageJwt = localStorage.getItem(this._jwtCacheKey);
-    this._isSignedInSubject.next(!!localStorageJwt);
+    const localStorageJwt = localStorage.getItem(this._jwtCacheKey) ?? null;
+    this._jwtSubject.next(localStorageJwt);
   }
 
   public async startSignInAsync() {
@@ -36,7 +39,7 @@ export class AuthService {
     }
 
     localStorage.setItem(this._jwtCacheKey, jwt);
-    this._isSignedInSubject.next(true);
+    this._jwtSubject.next(jwt);
     return 'success';
   }
 
@@ -44,6 +47,6 @@ export class AuthService {
   public async signOutAsync() {
     // TODO: call the api to revoke the token
     localStorage.removeItem(this._jwtCacheKey);
-    this._isSignedInSubject.next(false);
+    this._jwtSubject.next(null);
   }
 }
