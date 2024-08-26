@@ -13,13 +13,12 @@ export class EncryptionService {
   private readonly _passwordService = inject(PasswordService);
   private readonly _encryptionHandler = new EncryptionHandler();
 
-  public async checkMasterPassword(): Promise<boolean> {
+  public async checkPassword(password: string): Promise<boolean> {
     const encryptedCheckValue = this._localStorageService.getItem(environment.cacheKeys.encryptionCheck);
     if (!encryptedCheckValue)
       return false;
 
-    const decryptedCheckValue = await this.decrypt<string>(atob(encryptedCheckValue));
-    return decryptedCheckValue === this._passwordService.masterPassword;
+    return await this.verifyCheck(password, encryptedCheckValue);
   }
 
   public async writeCheck(): Promise<void> {
@@ -34,7 +33,18 @@ export class EncryptionService {
     if(!this._passwordService.masterPassword)
       return null;
 
-    return btoa(await this.encrypt(this._passwordService.masterPassword));
+    return btoa(await this.encrypt(this._passwordService.masterPassword, this._passwordService.masterPassword));
+  }
+
+  public async verifyCheck(password: string, check: string): Promise<boolean> {
+    try {
+      const val = atob(check);
+      const result = await this.decrypt(password, val);
+      return !!result && result === password;
+    } catch(err) {
+      console.error('Failed to verify check', err);
+      return false;
+    }
   }
 
   public isEnabled(): boolean {
@@ -45,12 +55,12 @@ export class EncryptionService {
     return !!this._localStorageService.getItem(environment.cacheKeys.encryptionCheck);
   }
 
-  public encrypt(value: any): Promise<string> {
-    return this._encryptionHandler.encryptObject(value);
+  public encrypt(password: string, value: any): Promise<string> {
+    return this._encryptionHandler.encryptObject(password, value);
   }
 
-  public decrypt<T>(value: any): Promise<T | null> {
-    return this._encryptionHandler.decryptObject<T>(value);
+  public decrypt<T>(password: string, value: any): Promise<T | null> {
+    return this._encryptionHandler.decryptObject<T>(password, value);
   }
 
   public isSupported(): boolean {
@@ -69,23 +79,23 @@ type EncryptedPayload = {
   providedIn: 'root'
 })
 export class EncryptionHandler {
-  private readonly _passwordService = inject(PasswordService);
+  // private readonly _passwordService = inject(PasswordService);
 
   public isSupported(): boolean {
     return !!window.crypto.subtle; // If subtle is defined then it should be enabled
   }
 
-  public encryptObject(input: any): Promise<string> {
+  public encryptObject(password: string, input: any): Promise<string> {
     if (input === null || input === undefined)
       throw new Error('Cannot encrypt null/undefined');
 
     const json = JSON.stringify(input);
-    return this.encryptString(json);
+    return this.encryptString(password, json);
   }
 
-  public async decryptObject<T>(input: string): Promise<T | null> {
+  public async decryptObject<T>(password: string, input: string): Promise<T | null> {
     try {
-      const json = await this.decryptString(input);
+      const json = await this.decryptString(password, input);
       if (json === null)
         return null;
 
@@ -96,16 +106,16 @@ export class EncryptionHandler {
     }
   }
 
-  public async encryptString(input: string): Promise<string> {
+  public async encryptString(password: string, input: string): Promise<string> {
     if (!this.isSupported())
       throw new Error('Cannot encrypt - crypto.subtle not supported');
 
-    if (!this._passwordService.masterPassword)
+    if (!password)
       throw new Error('Cannot encrypt - no password provided');
 
     const iv = crypto.getRandomValues(new Uint8Array(12));
     const salt = crypto.getRandomValues(new Uint8Array(16));
-    const key = await this.createKey(this._passwordService.masterPassword,  salt);
+    const key = await this.createKey(password,  salt);
 
     const inputBytes = this.convertStringToBytes(input);
     const encryptedBuffer = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key,  inputBytes)
@@ -120,13 +130,13 @@ export class EncryptionHandler {
     return btoa(payloadJson); // Return base64
   }
 
-  public async decryptString(input: string): Promise<string | null> {
+  public async decryptString(password: string, input: string): Promise<string | null> {
     if (!this.isSupported()) {
       console.error('Cannot decrypt value - crypto.subtle not supported');
       return null;
     }
 
-    if (!this._passwordService.masterPassword) {
+    if (!password) {
       console.warn('Cannot decrypt value - no password provided');
       return null;
     }
@@ -140,7 +150,7 @@ export class EncryptionHandler {
     const salt = this.convertBase64ToBytes(encryptedPayload.salt);
     const cipher = this.convertBase64ToBytes(encryptedPayload.cipher);
 
-    const key = await this.createKey(this._passwordService.masterPassword, salt);
+    const key = await this.createKey(password, salt);
 
     const decryptedContentBuffer = await crypto.subtle.decrypt({name: 'AES-GCM', iv}, key, cipher);
     const decryptedBytes = new Uint8Array(decryptedContentBuffer);

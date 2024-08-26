@@ -9,8 +9,10 @@ import {LocalStorageService} from "./local-storage.service";
 import {environment} from "../../environments/environment";
 import moment from "moment";
 import {getMomentWithTime} from "../utils/moment-utils";
-import {isAppdataPackage} from "../types/appdata/appdata-package";
+import {AppdataPackage, isAppdataPackage} from "../types/appdata/appdata-package";
 import {AppdataConflictBridgeService} from "./appdata-conflict-bridge.service";
+import {EncryptionService} from "./encryption.service";
+import {PasswordService} from "./password.service";
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +25,8 @@ export class AppDataSynchronizerService {
   private readonly _apiMediator = inject(ApiMediatorService);
   private readonly _appdataConflictBridge = inject(AppdataConflictBridgeService);
   private readonly _appdataPackageCreator = inject(AppdataPackageCreatorService);
+  private readonly _encryption = inject(EncryptionService);
+  private readonly _passwordService = inject(PasswordService);
   private readonly _messageService = inject(MessageService);
 
   private readonly _localStorageService = inject(LocalStorageService);
@@ -102,6 +106,8 @@ export class AppDataSynchronizerService {
       console.log("Response from conflict resolution:", response);
       this._hasFetched = true;
       if (response !== 'take-cloud')
+        console.warn('Only acceptable conflict resolution for malformed-data is keep-local');
+
         return 'malformed-data';
     }
 
@@ -132,8 +138,29 @@ export class AppDataSynchronizerService {
         return 'last-modified-mismatch';
     }
 
+
+
+    // Check encryption
+    if(appdata.isEncrypted) {
+      const check = appdata.check ?? '';
+      const isCheckValid = this._passwordService.masterPassword && await this._encryption.verifyCheck(this._passwordService.masterPassword, check);
+      if(!isCheckValid) {
+        this._passwordService.clearMasterPassword();
+        localStorage.setItem(environment.cacheKeys.encryptionCheck, check);
+
+        await this._passwordService.waitForUnlock();
+      }
+    }
+
+
     console.log("Appdata fetch response:", appdata);
-    await this._appdataPackageCreator.unpackAsync(appdata);
+    await this.unpackAsync(appdata);
+
+    return 'success';
+  }
+
+  private async unpackAsync(appdataPackage: AppdataPackage) {
+    await this._appdataPackageCreator.unpackAsync(appdataPackage);
     this._hasFetched = true;
 
     this._messageService.add({
@@ -141,8 +168,6 @@ export class AppDataSynchronizerService {
       summary: 'Synchronisation complete.',
       detail: 'Your cloud save has been downloaded to your device.'
     })
-
-    return 'success';
   }
 
   public async saveAsync() {

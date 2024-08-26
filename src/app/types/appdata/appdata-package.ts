@@ -14,7 +14,8 @@ export type AppdataPackage = {
 
 export function isAppdataPackage(obj: any): obj is AppdataPackage {
   return obj
-    && typeof obj.check === 'string'
+    && typeof obj.isEncrypted === 'boolean'
+    && (!obj.isEncrypted || typeof obj.check === 'string')
     && typeof obj.originUuid === 'string'
     && typeof obj.uploadTimestamp === 'number'
     && typeof obj.encryptionPreference === 'boolean'

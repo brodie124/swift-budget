@@ -9,6 +9,7 @@ import {EncryptionService} from "../../services/encryption.service";
 import {ToastModule} from "primeng/toast";
 import {PasswordService} from "../../services/password.service";
 import {Subscription} from "rxjs";
+import {sha256} from "../../helpers/hash-utils";
 
 @Component({
   selector: 'app-unlock-modal',
@@ -61,12 +62,15 @@ export class UnlockModalComponent implements OnInit, OnDestroy {
       return;
     }
 
-    await this._passwordService.setMasterPassword(this.masterPassword);
-    const isValid = await this._encryptionService.checkMasterPassword();
+    // TODO: it is very confusing where this hashing has to take place. We should sort that out!
+    const hashedPassword = await sha256(`swift-budget:${this.masterPassword}`);
+    const isValid = await this._encryptionService.checkPassword(hashedPassword);
     if (!isValid) {
       this.masterPasswordErrorMessage = 'The master password provided is incorrect.';
       return;
     }
+
+    await this._passwordService.setMasterPassword(this.masterPassword);
 
     this.showModal.set(false);
     setTimeout(() => this.onUnlock.emit(), 100); // Delay just enough for animations of modal closing to finish

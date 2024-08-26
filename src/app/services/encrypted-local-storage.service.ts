@@ -21,8 +21,8 @@ export class EncryptedLocalStorageService {
       if (!payload.e)
         return payload.v; // Not encrypted
 
-      await this._passwordService.waitForUnlock();
-      return await this._encryptionService.decrypt<string>(payload.v);
+      const password = await this._passwordService.waitForUnlock();
+      return await this._encryptionService.decrypt<string>(password, payload.v);
 
     } catch (err) {
       console.error("Couldn't parse JSON object", err);
@@ -32,8 +32,12 @@ export class EncryptedLocalStorageService {
 
   public async setItemAsync(key: string, value: string): Promise<void> {
     const isEncrypted = this._encryptionService.isEnabled();
+    let password = '';
+    if(isEncrypted)
+      password = await this._passwordService.waitForUnlock();
+
     const storedValue = isEncrypted
-      ? await this._encryptionService.encrypt(value)
+      ? await this._encryptionService.encrypt(password, value)
       : value;
 
     const payload: Payload = {

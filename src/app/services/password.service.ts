@@ -26,11 +26,17 @@ export class PasswordService {
     this._onUnlockSubject.next();
   }
 
-  public async waitForUnlock(): Promise<void> {
+  public clearMasterPassword() {
+    this._masterPassword = null;
+  }
+
+  public async waitForUnlock(): Promise<string> {
     if(this._masterPassword)
-      return;
+      return this.masterPassword!;
 
     this._requireUnlockSubject.next();
     await firstValueFrom(this.onUnlock$);
+
+    return this.masterPassword!;
   }
 }
