@@ -9,6 +9,7 @@ import {LocalStorageService} from "./local-storage.service";
 import {environment} from "../../environments/environment";
 import moment from "moment";
 import {getMomentWithTime} from "../utils/moment-utils";
+import {isAppdataPackage} from "../types/appdata/appdata-package";
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +25,7 @@ export class AppDataSynchronizerService {
 
   private readonly _localStorageService = inject(LocalStorageService);
 
-  private _originUuid: string = crypto.randomUUID();
+  private _originUuid: string | null = null;
   private _lastSyncMoment: moment.Moment = getMomentWithTime(0);
   private _lastModifiedMoment: moment.Moment = getMomentWithTime(0);
 
@@ -33,6 +34,8 @@ export class AppDataSynchronizerService {
 
   private _allowSyncSubject = new ReplaySubject<boolean>(1);
   public allowSync$ = this._allowSyncSubject.asObservable();
+
+  public readonly lastModifiedMoment = this._lastModifiedMoment;
 
   constructor() {
     this._allowSyncSubject.next(false);
@@ -57,7 +60,7 @@ export class AppDataSynchronizerService {
 
     this._localStorageService.set$.pipe(filter(e => monitoredLocalStorageKeys.indexOf(e.key) !== -1)).subscribe(() => {
       this._lastModifiedMoment = getMomentWithTime();
-      this._localStorageService.setItem(environment.cacheKeys.appdataLastSyncTime, this._lastModifiedMoment.toISOString());
+      this._localStorageService.setItem(environment.cacheKeys.appdataLastModifiedTime, this._lastModifiedMoment.toISOString());
     });
 
     this.triggerSyncCheck$.pipe().subscribe(async () => await this.syncCheckAsync());
@@ -68,13 +71,25 @@ export class AppDataSynchronizerService {
     return this._lastModifiedMoment.isAfter(this._lastSyncMoment);
   }
 
-  public async loadAsync() {
+  public async loadAsync(): Promise<Error | 'origin-mismatch' | 'last-modified-mismatch' | 'success'> {
     const jwt = await firstValueFrom(this._authService.jwt$);
     if (!jwt)
       throw new Error('Cannot fetch appdata without auth token!');
 
     const appdata = await this._apiMediator.fetchAppdata<any>(jwt);
+    if(!isAppdataPackage(appdata))
+      throw new Error('Returned appdata is malformed'); // TODO: handle this scenario better
+
+    if(appdata.originUuid !== this._originUuid)
+      return 'origin-mismatch';
+
+    const packageUploadMoment = getMomentWithTime(appdata.uploadTimestamp);
+    if(packageUploadMoment.isSameOrBefore(this._lastModifiedMoment))
+      return 'last-modified-mismatch';
+
     console.log("Appdata fetch response:", appdata);
+    await this._appdataPackageCreator.unpackAsync(appdata);
+    return 'success';
   }
 
   public async saveAsync() {
@@ -82,11 +97,19 @@ export class AppDataSynchronizerService {
     if (!jwt)
       throw new Error('Cannot save appdata without auth token!');
 
-    const appdataPackage = await this._appdataPackageCreator.make(this._originUuid);
+    const appdataPackage = await this._appdataPackageCreator.make(this._originUuid ?? crypto.randomUUID().toString());
     const result = await this._apiMediator.saveAppdata(jwt, appdataPackage);
+    this._originUuid = appdataPackage.originUuid;
+
     console.log("Upload appdata result:", result);
 
     if (result === 'success') {
+
+      // TODO: move this out (same for lastModifiedMoment too)
+      this._lastSyncMoment = getMomentWithTime();
+      this._localStorageService.setItem(environment.cacheKeys.appdataLastSyncTime, this._lastSyncMoment.toISOString());
+      this._localStorageService.setItem(environment.cacheKeys.appdataOriginUuid, this._originUuid); // Sync the origin ID too
+
       this._messageService.add({
         severity: 'success',
         summary: 'Synchronisation complete.',

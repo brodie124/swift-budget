@@ -28,7 +28,6 @@ export class FinancialEventHistoryProvider {
     return histories.find(e => e.eventUid === uid) ?? null;
   }
 
-
   public async getHistoriesAsync(): Promise<Array<FinancialEventHistory>> {
     if (this._cachedHistories)
       return [...this._cachedHistories];

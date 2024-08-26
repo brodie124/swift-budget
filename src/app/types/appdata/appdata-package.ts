@@ -8,3 +8,13 @@ export type AppdataPackage = {
   eventList: ReadonlyArray<FinancialEvent>;
   encryptionPreference: boolean;
 }
+
+
+export function isAppdataPackage(obj: any): obj is AppdataPackage {
+  return obj
+    && typeof obj.originUuid === 'string'
+    && typeof obj.uploadTimestamp === 'number'
+    && typeof obj.encryptionPreference === 'boolean'
+    && Array.isArray(obj.eventHistory)
+    && Array.isArray(obj.eventList)
+}

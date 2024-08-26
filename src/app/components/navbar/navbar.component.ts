@@ -30,7 +30,10 @@ export class NavbarComponent {
 
   async testFetchAppdata() {
     console.log("testFetchAppdata");
-    await this._syncro.loadAsync();
+
+    const result = await this._syncro.loadAsync();
+
+    console.log(`testFetchAppdata - result: ${result}`)
   }
 
   async testUploadAppdata() {

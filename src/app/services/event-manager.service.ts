@@ -17,6 +17,11 @@ export class EventManagerService {
     return await firstValueFrom(this.events$)
   }
 
+  public setEvents(events: ReadonlyArray<FinancialEvent>) {
+    this._eventsSubject.next(events);
+    return events;
+  }
+
   public async loadAsync(): Promise<ReadonlyArray<FinancialEvent>> {
     const eventsJson = await this._encryptedStorageService.getItemAsync(environment.cacheKeys.eventList);
     let events: Array<FinancialEvent> = [];
@@ -26,8 +31,7 @@ export class EventManagerService {
         events = [];
     }
 
-    this._eventsSubject.next(events);
-    return events;
+    return this.setEvents(events);
   }
 
   public async addAsync(event: FinancialEvent): Promise<void> {
