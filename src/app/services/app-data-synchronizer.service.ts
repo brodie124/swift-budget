@@ -1,7 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {AuthService} from "./auth.service";
-import {filter, firstValueFrom, interval, Observable, of, ReplaySubject, Subject} from "rxjs";
-import {HttpClient} from "@angular/common/http";
+import {filter, firstValueFrom, interval, ReplaySubject, Subject} from "rxjs";
 import {ApiMediatorService} from "./api-mediator.service";
 import {AppdataPackageCreatorService} from "./appdata-package-creator.service";
 import {MessageService} from "primeng/api";
@@ -21,7 +20,6 @@ export class AppDataSynchronizerService {
   private readonly _syncCheckInterval = 1000 * 15; // 15 sec sync checks
 
   private readonly _authService = inject(AuthService);
-  private readonly _httpClient = inject(HttpClient);
   private readonly _apiMediator = inject(ApiMediatorService);
   private readonly _appdataConflictBridge = inject(AppdataConflictBridgeService);
   private readonly _appdataPackageCreator = inject(AppdataPackageCreatorService);
@@ -42,9 +40,6 @@ export class AppDataSynchronizerService {
 
   private _allowSyncSubject = new ReplaySubject<boolean>(1);
   public allowSync$ = this._allowSyncSubject.asObservable();
-
-  public readonly lastModifiedMoment = this._lastModifiedMoment;
-
 
   constructor() {
     this._allowSyncSubject.next(this._localStorageService.getItem(environment.cacheKeys.enableCloudSync) === '1');
@@ -100,6 +95,17 @@ export class AppDataSynchronizerService {
     if (appdata === 'unauthorized')
       return 'unauthorized';
 
+    if (appdata instanceof Error) {
+      console.error("Failed to fetch appdata", appdata);
+      this._messageService.add({
+        severity: 'warn',
+        summary: 'Synchronisation failed.',
+        detail: 'We were unable to synchronise your data with Google Drive. We\'ll keep trying automatically.'
+      });
+
+      return appdata;
+    }
+
     if (!isAppdataPackage(appdata)) {
       console.log("Malformed appdata");
       const response = await this._appdataConflictBridge.requestConflictResolution({
@@ -108,10 +114,11 @@ export class AppDataSynchronizerService {
 
       console.log("Response from conflict resolution:", response);
       this._hasFetched = true;
-      if (response !== 'take-cloud')
+      if (response !== 'take-cloud') {
         console.warn('Only acceptable conflict resolution for malformed-data is keep-local');
+      }
 
-        return 'malformed-data';
+      return 'malformed-data'; // We can only report malformed data here - no sync to do
     }
 
     if (appdata.originUuid !== this._originUuid) {
@@ -142,12 +149,11 @@ export class AppDataSynchronizerService {
     }
 
 
-
     // Check encryption
-    if(appdata.isEncrypted) {
+    if (appdata.isEncrypted) {
       const check = appdata.check ?? '';
       const isCheckValid = this._passwordService.masterPassword && await this._encryption.verifyCheck(this._passwordService.masterPassword, check);
-      if(!isCheckValid) {
+      if (!isCheckValid) {
         this._passwordService.clearMasterPassword();
         localStorage.setItem(environment.cacheKeys.encryptionCheck, check);
 
@@ -255,3 +261,4 @@ export class AppDataSynchronizerService {
     await this.saveAsync() // Do the sync
   }
 }
+
