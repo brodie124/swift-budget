@@ -1,8 +1,9 @@
-import {Component, EventEmitter, inject, OnInit, output, Output} from '@angular/core';
+import {Component, inject, OnInit, output} from '@angular/core';
 import {CardModule} from "primeng/card";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {AppDataSynchronizerService} from "../../services/app-data-synchronizer.service";
-import {Router} from "@angular/router";
+import {AuthService} from "../../services/auth.service";
+import {MessageService} from "primeng/api";
 
 /// TODO: when you sign in with google, and there is a mismatch between cloud and local
 // we should then ask what the user wants to do.
@@ -23,12 +24,17 @@ import {Router} from "@angular/router";
 export class SyncAppdataDialogComponent implements OnInit{
 
   private readonly _synchronisationService = inject(AppDataSynchronizerService);
-  private readonly _router = inject(Router);
+  private readonly _authService = inject(AuthService);
+  private readonly _messageService = inject(MessageService);
 
   public readonly finished = output<void>();
 
   public async ngOnInit() {
     const result = await this._synchronisationService.loadAsync();
+    // if (result === 'unauthorized') {
+    //
+    // }
+
     this.finished.emit();
   }
 

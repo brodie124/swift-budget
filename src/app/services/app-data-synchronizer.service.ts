@@ -80,7 +80,7 @@ export class AppDataSynchronizerService {
     return this._lastModifiedMoment.isAfter(this._lastSyncMoment);
   }
 
-  public async loadAsync(): Promise<Error | 'origin-mismatch' | 'last-modified-mismatch' | 'malformed-data' | 'success'> {
+  public async loadAsync(): Promise<Error | 'origin-mismatch' | 'last-modified-mismatch' | 'malformed-data' | 'unauthorized' | 'success'> {
     if (this._appdataConflictBridge.conflictInProgress)
       return new Error('Cannot upload appdata while conflict is in progress');
 
@@ -96,7 +96,10 @@ export class AppDataSynchronizerService {
     });
 
 
-    const appdata = await this._apiMediator.fetchAppdata<any>(jwt);
+    const appdata = await this._apiMediator.fetchAppdata(jwt);
+    if (appdata === 'unauthorized')
+      return 'unauthorized';
+
     if (!isAppdataPackage(appdata)) {
       console.log("Malformed appdata");
       const response = await this._appdataConflictBridge.requestConflictResolution({
@@ -207,7 +210,7 @@ export class AppDataSynchronizerService {
       });
     } else {
       this._messageService.add({
-        severity: 'error',
+        severity: 'warn',
         summary: 'Synchronisation failed.',
         detail: 'We were unable to synchronise your data with Google Drive. We\'ll keep trying automatically.'
       });

@@ -1,15 +1,15 @@
 import {inject, Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
 import {ApiMediatorService} from "./api-mediator.service";
-import {Subject, Observable, ReplaySubject, startWith, map} from "rxjs";
+import {map, Observable, ReplaySubject} from "rxjs";
 import {LocalStorageService} from "./local-storage.service";
+import {MessageService} from "primeng/api";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly _httpClient = inject(HttpClient);
+  private readonly _messageService = inject(MessageService);
   private readonly _apiMediator = inject(ApiMediatorService);
   private readonly _localStorageService = inject(LocalStorageService);
 
@@ -23,6 +23,17 @@ export class AuthService {
     // TODO: call the api to check the JWT (but rate limit it)
     const localStorageJwt = this._localStorageService.getItem(environment.cacheKeys.apiAccessToken) ?? null;
     this._jwtSubject.next(localStorageJwt);
+
+    this._apiMediator.notifyUnauthorized$.subscribe(async () => {
+      await this.signOutAsync()
+      this._messageService.add({
+        severity: 'error',
+        summary: 'Cloud synchronisation paused.',
+        detail: 'You have been signed out. To re-enable cloud synchronisation, please sign back in again.',
+        closable: true,
+        sticky: true
+      });
+    })
   }
 
   public async startSignInAsync() {
@@ -35,7 +46,7 @@ export class AuthService {
       return 'failure';
     }
 
-    if(!jwt) {
+    if(!jwt || jwt === 'unauthorized') {
       return 'failure';
     }
 
