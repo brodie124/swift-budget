@@ -75,7 +75,7 @@ export class AppDataSynchronizerService {
     return this._lastModifiedMoment.isAfter(this._lastSyncMoment);
   }
 
-  public async loadAsync(): Promise<Error | 'origin-mismatch' | 'last-modified-mismatch' | 'malformed-data' | 'unauthorized' | 'success'> {
+  public async loadAsync(reportIfCloudOlder: boolean = true): Promise<Error | 'origin-mismatch' | 'last-modified-mismatch' | 'malformed-data' | 'unauthorized' | 'success'> {
     if (this._appdataConflictBridge.conflictInProgress)
       return new Error('Cannot upload appdata while conflict is in progress');
 
@@ -134,7 +134,7 @@ export class AppDataSynchronizerService {
     }
 
     const packageUploadMoment = getMomentWithTime(appdata.uploadTimestamp);
-    if (packageUploadMoment.isBefore(this._lastModifiedMoment)) {
+    if (reportIfCloudOlder && packageUploadMoment.isBefore(this._lastModifiedMoment)) {
       console.log("Last modified mismatch");
       const response = await this._appdataConflictBridge.requestConflictResolution({
         type: 'last-modified-mismatch',
@@ -146,6 +146,8 @@ export class AppDataSynchronizerService {
       this._hasFetched = true;
       if (response !== 'take-cloud')
         return 'last-modified-mismatch';
+    } else if (!reportIfCloudOlder && packageUploadMoment.isBefore(this._lastModifiedMoment)) {
+      console.warn("Fetched older cloud save - auto discarded");
     }
 
 
@@ -236,8 +238,13 @@ export class AppDataSynchronizerService {
     }
 
     if (!this._hasFetched) {
-      console.info("Skipping sync - no fetch has been performed yet");
-      return;
+      console.info("No fetch performed yet - fetching now");
+      const result = await this.loadAsync(false);
+
+      if (result !== 'success') {
+        console.warn("Fetch failed - skipping sync");
+        return;
+      }
     }
 
     if (this._appdataConflictBridge.conflictInProgress) {
@@ -257,7 +264,6 @@ export class AppDataSynchronizerService {
     }
 
     console.info("Due for sync - syncing");
-    this._lastSyncMoment = getMomentWithTime();
     await this.saveAsync() // Do the sync
   }
 }
