@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {FinancialEventOccurrence} from "../types/financial/financial-event";
-import {getMomentUtc} from "../utils/moment-utils";
+import {FinancialEventOccurrence} from "../../types/financial/financial-event";
+import {getMomentUtc} from "../../utils/moment-utils";
 
 @Injectable({
   providedIn: 'root'

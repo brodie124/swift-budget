@@ -1,7 +1,7 @@
 import {Component, computed, inject, signal} from '@angular/core';
 import {ToolbarModule} from "primeng/toolbar";
 import {SignInWithGoogleComponent} from "../sign-in-with-google/sign-in-with-google.component";
-import {AppDataSynchronizerService} from "../../services/app-data-synchronizer.service";
+import {AppDataSynchronizerService} from "../../services/appdata/app-data-synchronizer.service";
 import {toSignal} from "@angular/core/rxjs-interop";
 import {AuthService} from "../../services/auth.service";
 import {Button} from "primeng/button";

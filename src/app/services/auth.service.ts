@@ -1,8 +1,8 @@
 import {inject, Injectable} from '@angular/core';
 import {environment} from "../../environments/environment";
-import {ApiMediatorService} from "./api-mediator.service";
+import {ApiMediatorService} from "./api/api-mediator.service";
 import {map, Observable, ReplaySubject} from "rxjs";
-import {LocalStorageService} from "./local-storage.service";
+import {LocalStorageService} from "./storage/local-storage.service";
 import {MessageService} from "primeng/api";
 
 @Injectable({

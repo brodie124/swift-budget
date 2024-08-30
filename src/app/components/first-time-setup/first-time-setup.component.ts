@@ -6,10 +6,10 @@ import {InputTextModule} from "primeng/inputtext";
 import {Button} from "primeng/button";
 import {PasswordModule} from "primeng/password";
 import {environment} from "../../../environments/environment";
-import {EncryptionService} from "../../services/encryption.service";
-import {LocalStorageService} from "../../services/local-storage.service";
+import {EncryptionService} from "../../services/storage/encryption.service";
+import {LocalStorageService} from "../../services/storage/local-storage.service";
 import {PasswordService} from "../../services/password.service";
-import {EventManagerService} from "../../services/event-manager.service";
+import {EventManagerService} from "../../services/financial-events/event-manager.service";
 
 @Component({
   selector: 'app-first-time-setup',

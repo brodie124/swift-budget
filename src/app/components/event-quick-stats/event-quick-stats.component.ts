@@ -1,5 +1,5 @@
 import {Component, input} from '@angular/core';
-import {EventStatistics} from "../../services/event-statistics.service";
+import {EventStatistics} from "../../services/financial-events/event-statistics.service";
 import {DecimalPipe} from "@angular/common";
 
 @Component({

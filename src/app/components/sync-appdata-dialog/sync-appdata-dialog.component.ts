@@ -1,7 +1,7 @@
 import {Component, inject, OnInit, output} from '@angular/core';
 import {CardModule} from "primeng/card";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
-import {AppDataSynchronizerService} from "../../services/app-data-synchronizer.service";
+import {AppDataSynchronizerService} from "../../services/appdata/app-data-synchronizer.service";
 import {AuthService} from "../../services/auth.service";
 import {MessageService} from "primeng/api";
 

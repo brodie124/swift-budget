@@ -1,9 +1,9 @@
 import {inject, Injectable} from '@angular/core';
-import {sha256} from "../helpers/hash-utils";
-import {environment} from "../../environments/environment";
+import {sha256} from "../../helpers/hash-utils";
+import {environment} from "../../../environments/environment";
 import {LocalStorageService} from "./local-storage.service";
 import {Subject} from "rxjs";
-import {PasswordService} from "./password.service";
+import {PasswordService} from "../password.service";
 
 @Injectable({
   providedIn: 'root'

@@ -1,9 +1,9 @@
 import {inject, Injectable} from '@angular/core';
-import {FinancialEvent, FinancialEventHistory, FinancialEventOccurrence} from "../types/financial/financial-event";
+import {FinancialEvent, FinancialEventHistory, FinancialEventOccurrence} from "../../types/financial/financial-event";
 import moment from "moment/moment";
-import {EventEngineService} from "./event-engine/event-engine.service";
+import {EventEngineService} from "../event-engine/event-engine.service";
 import {FinancialEventHistoryManager} from "./financial-event-history-manager.service";
-import {getMomentUtc, getMomentWithTime} from "../utils/moment-utils";
+import {getMomentUtc, getMomentWithTime} from "../../utils/moment-utils";
 
 @Injectable({
   providedIn: 'root'

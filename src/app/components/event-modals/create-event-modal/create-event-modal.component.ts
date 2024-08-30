@@ -1,5 +1,5 @@
 import {Component, inject, OnInit, output, signal, ViewChild} from '@angular/core';
-import {EventManagerService} from "../../../services/event-manager.service";
+import {EventManagerService} from "../../../services/financial-events/event-manager.service";
 import {
   EventCreateEditMultiFormComponent
 } from "../event-create-edit-multi-form/event-create-edit-multi-form.component";

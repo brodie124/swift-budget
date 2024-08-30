@@ -1,8 +1,8 @@
 import {inject, Injectable} from '@angular/core';
-import {FinancialEventHistory, FinancialEventId} from "../types/financial/financial-event";
-import {getMomentUtc} from "../utils/moment-utils";
-import {environment} from "../../environments/environment";
-import {EncryptedLocalStorageService} from "./encrypted-local-storage.service";
+import {FinancialEventHistory, FinancialEventId} from "../../types/financial/financial-event";
+import {getMomentUtc} from "../../utils/moment-utils";
+import {environment} from "../../../environments/environment";
+import {EncryptedLocalStorageService} from "../storage/encrypted-local-storage.service";
 
 @Injectable({
   providedIn: 'root'

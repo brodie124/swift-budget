@@ -1,9 +1,9 @@
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {environment} from "../environments/environment";
-import {EncryptionService} from "./services/encryption.service";
+import {EncryptionService} from "./services/storage/encryption.service";
 import {Event, Router, RouterEvent} from "@angular/router";
 import {filter} from "rxjs";
-import {LocalStorageService} from "./services/local-storage.service";
+import {LocalStorageService} from "./services/storage/local-storage.service";
 
 @Component({
   selector: 'app-root',

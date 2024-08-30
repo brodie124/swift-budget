@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
-import {FinancialEvent} from "../types/financial/financial-event";
-import {environment} from "../../environments/environment";
-import {EncryptedLocalStorageService} from "./encrypted-local-storage.service";
+import {FinancialEvent} from "../../types/financial/financial-event";
+import {environment} from "../../../environments/environment";
+import {EncryptedLocalStorageService} from "../storage/encrypted-local-storage.service";
 import {firstValueFrom, Observable, ReplaySubject, Subject} from "rxjs";
 
 @Injectable({

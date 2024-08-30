@@ -1,17 +1,17 @@
 import {inject, Injectable} from '@angular/core';
-import {AuthService} from "./auth.service";
+import {AuthService} from "../auth.service";
 import {filter, firstValueFrom, interval, ReplaySubject, Subject} from "rxjs";
-import {ApiMediatorService} from "./api-mediator.service";
+import {ApiMediatorService} from "../api/api-mediator.service";
 import {AppdataPackageCreatorService} from "./appdata-package-creator.service";
 import {MessageService} from "primeng/api";
-import {LocalStorageService} from "./local-storage.service";
-import {environment} from "../../environments/environment";
+import {LocalStorageService} from "../storage/local-storage.service";
+import {environment} from "../../../environments/environment";
 import moment from "moment";
-import {getMomentWithTime} from "../utils/moment-utils";
-import {AppdataPackage, isAppdataPackage} from "../types/appdata/appdata-package";
+import {getMomentWithTime} from "../../utils/moment-utils";
+import {AppdataPackage, isAppdataPackage} from "../../types/appdata/appdata-package";
 import {AppdataConflictBridgeService} from "./appdata-conflict-bridge.service";
-import {EncryptionService} from "./encryption.service";
-import {PasswordService} from "./password.service";
+import {EncryptionService} from "../storage/encryption.service";
+import {PasswordService} from "../password.service";
 
 @Injectable({
   providedIn: 'root'

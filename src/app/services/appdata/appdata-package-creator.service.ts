@@ -1,11 +1,11 @@
 import {inject, Injectable} from '@angular/core';
-import {AppdataPackage} from "../types/appdata/appdata-package";
-import {EventManagerService} from "./event-manager.service";
-import {FinancialEventHistoryProvider} from "./financial-event-history-provider.service";
-import {EncryptionService} from "./encryption.service";
-import {environment} from "../../environments/environment";
-import {LocalStorageService} from "./local-storage.service";
-import {getMomentWithTime} from "../utils/moment-utils";
+import {AppdataPackage} from "../../types/appdata/appdata-package";
+import {EventManagerService} from "../financial-events/event-manager.service";
+import {FinancialEventHistoryProvider} from "../financial-events/financial-event-history-provider.service";
+import {EncryptionService} from "../storage/encryption.service";
+import {environment} from "../../../environments/environment";
+import {LocalStorageService} from "../storage/local-storage.service";
+import {getMomentWithTime} from "../../utils/moment-utils";
 
 @Injectable({
   providedIn: 'root'

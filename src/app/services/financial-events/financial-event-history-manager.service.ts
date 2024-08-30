@@ -1,8 +1,8 @@
 import {inject, Injectable} from '@angular/core';
 import {FinancialEventHistoryProvider} from "./financial-event-history-provider.service";
-import {FinancialEventHistory, FinancialEventId} from "../types/financial/financial-event";
+import {FinancialEventHistory, FinancialEventId} from "../../types/financial/financial-event";
 import moment from "moment";
-import {getMomentUtc} from "../utils/moment-utils";
+import {getMomentUtc} from "../../utils/moment-utils";
 import {Observable, Subject} from "rxjs";
 
 @Injectable({

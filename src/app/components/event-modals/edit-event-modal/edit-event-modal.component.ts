@@ -6,7 +6,7 @@ import {
 import {FinancialEvent} from "../../../types/financial/financial-event";
 import {DialogModule} from "primeng/dialog";
 import {MessageService, PrimeTemplate} from "primeng/api";
-import {EventManagerService} from "../../../services/event-manager.service";
+import {EventManagerService} from "../../../services/financial-events/event-manager.service";
 import {waitAsync} from "../../../utils/async-utils";
 
 @Component({

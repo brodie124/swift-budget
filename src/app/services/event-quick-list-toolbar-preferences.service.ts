@@ -2,7 +2,7 @@
 import moment from "moment";
 import {environment} from "../../environments/environment";
 import {getMomentUtc} from "../utils/moment-utils";
-import {LocalStorageService} from "./local-storage.service";
+import {LocalStorageService} from "./storage/local-storage.service";
 
 @Injectable({providedIn: 'root'})
 export class EventQuickListToolbarPreferencesService {

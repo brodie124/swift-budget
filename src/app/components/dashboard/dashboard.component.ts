@@ -1,14 +1,14 @@
 import {Component, computed, effect, inject, OnDestroy, OnInit, signal} from '@angular/core';
-import {EventManagerService} from "../../services/event-manager.service";
+import {EventManagerService} from "../../services/financial-events/event-manager.service";
 import {FinancialEvent, FinancialEventOccurrence} from "../../types/financial/financial-event";
 import {
   EventQuickListDateRange
 } from "../event-quick-list/subcomponents/event-quick-list-toolbar/event-quick-list-toolbar.component";
 import {getMomentUtc} from "../../utils/moment-utils";
 import {Subscription} from "rxjs";
-import {FinancialEventService} from "../../services/financial-event.service";
-import {FinancialEventHistoryManager} from "../../services/financial-event-history-manager.service";
-import {EventStatisticsService} from "../../services/event-statistics.service";
+import {FinancialEventService} from "../../services/financial-events/financial-event.service";
+import {FinancialEventHistoryManager} from "../../services/financial-events/financial-event-history-manager.service";
+import {EventStatisticsService} from "../../services/financial-events/event-statistics.service";
 import {toObservable} from "@angular/core/rxjs-interop";
 
 @Component({

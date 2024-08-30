@@ -1,9 +1,9 @@
 import {Component, computed, inject, input, output} from '@angular/core';
 import {MessageService} from "primeng/api";
 import {EventQuickListItem} from "../../event-quick-list.component";
-import {FinancialEventHistoryManager} from "../../../../services/financial-event-history-manager.service";
-import {AsyncConfirmationService} from "../../../../services/async-confirmation.service";
-import {EventManagerService} from "../../../../services/event-manager.service";
+import {FinancialEventHistoryManager} from "../../../../services/financial-events/financial-event-history-manager.service";
+import {AsyncConfirmationService} from "../../../../services/primeng-enhancements/async-confirmation.service";
+import {EventManagerService} from "../../../../services/financial-events/event-manager.service";
 import {FinancialEventOccurrence} from "../../../../types/financial/financial-event";
 
 @Component({

@@ -1,7 +1,7 @@
 ﻿import {Injectable, inject} from "@angular/core";
 import {EncryptionService} from "./encryption.service";
 import {LocalStorageService} from "./local-storage.service";
-import {PasswordService} from "./password.service";
+import {PasswordService} from "../password.service";
 
 @Injectable({
   providedIn: 'root'
