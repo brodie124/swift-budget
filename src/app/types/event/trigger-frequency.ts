@@ -1,4 +1,4 @@
-export enum EventFrequency {
+export enum TriggerFrequency {
   Daily,
   Weekly,
   Monthly,

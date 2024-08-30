@@ -1,5 +1,5 @@
 <ng-container>
-  <div *ngIf="asRecurringEventDaily(eventTrigger) as dailyEvent">
+  <div *ngIf="asRecurringEventDaily(trigger) as dailyEvent">
     <ng-container *ngIf="dailyEvent.selectedDays.length === 7; then everyDay else specificDays"></ng-container>
     <ng-template #everyDay>
       Every day

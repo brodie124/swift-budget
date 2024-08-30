@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {FinancialEvent, FinancialEventHistory, FinancialEventOccurrence} from "../../types/financial/financial-event";
 import moment from "moment/moment";
-import {EventEngineService} from "../event-engine/event-engine.service";
+import {TriggerEngine} from "../trigger-engine/trigger-engine.service";
 import {FinancialEventHistoryManager} from "./financial-event-history-manager.service";
 import {getMomentUtc, getMomentWithTime} from "../../utils/moment-utils";
 
@@ -9,7 +9,7 @@ import {getMomentUtc, getMomentWithTime} from "../../utils/moment-utils";
   providedIn: 'root'
 })
 export class FinancialEventService {
-  private readonly _eventEngine: EventEngineService = inject(EventEngineService);
+  private readonly _eventEngine: TriggerEngine = inject(TriggerEngine);
   private readonly _financialEventHistoryManager: FinancialEventHistoryManager = inject(FinancialEventHistoryManager);
 
   public async getCalculatedEventsAsync(

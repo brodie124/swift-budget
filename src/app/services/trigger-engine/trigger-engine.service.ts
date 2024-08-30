@@ -1,12 +1,12 @@
 import {inject, Injectable} from "@angular/core";
 import moment from "moment";
-import {EventTrigger} from "../../types/event/event";
-import {EventFrequency} from "../../types/event/event-frequency";
+import {Trigger} from "../../types/event/trigger";
+import {TriggerFrequency} from "../../types/event/trigger-frequency";
 import {compareMomentsAscending} from "../../helpers/moment-utils";
 import {MonthlyTriggerHandler} from "./trigger-handlers/monthly-trigger-handler";
 
-export type EventEngineOptions = {
-  trigger: EventTrigger;
+export type TriggerEngineOptions = {
+  trigger: Trigger;
   startDate: moment.Moment;
   endDate: moment.Moment
 }
@@ -14,22 +14,22 @@ export type EventEngineOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class EventEngineService {
+export class TriggerEngine {
 
   private readonly _monthlyTriggerHandler: MonthlyTriggerHandler = inject(MonthlyTriggerHandler);
 
-  public getOccurrences(options: EventEngineOptions): Array<moment.Moment> {
+  public getOccurrences(options: TriggerEngineOptions): Array<moment.Moment> {
     const occurrences: Array<moment.Moment> = this.calculate(options);
     return occurrences.sort(compareMomentsAscending);
   }
 
-  private calculate(options: EventEngineOptions): Array<moment.Moment> {
+  private calculate(options: TriggerEngineOptions): Array<moment.Moment> {
     switch(options.trigger.frequency) {
-      case EventFrequency.Monthly:
+      case TriggerFrequency.Monthly:
         return this._monthlyTriggerHandler.calculateOccurrences(options.trigger, options.startDate, options.endDate);
 
       default:
-        console.warn(`Unhandled event trigger frequency: ${options.trigger.frequency}`);
+        console.warn(`Unhandled trigger frequency: ${options.trigger.frequency}`);
         return [];
     }
   }

@@ -1,16 +1,16 @@
 import {Injectable} from "@angular/core";
-import {EventTriggerAdvancedOptions, EventTriggerMonthly, InvalidDayFallback} from "../../../types/event/event";
+import {TriggerAdvancedOptions, TriggerMonthly, InvalidDayFallback} from "../../../types/event/trigger";
 import moment from "moment/moment";
-import {EventTriggerHandler} from "./event-trigger-handle";
+import {TriggerHandler} from "./event-trigger-handle";
 import {getMomentUtc} from "../../../utils/moment-utils";
 
-export type EventTriggerMonthlyAdvanced = EventTriggerMonthly & EventTriggerAdvancedOptions;
+export type TriggerMonthlyAdvanced = TriggerMonthly & TriggerAdvancedOptions;
 
 @Injectable({ providedIn: 'root'})
-export class MonthlyTriggerHandler implements EventTriggerHandler<EventTriggerMonthlyAdvanced> {
+export class MonthlyTriggerHandler implements TriggerHandler<TriggerMonthlyAdvanced> {
 
   public calculateOccurrences(
-    trigger: EventTriggerMonthlyAdvanced,
+    trigger: TriggerMonthlyAdvanced,
     startDate: moment.Moment,
     endDate: moment.Moment
   ): Array<moment.Moment> {

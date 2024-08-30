@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {CalendarDay} from "../types/calendar/calendar-types";
-import { EventFrequency } from '../types/event/event-frequency';
-import {InvalidDayFallback, EventTrigger, EventTriggerDaily} from "../types/event/event";
+import { TriggerFrequency } from '../types/event/trigger-frequency';
+import {InvalidDayFallback, Trigger, TriggerDaily} from "../types/event/trigger";
 
 @Component({
   selector: 'app-event-frequency',
@@ -10,26 +10,26 @@ import {InvalidDayFallback, EventTrigger, EventTriggerDaily} from "../types/even
 })
 export class EventFrequencyComponent {
 
-  private readonly _eventTrigger: EventTrigger;
+  private readonly _trigger: Trigger;
 
 
-  public readonly asRecurringEventDaily = (trigger: EventTrigger): EventTriggerDaily | undefined =>
-    trigger.frequency === EventFrequency.Daily
-      ? trigger as EventTriggerDaily
+  public readonly asRecurringEventDaily = (trigger: Trigger): TriggerDaily | undefined =>
+    trigger.frequency === TriggerFrequency.Daily
+      ? trigger as TriggerDaily
       : undefined;
 
 
-  public get eventTrigger(): EventTrigger {
-    return this._eventTrigger;
+  public get trigger(): Trigger {
+    return this._trigger;
   }
 
-  public get EventFrequency(): typeof EventFrequency {
-    return EventFrequency;
+  public get TriggerFrequency(): typeof TriggerFrequency {
+    return TriggerFrequency;
   }
 
   constructor() {
-    this._eventTrigger = {
-      frequency: EventFrequency.Daily,
+    this._trigger = {
+      frequency: TriggerFrequency.Daily,
       selectedDays: [CalendarDay.Monday, CalendarDay.Tuesday, CalendarDay.Wednesday, CalendarDay.Thursday, CalendarDay.Friday, CalendarDay.Saturday],
       advancedOptions: {
         weekdaysAllowed: true,

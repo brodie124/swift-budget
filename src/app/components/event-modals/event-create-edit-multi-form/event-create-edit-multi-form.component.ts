@@ -3,9 +3,9 @@ import {FinancialEvent} from "../../../types/financial/financial-event";
 import {Router} from "@angular/router";
 import {EventManagerService} from "../../../services/financial-events/event-manager.service";
 import {getMomentUtc} from "../../../utils/moment-utils";
-import {EventTrigger, InvalidDayFallback} from "../../../types/event/event";
+import {Trigger, InvalidDayFallback} from "../../../types/event/trigger";
 import {AllCalendarMonths} from "../../../types/calendar/calendar-types";
-import {EventFrequency} from 'src/app/types/event/event-frequency';
+import {TriggerFrequency} from 'src/app/types/event/trigger-frequency';
 import {Button} from "primeng/button";
 import {CalendarModule} from "primeng/calendar";
 import {CheckboxModule} from "primeng/checkbox";
@@ -47,7 +47,7 @@ import {useTouchUi} from "../../../utils/screen-utils";
 })
 export class EventCreateEditMultiFormComponent {
 
-  public readonly EventFrequency: typeof EventFrequency = EventFrequency;
+  public readonly EventFrequency: typeof TriggerFrequency = TriggerFrequency;
   public readonly InvalidDayFallback: typeof InvalidDayFallback = InvalidDayFallback;
 
   public get useTouchUi(): boolean {
@@ -61,7 +61,7 @@ export class EventCreateEditMultiFormComponent {
   public description: string = '';
   public cost: number = 0;
 
-  public eventFrequency: EventFrequency = this.existingEvent()?.trigger?.frequency ?? EventFrequency.Monthly;
+  public eventFrequency: TriggerFrequency = this.existingEvent()?.trigger?.frequency ?? TriggerFrequency.Monthly;
   public eventType: 'specific-date' = 'specific-date';
   public specificDate?: Date;
 
@@ -71,7 +71,7 @@ export class EventCreateEditMultiFormComponent {
   public allowWorkingDays: boolean = this.existingEvent()?.trigger?.advancedOptions?.workingDaysAllowed ?? true;
 
   public frequencyCategoryOptions = [
-    { label: 'month', value: EventFrequency.Monthly }
+    { label: 'month', value: TriggerFrequency.Monthly }
   ];
 
   public frequencyOperationOptions  = [
@@ -101,7 +101,7 @@ export class EventCreateEditMultiFormComponent {
       this.allowWeekends = existingEvent.trigger.advancedOptions.weekendsAllowed;
       this.allowWorkingDays = existingEvent.trigger.advancedOptions.workingDaysAllowed;
 
-      if (existingEvent?.trigger?.frequency === EventFrequency.Monthly && existingEvent.trigger.options.type === 'specific-date') {
+      if (existingEvent?.trigger?.frequency === TriggerFrequency.Monthly && existingEvent.trigger.options.type === 'specific-date') {
         this.eventType = existingEvent.trigger.options.type;
         this.specificDate = getMomentUtc().set('date', existingEvent.trigger.options.dayOfMonth).toDate();
       }
@@ -110,7 +110,7 @@ export class EventCreateEditMultiFormComponent {
 
   public async createFinancialEventAsync(): Promise<FinancialEvent | null> {
     // TODO: this setup is incredibly specific to the Monthly/specific-date configuration
-    if(this.eventFrequency !== EventFrequency.Monthly) {
+    if(this.eventFrequency !== TriggerFrequency.Monthly) {
       console.error(new Error('Unhandled event frequency!'));
       return null;
     }
@@ -120,7 +120,7 @@ export class EventCreateEditMultiFormComponent {
       return null;
     }
 
-    const trigger: EventTrigger = {
+    const trigger: Trigger = {
       frequency: this.eventFrequency,
       selectedMonths: [...AllCalendarMonths],
       options: {

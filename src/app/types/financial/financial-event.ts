@@ -1,4 +1,4 @@
-import {EventTrigger} from "../event/event";
+import {Trigger} from "../event/trigger";
 import moment from "moment";
 
 export type FinancialEventId = string;
@@ -8,7 +8,7 @@ export type FinancialEvent = {
   name: string;
   description?: string;
   expense: number;
-  trigger: EventTrigger;
+  trigger: Trigger;
 }
 
 export type FinancialEventHistory = {
