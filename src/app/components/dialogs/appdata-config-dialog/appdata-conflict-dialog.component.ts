@@ -1,7 +1,7 @@
 import {Component, computed, inject, OnDestroy, OnInit, signal} from '@angular/core';
 import {DialogModule} from "primeng/dialog";
 import {Button} from "primeng/button";
-import {AppdataConflictBridgeService, Conflict} from "../../services/appdata/appdata-conflict-bridge.service";
+import {AppdataConflictBridgeService, Conflict} from "../../../services/appdata/appdata-conflict-bridge.service";
 import {Subscription} from "rxjs";
 
 @Component({

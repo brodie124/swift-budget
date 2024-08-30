@@ -5,11 +5,11 @@ import {InputSwitchModule} from "primeng/inputswitch";
 import {PasswordModule} from "primeng/password";
 import {MessageService, PrimeTemplate} from "primeng/api";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {EncryptionService} from "../../services/storage/encryption.service";
+import {EncryptionService} from "../../../services/storage/encryption.service";
 import {ToastModule} from "primeng/toast";
-import {PasswordService} from "../../services/password.service";
+import {PasswordService} from "../../../services/password.service";
 import {Subscription} from "rxjs";
-import {sha256} from "../../helpers/hash-utils";
+import {sha256} from "../../../helpers/hash-utils";
 
 @Component({
   selector: 'app-unlock-modal',

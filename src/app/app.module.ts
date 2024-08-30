@@ -32,7 +32,7 @@ import {
 import {NavbarComponent} from "./components/navbar/navbar.component";
 import {ToolbarModule} from "primeng/toolbar";
 import {FirstTimeSetupComponent} from "./components/first-time-setup/first-time-setup.component";
-import {UnlockModalComponent} from "./components/unlock-modal/unlock-modal.component";
+import {UnlockModalComponent} from "./components/dialogs/unlock-modal/unlock-modal.component";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {ToastModule} from "primeng/toast";
 import {ConfirmationService, MessageService} from "primeng/api";
@@ -46,8 +46,8 @@ import {EditEventModalComponent} from "./components/event-modals/edit-event-moda
 import {AuthService} from "./services/auth.service";
 import {initializeAuth} from "./initializers/auth-initializer";
 import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
-import {AppdataConflictDialogComponent} from "./components/appdata-config-dialog/appdata-conflict-dialog.component";
-import {SyncAppdataDialogComponent} from "./components/sync-appdata-dialog/sync-appdata-dialog.component";
+import {AppdataConflictDialogComponent} from "./components/dialogs/appdata-config-dialog/appdata-conflict-dialog.component";
+import {SyncAppdataDialogComponent} from "./components/dialogs/sync-appdata-dialog/sync-appdata-dialog.component";
 
 @NgModule({
   declarations: [
