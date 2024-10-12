@@ -1,4 +1,4 @@
-import {APP_INITIALIZER, NgModule} from '@angular/core';
+import {APP_INITIALIZER, NgModule, isDevMode} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -48,6 +48,7 @@ import {initializeAuth} from "./initializers/auth-initializer";
 import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
 import {AppdataConflictDialogComponent} from "./components/dialogs/appdata-config-dialog/appdata-conflict-dialog.component";
 import {SyncAppdataDialogComponent} from "./components/dialogs/sync-appdata-dialog/sync-appdata-dialog.component";
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -91,6 +92,12 @@ import {SyncAppdataDialogComponent} from "./components/dialogs/sync-appdata-dial
     EditEventModalComponent,
     AppdataConflictDialogComponent,
     SyncAppdataDialogComponent,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
 
   ],
   providers: [
