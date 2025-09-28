@@ -1,11 +1,11 @@
 
 @if(editBill(); as existingBill) {
-  <app-edit-event-modal [event]="existingBill.event" (closed)="editBill.set(undefined)" />
+  <app-edit-event-modal [event]="existingBill" (closed)="editBill.set(undefined)" />
 }
 
 
 <div class="event-quick-list mt-4">
-  @for(item of items(); track item.calculatedEvent.occurrenceId) {
+  @for(item of items(); track item.occurrence.recurringEventId) {
 
     <app-event-quick-list-item @slideInOut [item]="item" (edited)="editBill.set($event)" />
 

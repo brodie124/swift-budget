@@ -1,4 +1,4 @@
-import {FinancialEvent, FinancialEventHistory} from "../financial/financial-event";
+import { RecurringEventDefinition } from "../../services/event-engine-v2/types/recurring-event-definition";
 
 export type AppdataPackage = {
   isEncrypted: boolean;
@@ -6,8 +6,7 @@ export type AppdataPackage = {
   originUuid: string; // used to track if we're overwriting a totally different appdata or not
   uploadTimestamp: number;
 
-  eventHistory: ReadonlyArray<FinancialEventHistory>;
-  eventList: ReadonlyArray<FinancialEvent>;
+  eventList: ReadonlyArray<RecurringEventDefinition>;
   encryptionPreference: boolean;
 }
 
