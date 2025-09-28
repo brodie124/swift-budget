@@ -1,10 +1,12 @@
-import {Component, computed, inject, input, output} from '@angular/core';
-import {MessageService} from "primeng/api";
-import {EventQuickListItem} from "../../event-quick-list.component";
-import {FinancialEventHistoryManager} from "../../../../services/financial-events/financial-event-history-manager.service";
-import {AsyncConfirmationService} from "../../../../services/primeng-enhancements/async-confirmation.service";
-import {EventManagerService} from "../../../../services/financial-events/event-manager.service";
-import {FinancialEventOccurrence} from "../../../../types/financial/financial-event";
+import { Component, computed, inject, input, output } from '@angular/core';
+import { MessageService } from "primeng/api";
+import { EventQuickListItem } from "../../event-quick-list.component";
+import { AsyncConfirmationService } from "../../../../services/primeng-enhancements/async-confirmation.service";
+import {
+  RecurringEventDefinitionProvider
+} from "../../../../services/event-engine-v2/recurring-event-definition-provider.service";
+import { EventOccurrence } from "../../../../services/event-engine-v2/types/event-occurrence";
+import { EventQuickActionsService } from "../../../../services/event-engine-v2/event-quick-actions.service";
 
 @Component({
   selector: 'app-event-quick-list-item',
@@ -15,23 +17,21 @@ import {FinancialEventOccurrence} from "../../../../types/financial/financial-ev
 export class EventQuickListItemComponent {
   private readonly _confirmationService: AsyncConfirmationService = inject(AsyncConfirmationService);
   private readonly _messageService: MessageService = inject(MessageService);
+  private readonly _eventQuickActionsService: EventQuickActionsService = inject(EventQuickActionsService);
 
-  private readonly _financialEventHistoryManager: FinancialEventHistoryManager = inject(FinancialEventHistoryManager);
-  private readonly _eventManagerService: EventManagerService = inject(EventManagerService);
+  private readonly _eventDefinitionProvider: RecurringEventDefinitionProvider = inject(RecurringEventDefinitionProvider);
 
-  public readonly deleted = output<FinancialEventOccurrence>();
-  public readonly edited = output<FinancialEventOccurrence>();
+  public readonly deleted = output<EventOccurrence>();
+  public readonly edited = output<EventOccurrence>();
 
   public item = input.required<EventQuickListItem>();
   public isDueSoon = computed(() =>
-    !this.item().calculatedEvent.isPaid
+    this.item().occurrence.status !== 'paid'
     && !this.item().isOverdue
-    && this.item().nextOccurrence.timeUntil.days <= 2);
+    && this.item().nextOccurrenceDate.timeUntil.days <= 2);
 
   public async markAsPaidAsync(): Promise<void> {
-    await this._financialEventHistoryManager.markPaidAsync(
-      this.item().financialEvent.uid,
-      this.item().nextOccurrence.date.add(1, 'second'));
+    await this._eventQuickActionsService.updateStatusAsync(this.item().occurrence, 'paid');
   }
 
   public async delete(item: EventQuickListItem) {
@@ -49,7 +49,7 @@ export class EventQuickListItemComponent {
     if (result === 'rejected')
       return;
 
-    const hasDeleted = await this._eventManagerService.removeAsync(item.financialEvent.uid);
+    const hasDeleted = await this._eventDefinitionProvider.removeAsync(item.definition.id);
     if (!hasDeleted) {
       this._messageService.add({
         severity: 'danger',
@@ -62,13 +62,13 @@ export class EventQuickListItemComponent {
     this._messageService.add({
       severity: 'success',
       summary: "Bill deleted.",
-      detail: `${item.financialEvent.name} has been deleted.`
+      detail: `${item.definition.title} has been deleted.`
     });
 
-    this.deleted.emit(item.calculatedEvent);
+    this.deleted.emit(item.occurrence);
   }
 
   edit(item: EventQuickListItem) {
-    this.edited.emit(item.calculatedEvent);
+    this.edited.emit(item.occurrence);
   }
 }

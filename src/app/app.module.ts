@@ -49,6 +49,8 @@ import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
 import {AppdataConflictDialogComponent} from "./components/dialogs/appdata-config-dialog/appdata-conflict-dialog.component";
 import {SyncAppdataDialogComponent} from "./components/dialogs/sync-appdata-dialog/sync-appdata-dialog.component";
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { EventOccurrencesManager } from "./services/event-engine-v2/event-occurrences-manager";
+import { CalendarEngine } from "./services/event-engine-v2/calendar-engine";
 
 @NgModule({
   declarations: [
@@ -104,6 +106,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     provideHttpClient(withInterceptorsFromDi()),
     ConfirmationService,
     MessageService,
+    CalendarEngine,
+    EventOccurrencesManager,
     {
       provide: APP_INITIALIZER,
       multi: true,

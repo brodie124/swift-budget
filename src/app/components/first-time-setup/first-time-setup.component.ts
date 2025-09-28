@@ -9,7 +9,7 @@ import {environment} from "../../../environments/environment";
 import {EncryptionService} from "../../services/storage/encryption.service";
 import {LocalStorageService} from "../../services/storage/local-storage.service";
 import {PasswordService} from "../../services/password.service";
-import {EventManagerService} from "../../services/financial-events/event-manager.service";
+import {RecurringEventDefinitionProvider} from "../../services/event-engine-v2/recurring-event-definition-provider.service";
 
 @Component({
   selector: 'app-first-time-setup',
@@ -30,7 +30,7 @@ export class FirstTimeSetupComponent implements OnInit {
   private readonly _encryptionService = inject(EncryptionService);
   private readonly _passwordService = inject(PasswordService);
   private readonly _localStorageService = inject(LocalStorageService);
-  private readonly _eventManager = inject(EventManagerService);
+  private readonly _eventDefinitionProvider = inject(RecurringEventDefinitionProvider);
 
   public isVisible: boolean = true;
   public hasSubmitted: boolean = false;
@@ -97,6 +97,6 @@ export class FirstTimeSetupComponent implements OnInit {
       await this._encryptionService.writeCheck();
     }
 
-    await this._eventManager.setEventsAsync([]);
+    await this._eventDefinitionProvider.setEventsAsync([]);
   }
 }

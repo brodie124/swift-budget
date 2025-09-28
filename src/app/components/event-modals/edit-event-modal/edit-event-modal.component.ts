@@ -3,11 +3,12 @@ import {Button} from "primeng/button";
 import {
   EventCreateEditMultiFormComponent
 } from "../event-create-edit-multi-form/event-create-edit-multi-form.component";
-import {FinancialEvent} from "../../../types/financial/financial-event";
 import {DialogModule} from "primeng/dialog";
 import {MessageService, PrimeTemplate} from "primeng/api";
-import {EventManagerService} from "../../../services/financial-events/event-manager.service";
+import {RecurringEventDefinitionProvider} from "../../../services/event-engine-v2/recurring-event-definition-provider.service";
 import {waitAsync} from "../../../utils/async-utils";
+import {RecurringEventDefinition} from "../../../services/event-engine-v2/types/recurring-event-definition";
+import { EventOccurrence } from "../../../services/event-engine-v2/types/event-occurrence";
 
 @Component({
   selector: 'app-edit-event-modal',
@@ -24,10 +25,10 @@ import {waitAsync} from "../../../utils/async-utils";
 export class EditEventModalComponent implements OnInit {
   @ViewChild(EventCreateEditMultiFormComponent, {static: true})
   private readonly _eventCreateEditMultiForm: EventCreateEditMultiFormComponent = undefined!;
-  private readonly _eventManager = inject(EventManagerService);
+  private readonly _eventDefinitionProvider = inject(RecurringEventDefinitionProvider);
   private readonly _messageService = inject(MessageService);
 
-  public event = input.required<FinancialEvent>();
+  public event = input.required<EventOccurrence>();
   public visible = signal<boolean>(false);
 
   public saved = output<void>();
@@ -48,15 +49,26 @@ export class EditEventModalComponent implements OnInit {
   }
 
   public async save() {
-    const financialEvent = await this._eventCreateEditMultiForm.createFinancialEventAsync();
-    if (!financialEvent) {
-      console.info("Couldn't create financial event");
+    // TODO: edits should create modifications
+
+    const updatedEvent = await this._eventCreateEditMultiForm.createDefinition();
+    // const eventException = this._eventCreateEditMultiForm.createException();
+    if (!updatedEvent) {
+      console.info("Couldn't create event change");
       return;
     }
 
     let hasUpdated = false;
+    // let event: RecurringEventDefinition | undefined = undefined;
     try {
-      await this._eventManager.updateAsync(financialEvent);
+      // const events = await this._eventDefinitionProvider.getAsync();
+      // event = events.find(e => e.id === eventException.recurringEventId);
+      // if(!event) {
+      //   throw new Error('Event not found');
+      // }
+
+      // event.exceptions.push(eventException);
+      await this._eventDefinitionProvider.updateAsync(updatedEvent);
       hasUpdated = true;
     } catch (err) {
       console.error("Failed to update event", err);
@@ -66,7 +78,7 @@ export class EditEventModalComponent implements OnInit {
       this._messageService.add({
         severity: 'success',
         summary: "Bill updated.",
-        detail: `${financialEvent.name} has been updated.`
+        detail: `${updatedEvent?.title ?? 'Bill'} has been updated.`
       });
 
     } else {

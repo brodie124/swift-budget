@@ -1,5 +1,5 @@
 import {Component, inject, OnInit, output, signal, ViewChild} from '@angular/core';
-import {EventManagerService} from "../../../services/financial-events/event-manager.service";
+import {RecurringEventDefinitionProvider} from "../../../services/event-engine-v2/recurring-event-definition-provider.service";
 import {
   EventCreateEditMultiFormComponent
 } from "../event-create-edit-multi-form/event-create-edit-multi-form.component";
@@ -12,7 +12,7 @@ import {MessageService} from "primeng/api";
   styleUrls: ['./create-event-modal.component.less']
 })
 export class CreateEventModalComponent implements OnInit {
-  private readonly _eventManager = inject(EventManagerService);
+  private readonly _eventDefinitionProvider = inject(RecurringEventDefinitionProvider);
   private readonly _messageService = inject(MessageService);
 
   @ViewChild(EventCreateEditMultiFormComponent, {static: true})
@@ -33,15 +33,15 @@ export class CreateEventModalComponent implements OnInit {
   }
 
   public async create() {
-    const financialEvent = await this._eventCreateEditMultiForm.createFinancialEventAsync();
-    if (!financialEvent) {
-      console.info("Couldn't create financial event");
+    const eventDefinition = await this._eventCreateEditMultiForm.createDefinition();
+    if (!eventDefinition) {
+      console.info("Couldn't create recurring event definition");
       return;
     }
 
     let hasCreated = false;
     try {
-      await this._eventManager.addAsync(financialEvent);
+      await this._eventDefinitionProvider.addAsync(eventDefinition);
       hasCreated = true;
     } catch (err) {
       console.error("Failed to update event", err);
@@ -51,7 +51,7 @@ export class CreateEventModalComponent implements OnInit {
       this._messageService.add({
         severity: 'success',
         summary: "Bill created.",
-        detail: `${financialEvent.name} has been created.`
+        detail: `${eventDefinition.title} has been created.`
       });
 
     } else {
