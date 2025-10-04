@@ -1,4 +1,8 @@
-import { RecurringEventDefinition } from "../../services/event-engine-v2/types/recurring-event-definition";
+import {
+  isRecurringEventDefinition,
+  RecurringEventDefinition
+} from "../../services/event-engine-v2/types/recurring-event-definition";
+import {CommonTypeGuards, StrictTypeGuardBuilder} from "@bpits/type-guards";
 
 export type AppdataPackage = {
   isEncrypted: boolean;
@@ -10,14 +14,12 @@ export type AppdataPackage = {
   encryptionPreference: boolean;
 }
 
-
-export function isAppdataPackage(obj: any): obj is AppdataPackage {
-  return obj
-    && typeof obj.isEncrypted === 'boolean'
-    && (!obj.isEncrypted || typeof obj.check === 'string')
-    && typeof obj.originUuid === 'string'
-    && typeof obj.uploadTimestamp === 'number'
-    && typeof obj.encryptionPreference === 'boolean'
-    && Array.isArray(obj.eventHistory)
-    && Array.isArray(obj.eventList)
-}
+export const isAppdataPackage = StrictTypeGuardBuilder
+  .start<AppdataPackage>('AppdataPackage')
+  .validateProperty('isEncrypted', CommonTypeGuards.basics.boolean())
+  .validateProperty('check', CommonTypeGuards.basics.string().nullable(undefined))
+  .validateProperty('originUuid', CommonTypeGuards.basics.string())
+  .validateProperty('uploadTimestamp', CommonTypeGuards.basics.number())
+  .validateProperty('eventList', CommonTypeGuards.array.arrayOf(isRecurringEventDefinition))
+  .validateProperty('encryptionPreference', CommonTypeGuards.basics.boolean())
+  .build();
