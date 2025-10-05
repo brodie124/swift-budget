@@ -2,7 +2,7 @@
   <p-card>
     <app-event-quick-list-toolbar (dateRangeChanged)="quickListDateRange.set($event)"/>
 
-    @if (events().length > 0) {
+    @if (occurrences().length > 0) {
       <div class="spacer" style="height:32px"></div>
       <app-event-quick-stats [statistics]="statistics()"/>
     }

@@ -23,7 +23,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private readonly _eventOccurrencesManager: EventOccurrencesManager = inject(EventOccurrencesManager);
   private readonly _subscriptions: Subscription = new Subscription();
 
-  public events = signal<ReadonlyArray<RecurringEventDefinition>>([]);
   public occurrences = signal<ReadonlyArray<EventOccurrence>>([]);
   public statistics = computed(() => this._eventStatisticsService.calculateStatistics(this.occurrences()));
 
