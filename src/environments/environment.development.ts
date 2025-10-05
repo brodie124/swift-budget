@@ -19,6 +19,12 @@ export const environment: EnvironmentConfig = {
     appdataLastModifiedTime: 'sb-appdata-last-modified-time',
 
     enableCloudSync: 'sb-enable-cloud-sync',
+
+    bio: {
+      credential: 'sb-bio-credential',
+      salt: 'sb-bio-salt',
+      userDataStore: 'sb-bio-user-store'
+    },
   },
   enableNavbar: true,
 };

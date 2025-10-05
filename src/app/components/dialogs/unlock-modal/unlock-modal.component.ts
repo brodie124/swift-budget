@@ -45,7 +45,8 @@ export class UnlockModalComponent implements OnInit, OnDestroy {
   public readonly onUnlock = output<void>();
 
   public async ngOnInit() {
-    this._subscriptions.add(this._passwordService.requireUnlock$.subscribe(this.showUnlock.bind(this)));
+    this._subscriptions.add(this._passwordService.requireUnlock$.subscribe(() => this.showUnlock()));
+    this._subscriptions.add(this._passwordService.onUnlock$.subscribe(() => this.hideUnlock()));
   }
 
   public async ngOnDestroy() {
@@ -54,6 +55,10 @@ export class UnlockModalComponent implements OnInit, OnDestroy {
 
   showUnlock() {
     this.showModal.set(true);
+  }
+
+  hideUnlock() {
+    this.showModal.set(false);
   }
 
   async unlock() {
