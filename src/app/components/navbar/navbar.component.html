@@ -1,16 +1,22 @@
 <p-toolbar>
-  <div>
-    @if (signedIn()) {
-
+  @if (signedIn()) {
+    <div>
       <p-button [outlined]="true" type="button" (click)="setAllowSync()" class="mr-3">{{ syncButtonText() }}</p-button>
 
-<!--      @if (allowSync()) {-->
-<!--        <p-button [outlined]="true" (click)="testFetchAppdata()" class="mr-3">Fetch</p-button>-->
-<!--        <p-button [outlined]="true" type="button" (click)="testUploadAppdata()">Upload</p-button>-->
-<!--      }-->
-    }
-  </div>
+      <!--      @if (allowSync()) {-->
+      <!--        <p-button [outlined]="true" (click)="testFetchAppdata()" class="mr-3">Fetch</p-button>-->
+      <!--        <p-button [outlined]="true" type="button" (click)="testUploadAppdata()">Upload</p-button>-->
+      <!--      }-->
+
+    </div>
+  }
 
 
-  <app-sign-in-with-google/>
+  <app-sign-in-with-google />
+
+  @if (settingsMenuItems().length > 0) {
+    <p-menu #settingsMenu [model]="settingsMenuItems()" [popup]="true"/>
+    <p-button (click)="settingsMenu.toggle($event)" icon="fa-solid fa-ellipsis-vertical"
+              [text]="true" />
+  }
 </p-toolbar>

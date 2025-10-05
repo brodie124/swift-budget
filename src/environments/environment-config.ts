@@ -19,6 +19,12 @@
     readonly appdataOriginUuid: string;
 
     readonly enableCloudSync: string;
+
+    readonly bio: {
+      readonly credential: string;
+      readonly salt: string;
+      readonly userDataStore: string; // Intended to be suffixed with a key
+    }
   },
   readonly enableNavbar: boolean;
 }

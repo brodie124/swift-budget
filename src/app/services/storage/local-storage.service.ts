@@ -42,5 +42,9 @@ export class LocalStorageService implements Storage {
     localStorage.setItem(key, value);
     this._setSubject.next({key, value});
   }
+
+  getKeys(): Array<string> {
+    return Object.keys(localStorage);
+  }
 }
 

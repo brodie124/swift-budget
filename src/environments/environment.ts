@@ -17,6 +17,11 @@ export const environment: EnvironmentConfig = {
     appdataLastSyncTime: 'sbalst',
     appdataLastModifiedTime: 'sbalmt',
     enableCloudSync: 'sbecs',
+    bio: {
+      credential: 'sbbc',
+      salt: 'sbbs',
+      userDataStore: 'sbbud'
+    },
   },
   enableNavbar: true,
 };
